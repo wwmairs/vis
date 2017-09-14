@@ -1,3 +1,37 @@
+import java.util.*; 
+class CSVReader {
+  // A generic CSV reader class
+  
+  public String[] headers;
+  public List<Map<String, String>> rows;
+  
+  CSVReader(String filePath) {
+    String[] lines = loadStrings("./data.csv");
+    rows = new ArrayList<Map<String, String>>();
+    
+    // Get the headers from the first line
+    headers = split(lines[0], ",");
+    
+    // Iterate through all the non-header rows
+    for(int row = 1; row < lines.length; row++){
+      
+      // Split the row by comma
+      String[] rowSplit = split(lines[row], ",");
+      
+      // Initialize a new map for this row, mapping strings to strings
+      Map<String, String> rowData = new HashMap<String, String>();
+      
+      // For each row, get the data and put it into a Map at the associated row index
+      for (int col = 0; col < rowSplit.length; col++) {
+        rowData.put(headers[col], rowSplit[col]);
+      }
+      
+      // Put the data into the "rows" map
+      rows.add(rowData);
+    }
+  }
+}
+
 public class Point {
   public Object x;
   public Object y;
@@ -14,40 +48,45 @@ public class Chart {
   int Height;
   String xLabel;
   String yLabel;
+  int x;
+  int y;
+  
   
   // chartWidth and chartHeight are percentage values from 0-100
-  // add POINTS back in
-  public Chart(int chartWidth, int chartHeight, int xCoord, int yCoord, String xAxis, String yAxis) {
+  public Chart(String xAxis, String yAxis) {
     //points = data;
-    Width = chartWidth;
-    Height = chartHeight;
     xLabel = xAxis;
     yLabel = yAxis;
-    centerX = xCoord;
-    centerY = yCoord;
   }
     
   
-  public renderBars() {
-    rectMode(CENTER);
-    rect(centerX, centerY, Width, Height);
+  public void renderBars(int x, int y, int Width, int Height) {
+    rectMode(CORNER);
+    fill(50);
+    rect(x, y, Width, Height);
     
   }
   
-  public renderLines() {
+  public void renderLines() {
   }
 }
 
 
-chart c;
+Chart c;
 
 void setup() {
+  CSVReader data = new CSVReader("data.csv");
+  Point[] points = new Point[data.rows.size()](); 
+  for (int i=0; i < data.rows.size(); i++) {
+    points[i] = new Point(data.rows.get(i).get("Name"), data.rows.get(i).get("Price));
+  }
   size(400,400);
   surface.setResizable(true);
-  c = new Chart(width - 20, height - 20, width/2, height/2, "x", "y");
+  c = new Chart("x", "y");
   
 }
 
 void draw() {
-  c.renderBars();
+  background(255);
+  c.renderBars(0, 0, width/2, height/2);
 }
