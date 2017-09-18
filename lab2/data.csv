@@ -1,6 +1,6 @@
 Name,Price
 Apple,12
-Pear,4
+Pear,-4
 Orange,13
 Cherry,13
 Blueberry,8
@@ -13,4 +13,4 @@ Mango,16
 Grape,10
 Kiwi,1
 Pineapple,15
-Date,110
+Date,20
