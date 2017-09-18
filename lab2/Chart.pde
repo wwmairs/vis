@@ -77,7 +77,7 @@ public abstract class Chart {
       float elementHeight = Float.parseFloat((String)data[index].y) * ratio;
       float startX = chartX + (padding * (index + 1)) + (elementWidth * index);
       rect(startX, chartY + yZero - elementHeight, elementWidth, elementHeight);
-      line(startX + (elementWidth/2), chartY + yZero + max(-5, abs(elementHeight)), startX + (elementWidth/2), chartY + yZero - min(5, abs(elementHeight)));
+      line(startX + (elementWidth/2), chartY + yZero + abs(max(-5, (-1 *abs(elementHeight)))), startX + (elementWidth/2), chartY + yZero - min(5, abs(elementHeight)));
     }
     
     textSize(15);
