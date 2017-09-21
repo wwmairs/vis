@@ -28,7 +28,7 @@ public class RectangleNode {
        
        // Iterate through the children and calculate their total area
        for (int index = 0; index < children.size(); index++) {
-          areaSum += children.get(index).calculateArea();
+          areaSum += children.get(index).area();
        }
        // Set the current rectangle node's area to the sum of its children's areas
        this.area = areaSum;
