@@ -13,7 +13,14 @@ public class RectangleNode {
     this.area = a;
   }
   
-  float calculateArea() {
+  RectangleNode(float a, float w, float h) {
+    this.area = a;
+    this.w = w;
+    this.h = h;
+  }
+  
+  
+  public float area() {
     if (children.size() > 0) {
       
        //calculate area 
@@ -51,5 +58,21 @@ public class RectangleNode {
     return this.children.size(); 
   }
   
+  public float aspect() {
+    if (this.w && this.h) {
+      return (h/w);
+    }
+  }
+  
+  // and important function for squarify
+  public float width() {
+    if (this.aspect() < 1) {
+      return this.h;
+    }
+    else {
+      return this.w;
+    }
+  }
+
   
 }
