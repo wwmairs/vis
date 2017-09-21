@@ -64,7 +64,7 @@ public abstract class Chart {
     line(chartX, chartY+yZero, chartX + chartWidth, chartY + yZero);
     
     // Print the individual tick marks on the x axis    
-    float elementToPaddingRatio = 6;
+    float elementToPaddingRatio = .5;
     float elementWidth = chartWidth / data.length;
     float padding = 0;
     do {
