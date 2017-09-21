@@ -19,7 +19,14 @@ public class RectangleNode {
     this.area = a; 
   }
   
-  float calculateArea() {
+  RectangleNode(float a, float w, float h) {
+    this.area = a;
+    this.w = w;
+    this.h = h;
+  }
+  
+  
+  public float area() {
     if (children.size() > 0) {
       
        //calculate area 
@@ -27,7 +34,7 @@ public class RectangleNode {
        
        // Iterate through the children and calculate their total area
        for (int index = 0; index < children.size(); index++) {
-          areaSum += children.get(index).calculateArea();
+          areaSum += children.get(index).area();
        }
        // Set the current rectangle node's area to the sum of its children's areas
        this.area = areaSum;
@@ -61,5 +68,21 @@ public class RectangleNode {
     return this.children.size(); 
   }
   
+  public float aspect() {
+    if (this.w && this.h) {
+      return (h/w);
+    }
+  }
+  
+  // and important function for squarify
+  public float width() {
+    if (this.aspect() < 1) {
+      return this.h;
+    }
+    else {
+      return this.w;
+    }
+  }
+
   
 }
