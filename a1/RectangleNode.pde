@@ -3,7 +3,8 @@ import java.util.*;
 public class RectangleNode {
   private List<RectangleNode> children;
   private RectangleNode parent;
-  private float x, y, w, h, area;
+  private float area;
+  float x, y, w, h;
   
   RectangleNode() {
     this(0);
@@ -58,21 +59,13 @@ public class RectangleNode {
     return this.children.size(); 
   }
   
+  // returns 0 sentinel if width and height have not been defined yet
   public float aspect() {
     if (this.w && this.h) {
       return (h/w);
+    } else {
+      return 0;
     }
   }
-  
-  // and important function for squarify
-  public float width() {
-    if (this.aspect() < 1) {
-      return this.h;
-    }
-    else {
-      return this.w;
-    }
-  }
-
   
 }
