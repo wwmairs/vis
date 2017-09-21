@@ -9,16 +9,17 @@ public class TreeMap {
   }
   
   public void drawTreeMap(float x, float y, float Width, float Height) {
+    float canvas_area = width * height;
+    float total_value = currNode.area();
+    float VA_ratio = total_value / canvas_area;
+    float short_side = min(width, height);
   }
   
   public void drawNode(float x, float y, float Width, float Height) {
   }
   
+  // contract: children are sorted in descending order by area
   private void squarify(List<RectangleNode> children, List<RectangleNode> row, RectangleNode subRectangle) {
-    float w = subRectangle.width();
-    
-    
-    
   }
   
   private void layoutRow() {
