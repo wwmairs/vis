@@ -11,7 +11,13 @@ public class RectangleNode {
   }
   
   RectangleNode(float a) {
-    this.area = a;
+    this.setArea(a);
+    this.parent = null;
+    this.children = new ArrayList<RectangleNode>();
+  }
+  
+  void setArea(float a) {
+    this.area = a; 
   }
   
   RectangleNode(float a, float w, float h) {
@@ -44,10 +50,14 @@ public class RectangleNode {
   }
  
   public void setParent(RectangleNode newParent) {
+    if (this.parent != null) {
+      this.parent.children.remove(this);
+    }
     this.parent = newParent;
+    this.parent.addChild(this);
   }
   
-  public void addChild(RectangleNode child) {
+  private void addChild(RectangleNode child) {
     this.children.add(child);
   }
   
