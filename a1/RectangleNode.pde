@@ -69,13 +69,9 @@ public class RectangleNode {
     return this.children.size(); 
   }
   
-  // returns 0 sentinel if width and height have not been defined yet
+
   public float aspect() {
-    if (this.w && this.h) {
-      return (h/w);
-    } else {
-      return 0;
-    }
+    return (h/w);
   }
   
 }
