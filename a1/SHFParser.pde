@@ -83,7 +83,6 @@ class SHFParser {
     for (int i = 0; i < nodes.length; i++) {
       if (nodes[i] != null) {
         if (nodes[i].parent == null) {
-          println(i);
           potentialRootNodesCount++;
           rootNode = nodes[i];
         }
