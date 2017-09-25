@@ -100,9 +100,15 @@ public class TreeMap {
     }
     
     // Draw the current node
-    fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
+    
+    if (node == currNode.nodeHoveredOver()) {
+      fill(100);
+    } else {
+      fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
+    }
     strokeWeight(min(this.maxDepth - depth + 1, 2.5));
     rect(node.x, node.y, node.w, node.h, 3);
+
     for (int i = 0; i < node.children.size(); i++) {
       RectangleNode child = node.children.get(i);
       this.drawNode(child, depth + 1); 

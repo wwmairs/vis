@@ -13,7 +13,7 @@ void draw() {
 }
 
 void mouseMoved() {
-  
+  t.getCurrentNode().nodeHoveredOver().toolTip();
 }
 
 void mouseClicked() {
