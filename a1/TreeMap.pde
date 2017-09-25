@@ -72,13 +72,14 @@ public class TreeMap {
     
     // Draw the current node
     if (node.parent != this.currNode) {
-      fill(200);
+      fill(node.c);
     } else {
       fill(100);
     }
-    if (node != this.currNode) {
+    // Dear Max: does this do something? This condition doesn't allow for leaf level current node drawing
+    //if (node != this.currNode) {
       rect(node.x, node.y, node.w, node.h);
-    }
+    //}
     for (int i = 0; i < node.children.size(); i++) {
       RectangleNode child = node.children.get(i);
       this.drawNode(child); 
@@ -154,6 +155,10 @@ public class TreeMap {
     this.currNode = newCurr;
   }
       
+  public RectangleNode getCurrentNode() {
+    return this.currNode;
+  }
+  
   public RectangleNode getRoot(){
     return this.root;
   }

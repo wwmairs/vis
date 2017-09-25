@@ -4,7 +4,7 @@ public class RectangleNode {
   private List<RectangleNode> children;
   private RectangleNode parent;
   private float area;
-  float x, y, w, h;
+  float x, y, w, h, c;
   String id;
   
   RectangleNode() {
@@ -15,6 +15,7 @@ public class RectangleNode {
     this.setArea(a);
     this.parent = null;
     this.children = new ArrayList<RectangleNode>();
+    this.c = 200;
   }
   
   void setArea(float a) {
@@ -46,7 +47,11 @@ public class RectangleNode {
   }
   
   public RectangleNode getParent() {
-    return this.parent;
+    if (this.parent != null) {
+      return this.parent;
+    } else {
+      return this;
+    }
   }
  
   public void setParent(RectangleNode newParent) {
@@ -91,6 +96,30 @@ public class RectangleNode {
       this.children.get(i).sortChildren();
     }
     
+  }
+  
+  public void highlightHover() {
+    for (int i = 0; i < this.children.size(); i++) {
+      this.children.get(i).highlightHover();
+    }
+    if (this.hoverOver()) {
+      this.c = 100;
+    }
+    else {
+      this.c = 200;
+    }
+  }
+  public RectangleNode nodeHoveredOver() {
+    for (int i = 0; i < this.children.size(); i++) {
+      if (this.children.get(i).hoverOver()){
+        return this.children.get(i).nodeHoveredOver();
+      }
+    }
+    return this;
+  }
+  
+  public boolean hoverOver()  {
+    return ((mouseX < x + w) && (mouseX > x) && (mouseY < y + h) && (mouseY > y));
   }
   
 }
