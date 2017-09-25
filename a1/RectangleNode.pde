@@ -4,7 +4,7 @@ public class RectangleNode {
   private List<RectangleNode> children;
   private RectangleNode parent;
   private float area;
-  float x, y, w, h, c;
+  float x, y, w, h;
   String id;
   
   RectangleNode() {
@@ -15,7 +15,6 @@ public class RectangleNode {
     this.setArea(a);
     this.parent = null;
     this.children = new ArrayList<RectangleNode>();
-    this.c = 200;
   }
   
   void setArea(float a) {
@@ -98,15 +97,11 @@ public class RectangleNode {
     
   }
   
-  public void highlightHover() {
-    for (int i = 0; i < this.children.size(); i++) {
-      this.children.get(i).highlightHover();
-    }
+  public float getColor() {
     if (this.hoverOver()) {
-      this.c = 100;
-    }
-    else {
-      this.c = 200;
+      return 150;
+    } else {
+      return 200;
     }
   }
   public RectangleNode nodeHoveredOver() {

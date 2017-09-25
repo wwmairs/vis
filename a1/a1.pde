@@ -14,7 +14,6 @@ void draw() {
 }
 
 void mouseMoved() {
-  t.getCurrentNode().highlightHover();
 }
 
 void mouseClicked() {
