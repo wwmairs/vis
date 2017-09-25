@@ -99,7 +99,7 @@ public class RectangleNode {
   
   public float getColor() {
     if (this.hoverOver()) {
-      return 150;
+      return 100;
     } else {
       return 200;
     }
