@@ -13,6 +13,7 @@ void draw() {
 }
 
 void mouseMoved() {
+  
 }
 
 void mouseClicked() {
