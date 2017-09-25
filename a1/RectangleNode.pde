@@ -41,7 +41,7 @@ public class RectangleNode {
        // Set the current rectangle node's area to the sum of its children's areas
        this.area = areaSum;
     }
-    assert(this.area) > 0;
+    assert this.area > 0;
     return this.area;
   }
   

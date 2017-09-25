@@ -97,7 +97,6 @@ class SHFParser {
     // to the new root node
     if (potentialRootNodesCount > 1) {
       rootNode = new RectangleNode();
-      println("Made root node");
       
       // Find all the parentless nodes and set their parent to the root node
       for (int i = 0; i < nodes.length; i++) {
