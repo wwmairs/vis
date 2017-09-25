@@ -117,4 +117,11 @@ public class RectangleNode {
     return ((mouseX < x + w) && (mouseX > x) && (mouseY < y + h) && (mouseY > y));
   }
   
+  public void toolTip() {
+    //fill(255);
+    //rect(mouseX, mouseY, 150, 40);
+    fill(0);
+    text("ID: " + this.id + ", Value: " + this.area(), mouseX, mouseY);
+  }
+  
 }
