@@ -29,9 +29,9 @@ public class Button {
     Height = h;
   }
   
-  boolean clickedOn(int x, int y){
-    if ((x < (centerX + (Width / 2)) && (x > (centerX - (Width / 2)))) &&
-        (y < (centerY + (Height / 2)) && (y > (centerY - (Height / 2))))) {
+  boolean clickedOn(){
+    if ((mouseX < (centerX + (Width / 2)) && (mouseX > (centerX - (Width / 2)))) &&
+        (mouseY < (centerY + (Height / 2)) && (mouseY > (centerY - (Height / 2))))) {
           return true;
         } else {
           return false;
@@ -88,7 +88,7 @@ void draw () {
 }
 
 void mouseClicked () {
-  if (b1.clickedOn(mouseX, mouseY)){
+  if (b1.clickedOn()){
     clear();
     b1.transition();
   }
