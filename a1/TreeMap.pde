@@ -2,7 +2,7 @@ public class TreeMap {
   
   private RectangleNode rootNode;
   private RectangleNode currNode;
-  private float padding = 3;
+  private float padding = 5;
   private int maxDepth = 0, currDepth = 0;
   private color rootColor = color(204, 102, 0);
   private color leafColor = color(0, 102, 153);
