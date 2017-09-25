@@ -96,10 +96,15 @@ class SHFParser {
       }
     }
     
+    // Sort all of the children
+    this.rootNode.sortChildren();
+    
   }
   
   // Get the root node 
   RectangleNode getRootNode() {
     return rootNode; 
   }
+  
+  
 }

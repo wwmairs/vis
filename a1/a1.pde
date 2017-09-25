@@ -9,5 +9,5 @@ void setup() {
 }
 
 void draw() {
-  t.drawTreeMap();
+  t.drawTreeMap(0, 0, width, height);
 }

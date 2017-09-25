@@ -74,4 +74,19 @@ public class RectangleNode {
     return (h/w);
   }
   
+  public void sortChildren() {
+    Collections.sort(this.children, new Comparator<RectangleNode>() {
+      public int compare(RectangleNode node1, RectangleNode node2) {
+        if (node1.area() > node2.area()) return -1;
+        if (node1.area() < node2.area()) return 1;
+        return 0;
+      }
+    }); 
+    
+    for (int i = 0; i < this.children.size(); i++) {
+      this.children.get(i).sortChildren();
+    }
+    
+  }
+  
 }
