@@ -32,11 +32,6 @@ class SHFParser {
     
     // Create an array of RectangleNodes the length of the number of nodes we have (maxIndex)
     RectangleNode[] nodes = new RectangleNode[maxIndex+1];
-    
-    // Initalize every element in the array to be a new RectangleNode
-    for (int i = 0; i < maxIndex + 1; i++) {
-      nodes[i] = new RectangleNode(); 
-    }
 
     // Create a helper array to get info from the .shf file
     String[] infoStrings = new String[2];
@@ -49,7 +44,8 @@ class SHFParser {
       infoStrings = split(lines[index], " ");
       
       // Set the area of the specifed node, converting the given strings into integers
-      nodes[Integer.parseInt(infoStrings[0])].setArea(Integer.parseInt(infoStrings[1]));  
+      nodes[Integer.parseInt(infoStrings[0])] = new RectangleNode(Integer.parseInt(infoStrings[1])); 
+      nodes[Integer.parseInt(infoStrings[0])].id = infoStrings[0];
     }
     
     // Create integers to store the parent and child indexes for each relationship in the file
@@ -64,6 +60,17 @@ class SHFParser {
       parentIndex = Integer.parseInt(infoStrings[0]);
       childIndex = Integer.parseInt(infoStrings[1]);
       
+      if (nodes[childIndex] == null) {
+        nodes[childIndex] = new RectangleNode(); 
+        nodes[childIndex].id = String.valueOf(childIndex);
+      }
+      if (nodes[parentIndex] == null) {
+        nodes[parentIndex] = new RectangleNode(); 
+        nodes[parentIndex].id = String.valueOf(parentIndex);
+
+      }
+      
+      
       // For each child index, set its parent (which also removes the child from it's current parent's children array)
       // and append the child to the new parent's child array
       nodes[childIndex].setParent(nodes[parentIndex]);
@@ -74,11 +81,15 @@ class SHFParser {
     
     // Iterate over all the nodes and find all the nodes that do not have parents
     for (int i = 0; i < nodes.length; i++) {
-      if (nodes[i].parent == null) {
-        potentialRootNodesCount++;
-        rootNode = nodes[i];
+      if (nodes[i] != null) {
+        if (nodes[i].parent == null) {
+          println(i);
+          potentialRootNodesCount++;
+          rootNode = nodes[i];
+        }
       }
-    }
+      
+    } //<>//
      
     // Ensure that at least one node does not have a parent
     assert(potentialRootNodesCount > 0);
@@ -87,10 +98,11 @@ class SHFParser {
     // to the new root node
     if (potentialRootNodesCount > 1) {
       rootNode = new RectangleNode();
+      println("Made root node");
       
       // Find all the parentless nodes and set their parent to the root node
       for (int i = 0; i < nodes.length; i++) {
-        if (nodes[i].parent == null) {
+        if (nodes[i] != null && nodes[i].parent == null) {
           nodes[i].setParent(rootNode);
         }
       }

@@ -5,6 +5,7 @@ public class RectangleNode {
   private RectangleNode parent;
   private float area;
   float x, y, w, h;
+  String id;
   
   RectangleNode() {
     this(0);
@@ -35,12 +36,11 @@ public class RectangleNode {
        
        // Iterate through the children and calculate their total area
        for (int index = 0; index < children.size(); index++) {
-          areaSum += children.get(index).area();
+          areaSum = areaSum + children.get(index).area();
        }
        // Set the current rectangle node's area to the sum of its children's areas
        this.area = areaSum;
     }
-    
     assert(this.area) > 0;
     return this.area;
   }
@@ -71,7 +71,11 @@ public class RectangleNode {
   
 
   public float aspect() {
-    return (h/w);
+    return h / w;
+  }
+  
+  public float pixelArea() {
+    return w * h;
   }
   
   public void sortChildren() {

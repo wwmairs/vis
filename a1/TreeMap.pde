@@ -2,6 +2,7 @@ public class TreeMap {
   
   private RectangleNode root;
   private RectangleNode currNode;
+  private float ratio;
   
   TreeMap(RectangleNode treeRoot) {
     this.root = treeRoot;
@@ -9,107 +10,125 @@ public class TreeMap {
   }
   
   public void drawTreeMap(float x, float y, float w, float h) {
-    float ratio = currNode.area() / (w * h);
-    println("Ratio: ", ratio, "Area:", currNode.area());
-    
-    drawNode(root, x, y, w, h, ratio);
+    this.ratio = (w * h) / currNode.area();
+    this.currNode.x = x;
+    this.currNode.y = y;
+    this.currNode.w = w;
+    this.currNode.h = h;
+    drawNode(this.currNode);
   }
   
-  // x and y are the top-left corner's coordinates of the node being drawn
+  // x and y are the top-left corner's coordinates of the nde being drawn
   // w and h are of the node being drawn
-  public void drawNode(RectangleNode node, float x, float y, float w, float h, float ratio) {
-    float shortSide = min(w, h);
+  public void drawNode(RectangleNode node) {    
+    // Find if we are drawing horizontally or vertically
+       
+    float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
     
-    // Find if we are drawing horizontally or verticallyy
-    boolean horizontal = false;
-    if (shortSide == h) {
-      horizontal = true;
-    }
-    
-    float c1Ratio =0, c2Ratio = 0;
-    
-    float currX = x, currY = y, currWidth = w, currHeight = h;
-    
-    float currRowWidth = 0;
-    
+    boolean horizontal = (currHeight < currWidth);
+
     int rowStart = 0;
     
     for (int currChild = 0; currChild < node.children.size(); currChild++) {
-      println("SIZE", node.children.subList(rowStart, currChild+1).size());
-      currRowWidth = updateRow(node.children.subList(rowStart, currChild+1), shortSide, horizontal, ratio);
-      println("curr width", currRowWidth);
-      c2Ratio = node.children.get(currChild).aspect();
+      List<RectangleNode> currRow = node.children.subList(rowStart, currChild+1);
+      float currRowWidth = rowWidth(sumArea(currRow), currWidth, currHeight);
       
-      if (currChild == rowStart) {
-        c1Ratio = c2Ratio;
-        print("CONTINUE ON FIRST");
-        continue;
+      this.updateRowBounds(currRow, currX, currY, currWidth, currHeight);
+
+      if (currChild < node.children.size() - 1) {
+        List<RectangleNode> nextRow = node.children.subList(rowStart, currChild+2);
+        
+        float nextRowWidth = rowWidth(sumArea(nextRow), currWidth, currHeight);
+        
+        float shortSide = min(currWidth, currHeight);
+        
+        float currRatio = this.worst(currRow, shortSide);
+        
+        this.updateRowBounds(nextRow, currX, currY, currWidth, currHeight);
+        float nextRatio = this.worst(nextRow, shortSide);
+        
+        if (currRatio > nextRatio) {
+          continue;
+        }
       }
       
-      // If the currChild is the last element and is a row of it's own, draw it!
-      if (currChild == rowStart && currChild == node.children.size()-1) {
-        currRowWidth = updateRow(node.children.subList(rowStart, currChild+1), shortSide, horizontal, ratio);
-        drawRow(node.children.subList(rowStart, currChild+1), currX, currY, currWidth, currHeight, horizontal);
-      }
+      this.updateRowBounds(currRow, currX, currY, currWidth, currHeight);
+
       
-      // DO THE CHECK
-      if (!betterRatio(c2Ratio, c1Ratio)) {
-         currRowWidth = updateRow(node.children.subList(rowStart, currChild), shortSide, horizontal, ratio);
-         drawRow(node.children.subList(rowStart, currChild), currX, currY, currWidth, currHeight, horizontal);
-         
-         // Next row starts at currChild
-         rowStart = currChild;
-         
-         currChild--;
-         
-         // Change subsection (currX, currY, ...) dimensions
-         if (horizontal) {
-           currX = currX + currRowWidth;
-           currWidth = currWidth - currRowWidth;
-         } else {
-           currY = currY + currRowWidth;
-           currHeight = currHeight - currRowWidth;
-         }
-         
-         // Recalculate ShortSide and horizontal
-         shortSide = min(currWidth, currHeight);
-         if (shortSide == currHeight) {
-            horizontal = true;
-         }
-         
+      
+      if (horizontal) { //<>//
+        currX = currX + currRowWidth;
+        currWidth = currWidth - currRowWidth;
       } else {
-      
-        c1Ratio = c2Ratio;
-      
+        currY = currY + currRowWidth;
+        currHeight = currHeight - currRowWidth;
       }
       
+      horizontal = (currHeight < currWidth);
+      
+      rowStart = currChild + 1;
+     
     }
+    
+    // Draw the current node
+    if (node.parent != this.currNode) {
+      fill(200);
+    } else {
+      fill(100);
+    }
+    if (node != this.currNode) {
+      rect(node.x, node.y, node.w, node.h);
+    }
+    for (int i = 0; i < node.children.size(); i++) {
+      RectangleNode child = node.children.get(i);
+      this.drawNode(child); 
+    }
+    fill(0);
+    text(String.valueOf(node.area()), node.x + (node.w/2) - 10, node.y + (node.h / 2));
+    
+    
     
   }
   
-  // returns true if the first arg is a better (more square, i.e. closer to 1) aspect that the second arg
-  private boolean betterRatio(float r1, float r2) {
-    if (Math.abs(r1 - 1) < Math.abs(r2 - 1)) {
-      return true;
-    } else {
-      return false;
-    }
+  private boolean horizontal(float w, float h) {
+    return (w < h);
   }
   
-  // updates the w and h values of each node in a row, so that all that shit fits
-  private float updateRow(List<RectangleNode> row, float shortSide, boolean horizontal, float ratio) {
-    float rowWidth = sumArea(row) / shortSide;
-    println("ROW SIZE: ", row.size(), "ROW AREA", sumArea(row));
+  // returns true if the first arg is a better (more square, i.e. closer to 1) aspect that the second arg
+  private float worst(List<RectangleNode> row, float rowWidth) {
+    float wSquared = rowWidth * rowWidth;
+    float rowArea = sumPixelArea(row);
+    float rowAreaSquared = rowArea * rowArea;
+    return max(((wSquared * row.get(0).pixelArea()) / rowAreaSquared), (rowAreaSquared / (wSquared * row.get(row.size() - 1).pixelArea())));
+  }
+  
+  private float rowWidth(float rowArea, float w, float h) { //<>//
+    boolean horizontal = (h < w);
+    return (rowArea / ((w * h) * (1 / this.ratio))) * (horizontal ? w : h);
+  }
+  
+  // updates the w and h values of each node in a row
+  private float updateRowBounds(List<RectangleNode> row, float x, float y, float w, float h) {
+    boolean horizontal = (h < w);
+    float rowArea = sumArea(row);
+    float rowWidth = rowWidth(rowArea, w, h);
     for (int i = 0; i < row.size(); i++) {
       RectangleNode rect = row.get(i);
+      float rectToRowRatio = rect.area() / rowArea;
+      
       if (horizontal) {
+        rect.x = x;
+        rect.y = (i < 1) ? y : (row.get(i-1).y + row.get(i-1).h);
         rect.w = rowWidth;
-        rect.h = (rect.area() * ratio) / rowWidth;
-        print("row_width", rect.w, " rect height", rect.h);
+        rect.h = rectToRowRatio * h;
       } else {
+        rect.x = (i < 1) ? x : (row.get(i-1).x + row.get(i-1).w);;
+        rect.y = y;
+        rect.w = rectToRowRatio * w;
         rect.h = rowWidth;
-        rect.w = (rect.area() * ratio) / rowWidth;
       }
+      
+
     }
     
     return rowWidth;
@@ -122,28 +141,14 @@ public class TreeMap {
     }
     return sum;
   }
-  private void drawRow(List<RectangleNode> row, float x, float y, float canvasw, float canvash, boolean horizontal) {
-    if (horizontal) {
-      float startX = x;
-      float startY = y + canvash;
-      for (int i = 0; i < row.size(); i++) {
-        RectangleNode r = row.get(i);
-        startY = startY - r.h;
-        print("drawing rect: ", startX, ",", startY, ",", r.w, ",", r.h);
-        fill(88);
-        rect(startX, startY, r.w, r.h);
-      }
-    } else {
-      float startX = x;
-      float startY = y + canvash - row.get(0).h;
-      for (int i = 0; i < row.size(); i++) {
-        RectangleNode r = row.get(i);
-        print("drawing rect: ", startX, ",", startY, ",", r.w, ",", r.h);
-        rect(startX, startY, r.w, r.h);
-        startX = startX + r.w;
-      }
+  
+  private float sumPixelArea(List<RectangleNode> row) {
+    float sum = 0;
+    for (int i = 0; i < row.size(); i++) {
+      sum += row.get(i).pixelArea();
     }
-  }
+    return sum;
+  }  
    
   public void setCurrentNode(RectangleNode newCurr) {
     this.currNode = newCurr;
