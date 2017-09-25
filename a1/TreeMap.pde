@@ -1,5 +1,6 @@
 public class TreeMap {
   
+  // Private Class Variables
   private RectangleNode rootNode;
   private RectangleNode currNode;
   private float padding = 5;
@@ -7,12 +8,17 @@ public class TreeMap {
   private color rootColor = color(255, 255, 255);
   private color leafColor = color(0, 102, 153);
   
+  // TreeMap Constructor
+  //   - Set the root node, current node, and update the max tree depth
   TreeMap(RectangleNode treeRoot) {
     this.rootNode = treeRoot;
     this.maxDepth = this.getMaxDepth(this.rootNode);
     this.setCurrentNode(this.rootNode);
   }
   
+  // drawTreeMap
+  //   - Draw the current tree map in the given frame
+  //   - Set the padding based on the width and height
   public void drawTreeMap(float x, float y, float w, float h) {
     fill(255);
     this.padding = min(max(w, h) / 150.0, 6);
@@ -21,27 +27,32 @@ public class TreeMap {
     this.currNode.w = w;
     this.currNode.h = h;
     
+    // Draw the current root node
     drawNode(this.currNode, this.currDepth);
   }
   
-  // x and y are the top-left corner's coordinates of the nde being drawn
-  // w and h are of the node being drawn
+  // drawNode
+  //   - draw the given node and layout all of its children
+  //   - use "depth" to find the color of the node
   public void drawNode(RectangleNode node, int depth) {    
-    // Find if we are drawing horizontally or vertically
-    
+
+    // Set local variables to keep track of the remaining x, y, width, and height
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
     
+    // For all nodes being drawn (except the outermost node), pad it by this.padding on each side
     if (node != this.currNode) {
       node.x = node.x + this.padding; node.y = node.y + this.padding; node.w = node.w - (2 * this.padding); node.h = node.h - (2 * this.padding);
     }
     
-    // Double pad single children around the outside
+    // Pad single children around the outside for extra visibility
     if (node.children.size() == 1) {
       if ((node.w > (6)) && (node.h > (6))) {
         currX = node.x + (this.padding/4);
         currY = node.y + (this.padding/4);
         currWidth = node.w - (this.padding/2);
         currHeight = node.h - (this.padding/2);
+        
+      // In case the view gets to small, limit the actual padding
       } else {
         currX = node.x - (this.padding/2);
         currY = node.y - (this.padding/2);
@@ -50,41 +61,57 @@ public class TreeMap {
       }
     }
     
-    
+    // Find if should layout horizontal or vertical row
     boolean horizontal = (currHeight < currWidth);
 
+    // Set initial vars for child iteration
     int rowStart = 0;
     float currRowWidth = 0;
+    
+    // Get ratio for current node of its pixel area to its area
     float ratio = (currWidth * currHeight) / node.area();
 
+    // Iterate through the children and layout all the rows
     for (int currChild = 0; currChild < node.children.size(); currChild++) {
+      
+      // Get the current row (from rowStart to currChild) and its potential width
       List<RectangleNode> currRow = node.children.subList(rowStart, currChild+1);
-      currRowWidth = rowWidth(sumArea(currRow), ratio, currWidth, currHeight);
 
+      // If the current row does not contain the smallest child, try to layout the next row and compare their aspect ratios
       if (currChild < node.children.size() - 1) {
+        
+        // Get the "next" row (one longer than the current row)
         List<RectangleNode> nextRow = node.children.subList(rowStart, currChild+2);
         
-        float nextRowWidth = rowWidth(sumArea(nextRow), ratio, currWidth, currHeight);
-         //<>//
+ //<>//
+        
+        // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if necessary
+        this.updateRowBounds(nextRow, currX, currY, currWidth, currHeight, ratio);
+        
+        // Calculate the shortest side of the current canvas
         float shortSide = min(currWidth, currHeight);
         
-        // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if possible
-        // without recalculating
-        this.updateRowBounds(nextRow, currX, currY, currWidth, currHeight, ratio);
+        // Find the "worst" aspect ratio of the next row
         float nextRatio = this.worst(nextRow, shortSide);
         
-        
-        this.updateRowBounds(currRow, currX, currY, currWidth, currHeight, ratio);
+        // Get the row width of the current row (which may be helpful later) and find its "worst" aspect ratio
+        currRowWidth = this.updateRowBounds(currRow, currX, currY, currWidth, currHeight, ratio);
         float currRatio = this.worst(currRow, shortSide);
 
+        // If the next ratio is better than the current ratio, we need to continue iteration to check the next row
         if (currRatio > nextRatio) {
           continue;
         }
         
+        
+      // If this is the last child, update the row bounds!
       } else {
-        this.updateRowBounds(currRow, currX, currY, currWidth, currHeight, ratio);
+        currRowWidth = this.updateRowBounds(currRow, currX, currY, currWidth, currHeight, ratio);
       }
       
+      // If we get here, we are going to start a new row      
+      
+      // If we are drawing a horizontal row, update the current x points. If not, update the y points.
       if (horizontal) {
         currX = currX + currRowWidth; //<>//
         currWidth = currWidth - currRowWidth ; //<>//
@@ -93,60 +120,77 @@ public class TreeMap {
         currHeight = currHeight - currRowWidth;
       }
       
+      // Find the new horizontal
       horizontal = (currHeight < currWidth);
       
+      // Increment rowStart to the new row starting child
       rowStart = currChild + 1;
      
     }
     
-    // Draw the current node
+    // After we have layed out the children, draw the current node
     
-    println(currNode.nodeHoveredOver().id);
+    // If the node is currently being hovered over, fill it in gray
     if (node.id == currNode.nodeHoveredOver().id) {
       fill(100);
+      
+    // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
       fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
     }
+    
+    // Set the stroke weight depending on the depth, with a maximum of 2.5
     strokeWeight(min(this.maxDepth - depth + 1, 2.5));
+    
+    // Draw the node!
     rect(node.x, node.y, node.w, node.h, 3);
 
+    // Recursively draw all children, adding 1 to the depth
     for (int i = 0; i < node.children.size(); i++) {
-      RectangleNode child = node.children.get(i);
-      this.drawNode(child, depth + 1); 
+      this.drawNode(node.children.get(i), depth + 1); 
     }
     
+    // Draw the 'id' text label for each leaf node in black in the center of the node
     fill(0);
     if (node.children.size() == 0) {
       text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     }
-    
-    
-    
   }
   
-  private boolean horizontal(float w, float h) {
-    return (w < h);
-  }
-  
-  // returns true if the first arg is a better (more square, i.e. closer to 1) aspect that the second arg
+  // worst
+  //   - finds the worst aspect ratio in the row
   private float worst(List<RectangleNode> row, float rowWidth) { //<>//
+    
+    // Calculate rowWidth^2, rowArea^2, and the sum pixelRowArea for the row
     float wSquared = rowWidth * rowWidth;
     float rowArea = sumPixelArea(row);
     float rowAreaSquared = rowArea * rowArea;
+    
+    // Complete the "worst" caluculation to find the worst aspect ratio of all nodes in the row
     return max(((wSquared * row.get(0).pixelArea()) / rowAreaSquared), (rowAreaSquared / (wSquared * row.get(row.size() - 1).pixelArea())));
   }
   
+  // rowWidth
+  //   - Get the width of a row, using the ratio of nodeArea (w*h) / rectArea (node.area())
   private float rowWidth(float rowArea, float ratio, float w, float h) {
     boolean horizontal = (h < w);
     return ratio * (rowArea / (horizontal ? h : w)); //<>//
   }
   
-  // updates the w and h values of each node in a row
+  // updateRowBounds
+  //   - Update the w and h values of each node in a row using the rowWidth
   private float updateRowBounds(List<RectangleNode> row, float x, float y, float w, float h, float ratio) {
+    
     boolean horizontal = (h < w);
+    
+    // Get the row sumArea and rowWidth
     float rowArea = sumArea(row);
     float rowWidth = rowWidth(rowArea, ratio, w, h);
+    
+    // Iterate over each child in the row
     for (int i = 0; i < row.size(); i++) {
+      
+      // Get the rect area to row area ratio, and update the node bounds if horizontal or not, accoringly
       RectangleNode rect = row.get(i);
       float rectToRowRatio = rect.area() / rowArea;
       
@@ -161,12 +205,13 @@ public class TreeMap {
         rect.w = rectToRowRatio * w;
         rect.h = rowWidth;
       }
-      
     }
     
     return rowWidth;
   }
   
+  // sumArea
+  //   - Get the sum of all the areas in a row list
   private float sumArea(List<RectangleNode> row) {
     float sum = 0;
     for (int i = 0; i < row.size(); i++) {
@@ -175,6 +220,8 @@ public class TreeMap {
     return sum;
   }
   
+  // sumPixelArea
+  //   - Get the sum of all the actual w*h pixels in a row
   private float sumPixelArea(List<RectangleNode> row) {
     float sum = 0;
     for (int i = 0; i < row.size(); i++) {
@@ -183,20 +230,27 @@ public class TreeMap {
     return sum;
   }  
    
+  // setCurrentNode
+  //   - Set the current node and update the currDepth
   public void setCurrentNode(RectangleNode newCurr) {
     this.currNode = newCurr;
     this.currDepth = this.getDepth(this.currNode);
-    println(this.currDepth);
   }
       
+  // getCurrentNode
+  //   - Get the current root node
   public RectangleNode getCurrentNode() {
     return this.currNode;
   }
   
+  // getRoot
+  //   - get the root node
   public RectangleNode getRoot(){
     return this.rootNode;
   }
   
+  // getMaxDepth
+  //   - Recursively find the max depth of the tree
   private int getMaxDepth(RectangleNode node) {
     int maxDepth = 0;
     if (node.children.size() == 0) {
@@ -206,9 +260,10 @@ public class TreeMap {
       maxDepth = max(maxDepth, 1 + this.getMaxDepth(node.children.get(i)));
     }
     return maxDepth;
-    
   }
   
+  // getDepth
+  //   - get the current depth of a node
   private int getDepth(RectangleNode node) {
     if (node.parent == null) {
       return 0; 

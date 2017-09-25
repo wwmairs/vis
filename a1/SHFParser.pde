@@ -88,7 +88,7 @@ class SHFParser {
         }
       }
       
-    } //<>//
+    } //<>// //<>//
      
     // Ensure that at least one node does not have a parent
     assert(potentialRootNodesCount > 0);
