@@ -2,7 +2,7 @@ public class TreeMap {
   
   private RectangleNode rootNode;
   private RectangleNode currNode;
-  private float padding = 6;
+  private float padding = 5;
   private int maxDepth = 0, currDepth = 0;
   private color rootColor = color(255, 255, 255);
   private color leafColor = color(0, 102, 153);
@@ -101,7 +101,8 @@ public class TreeMap {
     
     // Draw the current node
     
-    if (node == currNode.nodeHoveredOver()) {
+    println(currNode.nodeHoveredOver().id);
+    if (node.id == currNode.nodeHoveredOver().id) {
       fill(100);
     } else {
       fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
@@ -113,10 +114,12 @@ public class TreeMap {
       RectangleNode child = node.children.get(i);
       this.drawNode(child, depth + 1); 
     }
+    
     fill(0);
     if (node.children.size() == 0) {
-      text(node.id, node.x + (node.w/2) - 10, node.y + (node.h / 2));
+      text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     }
+    
     
     
   }

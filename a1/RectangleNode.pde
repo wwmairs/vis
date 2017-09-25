@@ -121,7 +121,7 @@ public class RectangleNode {
     //fill(255);
     //rect(mouseX, mouseY, 150, 40);
     fill(0);
-    text("ID: " + this.id + ", Value: " + this.area(), mouseX, mouseY);
+    text("Node: " + this.id + ", Value: " + nf(this.area(), 0, 0), mouseX, mouseY);
   }
   
 }
