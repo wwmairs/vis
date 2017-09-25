@@ -11,3 +11,14 @@ void setup() {
 void draw() {
   t.drawTreeMap(0, 0, width, height);
 }
+
+void mouseMoved() {
+}
+
+void mouseClicked() {
+  if (mouseButton == LEFT) {
+    t.setCurrentNode(t.getCurrentNode().nodeHoveredOver());
+  } else if (mouseButton == RIGHT) {
+    t.setCurrentNode(t.getCurrentNode().getParent());
+  }
+}

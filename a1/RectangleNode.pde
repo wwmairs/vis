@@ -46,7 +46,11 @@ public class RectangleNode {
   }
   
   public RectangleNode getParent() {
-    return this.parent;
+    if (this.parent != null) {
+      return this.parent;
+    } else {
+      return this;
+    }
   }
  
   public void setParent(RectangleNode newParent) {
@@ -91,6 +95,26 @@ public class RectangleNode {
       this.children.get(i).sortChildren();
     }
     
+  }
+  
+  public float getColor() {
+    if (this.hoverOver()) {
+      return 100;
+    } else {
+      return 200;
+    }
+  }
+  public RectangleNode nodeHoveredOver() {
+    for (int i = 0; i < this.children.size(); i++) {
+      if (this.children.get(i).hoverOver()){
+        return this.children.get(i).nodeHoveredOver();
+      }
+    }
+    return this;
+  }
+  
+  public boolean hoverOver()  {
+    return ((mouseX < x + w) && (mouseX > x) && (mouseY < y + h) && (mouseY > y));
   }
   
 }
