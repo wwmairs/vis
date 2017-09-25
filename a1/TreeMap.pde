@@ -1,16 +1,16 @@
 public class TreeMap {
   
-  private RectangleNode root;
+  private RectangleNode rootNode;
   private RectangleNode currNode;
-  private float ratio;
-  private float padding = 4;
-  private int maxDepth = 0;
+  private float padding = 3;
+  private int maxDepth = 0, currDepth = 0;
   private color rootColor = color(204, 102, 0);
   private color leafColor = color(0, 102, 153);
   
   TreeMap(RectangleNode treeRoot) {
-    this.root = treeRoot;
-    this.setCurrentNode(this.root);
+    this.rootNode = treeRoot;
+    this.maxDepth = this.getMaxDepth(this.rootNode);
+    this.setCurrentNode(this.rootNode);
   }
   
   public void drawTreeMap(float x, float y, float w, float h) {
@@ -20,7 +20,7 @@ public class TreeMap {
     this.currNode.w = w;
     this.currNode.h = h;
     
-    drawNode(this.currNode, 0);
+    drawNode(this.currNode, this.currDepth);
   }
   
   // x and y are the top-left corner's coordinates of the nde being drawn
@@ -88,14 +88,17 @@ public class TreeMap {
     }
     
     // Draw the current node //<>//
-    fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
+    fill(lerpColor(this.rootNodeColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
     rect(node.x, node.y, node.w, node.h);
     for (int i = 0; i < node.children.size(); i++) {
       RectangleNode child = node.children.get(i);
       this.drawNode(child, depth + 1); 
     }
     fill(0);
-    text(node.id, node.x + (node.w/2) - 10, node.y + (node.h / 2));
+    if (node.children.size() == 0) {
+      text(node.id, node.x + (node.w/2) - 10, node.y + (node.h / 2));
+    }
+    
     
   }
   
@@ -117,10 +120,10 @@ public class TreeMap {
   }
   
   // updates the w and h values of each node in a row
-  private float updateRowBounds(List<RectangleNode> row, float x, float y, float w, float h, float ratio) {
+  private float updateRowBounds(List<RectangleNode> row, float x, float y, float w, float h, float ratio) { //<>//
     boolean horizontal = (h < w);
     float rowArea = sumArea(row);
-    float rowWidth = rowWidth(rowArea, ratio, w, h); //<>//
+    float rowWidth = rowWidth(rowArea, ratio, w, h);
     for (int i = 0; i < row.size(); i++) {
       RectangleNode rect = row.get(i);
       float rectToRowRatio = rect.area() / rowArea;
@@ -160,8 +163,8 @@ public class TreeMap {
    
   public void setCurrentNode(RectangleNode newCurr) {
     this.currNode = newCurr;
-    this.maxDepth = this.getMaxDepth(this.currNode);
-    println(this.maxDepth);
+    this.currDepth = this.maxDepth - this.getMaxDepth(this.currNode);
+    println(this.currDepth);
   }
       
   public RectangleNode getCurrentNode() {
@@ -169,7 +172,7 @@ public class TreeMap {
   }
   
   public RectangleNode getRoot(){
-    return this.root;
+    return this.rootNode;
   }
   
   private int getMaxDepth(RectangleNode node) {
@@ -182,5 +185,12 @@ public class TreeMap {
     }
     return maxDepth;
     
+  }
+  
+  private int getCurrDepth(RectangleNode node) {
+    if (node.parent == this.rootNode) {
+      return 1; 
+    }
+    return 1 + this.getCurrDepth(node.parent);
   }
 }
