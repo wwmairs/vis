@@ -118,8 +118,8 @@ public class RectangleNode {
   }
   
   public void toolTip() {
-    //fill(255);
-    //rect(mouseX, mouseY, 150, 40);
+    fill(255);
+    rect(mouseX - 5, mouseY - 17, 140, 25);
     fill(0);
     text("Node: " + this.id + ", Value: " + nf(this.area(), 0, 0), mouseX, mouseY);
   }

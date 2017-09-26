@@ -10,10 +10,9 @@ void setup() {
 
 void draw() {
   t.drawTreeMap(0, 0, width, height);
-  t.getCurrentNode().nodeHoveredOver().toolTip();
-}
-
-void mouseMoved() {
+  if ((keyPressed == true) && (key == ' ')) {
+    t.getCurrentNode().nodeHoveredOver().toolTip();
+  }
 }
 
 void mouseClicked() {

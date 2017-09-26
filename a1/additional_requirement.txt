@@ -1,0 +1,8 @@
+additional_requirement.txt
+
+We were both very struck by the methods outlined in the paper to distinguish
+nodes of different depths; the solutions in the paper are fairly ugly.  
+Instead we have implemented a depth-based coloring of nodes.  The lighter the
+node, the higher it is, the darker the deeper.  Additionally, we have 
+implemented a simple tool-tip feature; holding space activates a label beneath
+the mouse displaying the node ID and the value of the node.

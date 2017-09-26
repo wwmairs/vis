@@ -1,0 +1,8 @@
+team.txt
+
+Max Greenwald and William Mairs
+
+Max did preliminary work on both the Parser and our Tree data structure.  Will 
+started work on the TreeMap class, but we refactored the code and worked through
+bugs together.  We both worked on tweaking the final submission and adding
+extra features.
