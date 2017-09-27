@@ -11,6 +11,14 @@ public class Point {
   
   void drawBar() {
     rect(xCoord, yCoord, w, h);
+    pushMatrix();
+    translate(xCoord, yCoord);
+    rotate(-HALF_PI);
+    translate(-xCoord, -yCoord);
+    textAlign(RIGHT);
+    textSize(10);
+    text(x.toString(), xCoord - h - 10, yCoord + w/2);
+    popMatrix();
   }
   
   void setDims(float X, float Y, float Width, float Height) {
