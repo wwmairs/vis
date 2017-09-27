@@ -1,6 +1,6 @@
 public abstract class Chart {
   
-  private Point[] data;
+  public Point[] data;
   private float maxXLabelWidth, maxYLabelWidth;
   private String xLabel, yLabel;
   private float xMin, xMax, yMin, yMax;
@@ -44,6 +44,8 @@ public abstract class Chart {
   
   protected abstract float calculateXLabelWidth();
   protected abstract float calculateYLabelWidth();
+  protected abstract void drawData(float ratio, float chartX, float chartY, 
+                                   float yZero, float elementWidth, float padding);
   
   public void render(int x, int y, int w, int h) {
     float xLabelWidth = min(h/4, maxXLabelWidth);
@@ -72,13 +74,7 @@ public abstract class Chart {
       elementWidth = (chartWidth - (padding * (data.length + 1))) / data.length; // add 1 in order to add spacing on each side of the bars
     } while (elementWidth/padding >= elementToPaddingRatio);  
     
-    fill(180);
-    for (int index = 0; index < data.length; index++) { //<>//
-      float elementHeight = Float.parseFloat((String)data[index].y) * ratio;
-      float startX = chartX + (padding * (index + 1)) + (elementWidth * index);
-      rect(startX, chartY + yZero - elementHeight, elementWidth, elementHeight);
-      line(startX + (elementWidth/2), chartY + yZero + abs(max(-5, (-1 *abs(elementHeight)))), startX + (elementWidth/2), chartY + yZero - min(5, abs(elementHeight)));
-    }
+    drawData(ratio, chartX, chartY, yZero, elementWidth, padding); //<>//
     
     textSize(15);
     float xtw = textWidth(xLabel) + 1;
