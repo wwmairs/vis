@@ -30,6 +30,10 @@ public class Point {
     popMatrix();
   }
   
+  void drawPoint() {
+    
+  }
+  
   void setDims(float X, float Y, float Width, float Height) {
     xCoord = X;
     yCoord = Y;

@@ -1,4 +1,7 @@
-Chart c;
+Chart b;
+Chart l;
+
+boolean bar = false;
 
 void setup() {
   size(800, 600);
@@ -12,10 +15,15 @@ void setup() {
     chartPoints[i] = new Point(data.rows.get(i).get("Name"), data.rows.get(i).get("Price"));
   }
   
-  c = new BarChart(chartPoints, "Name", "Price");
+  b = new BarChart(chartPoints, "Name", "Price");
+  l = new LineChart(chartPoints, "Name", "Price");
 }
 
 void draw() {
   background(255);
-  c.render(10, 10, width-20, height-20);
+  if (bar) {
+    b.render(10, 10, width-20, height-20);
+  } else {
+    l.render(10, 10, width-20, height-20);
+  }
 }
