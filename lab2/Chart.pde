@@ -62,7 +62,7 @@ public abstract class Chart {
     float range = yMax-yMin;
     float ratio = chartHeight/range;
     float yZero = yMax * ratio;
-    println(yMin, yMax, range, chartHeight, ratio, yZero);
+    //println(yMin, yMax, range, chartHeight, ratio, yZero);
     line(chartX, chartY+yZero, chartX + chartWidth, chartY + yZero);
     
     // Print the individual tick marks on the x axis    

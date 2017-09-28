@@ -9,6 +9,14 @@ public class Point {
     y = yVal;
   }
   
+  public float x() {
+    return xCoord + (w/2);
+  }
+  
+  public float y() {
+    return yCoord;
+  }
+  
   void drawBar() {
       if (this.hoverOver()) {
         fill(200);
@@ -31,7 +39,24 @@ public class Point {
   }
   
   void drawPoint() {
-    
+    if (this.hoverOver()) {
+        fill(200);
+        ellipse(xCoord + w/2, yCoord, 10, 10);
+        toolTip();
+      } else {
+        fill (120);
+        ellipse(xCoord + w/2, yCoord, 10, 10);
+      }
+    // all of this shiz is just to make the text below the bars vertical
+    pushMatrix();
+    translate(xCoord, yCoord);
+    rotate(-HALF_PI);
+    translate(-xCoord, -yCoord);
+    textAlign(RIGHT);
+    textSize(10);
+    fill(0);
+    text(x.toString(), xCoord - h - 10, yCoord + w/2);
+    popMatrix();
   }
   
   void setDims(float X, float Y, float Width, float Height) {
