@@ -23,10 +23,10 @@ public class Point {
         rect(xCoord, yCoord, w, h);
         toolTip();
       } else {
-        fill (120);
+        fill(123, 48, 99);
         rect(xCoord, yCoord, w, h);
       }
-    // all of this shiz is just to make the text below the bars vertical
+    // all of this is just to make the text below the bars vertical
     pushMatrix();
     translate(xCoord, yCoord);
     rotate(-HALF_PI);
@@ -44,7 +44,7 @@ public class Point {
         ellipse(xCoord + w/2, yCoord, 10, 10);
         toolTip();
       } else {
-        fill (120);
+        fill(123, 48, 99);;
         ellipse(xCoord + w/2, yCoord, 10, 10);
       }
     // all of this shiz is just to make the text below the bars vertical

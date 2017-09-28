@@ -11,15 +11,15 @@ public class Button {
     Height = h;
     centerX = x;
     centerY = y;
-    label = "Bars?";
+    label = "Bars";
     backgroundColor = c;
   }
   
   public void changeLabel() {
-    if (label == "Bars?") {
-      label = "Lines?";
+    if (label == "Bar") {
+      label = "Line";
     } else {
-      label = "Bars?";
+      label = "Bar";
     }
   }
   
