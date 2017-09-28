@@ -6,20 +6,20 @@ public class Button {
   String label;
   color backgroundColor;
   
-  public Button(int w, int h, int x, int y, color c) {
+  public Button(int x, int y, int w, int h, color c) {
     Width = w;
     Height = h;
     centerX = x;
     centerY = y;
-    label = "Bars";
+    label = "Bars?";
     backgroundColor = c;
   }
   
   public void changeLabel() {
-    if (label == "Bars") {
-      label = "Lines";
+    if (label == "Bars?") {
+      label = "Lines?";
     } else {
-      label = "Bars";
+      label = "Bars?";
     }
   }
   
@@ -47,10 +47,13 @@ public class Button {
   void render() {
     println("drawing button");
     fill(backgroundColor);
+    println("mouse at: ", mouseX, mouseY);
+    println("about to draw rect: ", centerX, centerY, Width, Height);
     rect(centerX, centerY, Width, Height);
     fill(0);
     textSize(14);
-    textAlign(CENTER,CENTER);
-    text(label, centerX, centerY);
+    textAlign(LEFT);
+    //textAlign(CENTER,CENTER);
+    text(label, centerX + 5, centerY + 15);
   }
 }

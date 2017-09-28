@@ -19,7 +19,7 @@ void setup() {
   b = new BarChart(chartPoints, "Name", "Price");
   l = new LineChart(chartPoints, "Name", "Price");
   
-  swapButton = new Button(300, 300, 100, 50, 100);
+  swapButton = new Button(20, 20, 50, 20, 255);
 }
 
 void draw() {
@@ -36,5 +36,6 @@ void draw() {
 void mouseClicked() {
   if (swapButton.clickedOn()){
     swapButton.changeLabel();
+    bar = !bar;
   }
 }

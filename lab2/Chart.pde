@@ -76,6 +76,7 @@ public abstract class Chart {
     
     drawData(ratio, chartX, chartY, yZero, elementWidth, padding); //<>//
     
+    pushMatrix();
     textSize(15);
     float xtw = textWidth(xLabel) + 1;
     float ytw = textWidth(yLabel) + 1;
@@ -85,7 +86,7 @@ public abstract class Chart {
     translate(x + 10, y + (h/2));
     rotate(PI/2.0);
     text(yLabel, -ytw/2, -10, ytw, 20);
-    
+    popMatrix();
     
   }
   
