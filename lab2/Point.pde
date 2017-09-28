@@ -77,4 +77,5 @@ public class Point {
     textAlign(RIGHT);
     text("( " + this.x + ", " + this.y + ")", mouseX, mouseY);
   }
+
 }

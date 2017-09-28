@@ -19,7 +19,6 @@ public class LineChart extends Chart {
         Point p2 = data[index];
         line(p1.x(), p1.y(), p2.x(), p2.y());
         line(p2.x(), p2.y(), p3.x(), p3.y());
-        println("doing a line");
       }
       float elementHeight = Float.parseFloat((String)data[index].y) * ratio;
       float startX = chartX + (padding * (index + 1)) + (elementWidth * index);

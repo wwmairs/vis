@@ -1,5 +1,6 @@
 Chart b;
 Chart l;
+Button swapButton;
 
 boolean bar = false;
 
@@ -17,6 +18,8 @@ void setup() {
   
   b = new BarChart(chartPoints, "Name", "Price");
   l = new LineChart(chartPoints, "Name", "Price");
+  
+  swapButton = new Button(300, 300, 100, 50, 100);
 }
 
 void draw() {
@@ -25,5 +28,13 @@ void draw() {
     b.render(10, 10, width-20, height-20);
   } else {
     l.render(10, 10, width-20, height-20);
+  }
+  swapButton.render();
+}
+
+
+void mouseClicked() {
+  if (swapButton.clickedOn()){
+    swapButton.changeLabel();
   }
 }
