@@ -12,7 +12,6 @@ public class BarChart extends Chart {
   }
   
   void drawData(float ratio, float chartX, float chartY, float yZero, float elementWidth, float padding) {
-    fill(180);
     for (int index = 0; index < data.length; index++) {
       float elementHeight = Float.parseFloat((String)data[index].y) * ratio;
       float startX = chartX + (padding * (index + 1)) + (elementWidth * index);
