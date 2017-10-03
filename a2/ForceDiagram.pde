@@ -2,9 +2,9 @@ public class ForceDiagram {
   
   private List<Node> nodes;
   private List<Edge> edges;
-  private float springConstant = 10.0;
-  private float dampingConstant = 10.0;
-  private float coulombConstant = 10.0;
+  private float springConstant = 1.0;
+  private float dampingConstant = 0.4;
+  private float coulombConstant = 1000.0;
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float currWidth, currHeight;
   
@@ -12,13 +12,24 @@ public class ForceDiagram {
     // Set local nodes and edges
     this.nodes = nodes;
     this.edges = edges;
+    
+    Collections.sort(this.nodes, new Comparator<Node>() {
+      public int compare(Node nodeOne, Node nodeTwo) {
+        if (nodeOne.mass > nodeTwo.mass) return -1;
+        if (nodeOne.mass < nodeTwo.mass) return 1;
+        return 0;
+      }});
   }
   
   void setScale(float newScale) {
-    println(this.xOffset, this.yOffset);
-    this.xOffset -= ((this.currWidth * newScale) - (this.currWidth * this.scale)) / 2;
-    this.yOffset -= ((this.currHeight * newScale) - (this.currHeight * this.scale)) / 2;
+    this.xOffset += ((this.currWidth * this.scale) - (this.currWidth * newScale)) / 2;
+    this.yOffset += ((this.currHeight * this.scale) - (this.currHeight * newScale)) / 2;
     this.scale = newScale; 
+  }
+  
+  void incementOffset(float x, float y) {
+    this.xOffset += x;
+    this.yOffset += y; 
   }
   
   void performInitialLayout(float x, float y, float w, float h) {
@@ -28,26 +39,47 @@ public class ForceDiagram {
     float leftX, rightX;
     
     // Iterate through the nodes and update their positions to random values
-    for (int i = 0; i < nodes.size(); i++) {
+    for (int i = 0; i < this.nodes.size(); i++) {
       // Calculate the domain of this node's placement
       leftX = x + (i * spacing) + padding;
       rightX = leftX + spacing - (padding * 2);
        
       // Update the node's position to be random
-      nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
+      this.nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
     }
   }
   
   void render(float x, float y, float w, float h, float time) {
     this.currWidth = w;
     this.currHeight = h;
+    
     for (int i = 0; i < edges.size(); i++) {
-      edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      this.edges.get(i).applyHookeForces(this.springConstant);
     }
     for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      for (int j = i + 1; j < nodes.size(); j++) {
+        this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
+      }
     }
     
+    float ke = 0;
+    for (int i = 0; i < nodes.size(); i++) {
+      nodes.get(i).updatePosition(time, this.dampingConstant);
+      ke += this.nodes.get(i).kineticEnergy();
+    }
+    println(ke);
+
+
+    for (int i = 0; i < nodes.size(); i++) {
+      this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+    }
+    for (int i = 0; i < edges.size(); i++) {
+      this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+    }
+    
+    
+    
+    
   }
-  
+    
 }

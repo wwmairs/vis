@@ -29,10 +29,11 @@ public class Slider {
     return 1-this.percentage;
   }
   
-  public void startDrag() {
+  public boolean startDrag() {
     if(this.mouseOver()) {
       this.dragging = true;
     }
+    return this.dragging;
   }
   
   public boolean drag() {
