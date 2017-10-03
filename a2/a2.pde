@@ -9,7 +9,7 @@ Slider verticalSlider = new Slider(0.5);
 Button upButton = new Button(65, 40, 70, 40, color(240), "Up");
 Button downButton = new Button(65, 140, 70, 40, color(240), "Down");
 Button leftButton = new Button(25, 90, 70, 40, color(240), "Left");
-Button rightButton = new Button(110, 90, 70, 40, color(240), "Right");
+Button rightButton = new Button(105, 90, 70, 40, color(240), "Right");
 
 void setup() {
   size(800, 500);
