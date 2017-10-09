@@ -6,7 +6,6 @@ public class ForceDiagram {
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
-  private float currWidth, currHeight;
   private float x, y, w, h;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
@@ -23,8 +22,9 @@ public class ForceDiagram {
   }
   
   void setScale(float newScale) {
-    this.xOffset += ((this.currWidth * this.scale) - (this.currWidth * newScale)) / 2;
-    this.yOffset += ((this.currHeight * this.scale) - (this.currHeight * newScale)) / 2;
+    this.xOffset += ((this.w * this.scale) - (this.w * newScale)) / 2;
+    this.yOffset += ((this.h * this.scale) - (this.h * newScale)) / 2;
+    println(this.x, this.y, this.xOffset, this.yOffset);
     this.scale = newScale; 
   }
   
@@ -74,12 +74,15 @@ public class ForceDiagram {
     // Iterate through the nodes and update their positions to random values
     for (int i = 0; i < this.nodes.size(); i++) {
       // Calculate the domain of this node's placement
-      leftX = x + (i * spacing) + padding;
-      rightX = leftX + spacing - (padding * 2);
+      
+      // This was used to ensure nodes were not on top of each other by strictly setting left and right x positions
+      // and then choosing a random Y. Later, we decided that this did not make sense.
+      //leftX = x + (i * spacing) + padding;
+      //rightX = leftX + spacing - (padding * 2);
        
       // Update the node's position to be random
       this.nodes.get(i).resetVelocity();
-      this.nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
+      this.nodes.get(i).setPosition(random(x, x+w), random(y, y + h));
     }
   }
   
@@ -126,7 +129,7 @@ public class ForceDiagram {
     textSize(12);
     textAlign(LEFT, TOP);
     fill(0);
-    text("Kinetic Energy: " + nfc(ke, 2), x, y);
+    text("Kinetic Energy: " + nfc(ke, 2), x + 3, y);
 
     for (int i = 0; i < nodes.size(); i++) {
       this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);

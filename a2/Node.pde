@@ -16,7 +16,7 @@ public class Node {
   }
   
   float radius() {
-    return sqrt((this.mass * 300 / PI));
+    return sqrt((this.mass * 500 / PI));
   }
   
   public void applyCoulombForce(Node otherNode, float coulombConstant) {
@@ -33,10 +33,18 @@ public class Node {
     }
   }
   
+  float scaleCoord(float coord, float start, float scale) {
+    return start + (scale * coord);
+  }
+  
+  float unscaleCoord(float coord, float start, float scale) {
+    return (coord - start) / scale;
+  }
+  
   void render(float x, float y, float scale) {
     fill(0);
-    float renderX = x + (scale * this.x);
-    float renderY = y + (scale * this.y);
+    float renderX = this.scaleCoord(this.x, x, scale);
+    float renderY = this.scaleCoord(this.y, y, scale);
     fill(30, 99, 144);
     if (this.hover(x, y, scale)) {
       fill(255, 204, 0);
@@ -91,7 +99,8 @@ public class Node {
   }
   
   boolean hover(float x, float y, float scale){
-    return (dist(mouseX - (x * scale), mouseY - (y * scale), this.x, this.y) <= ((scale * this.radius())));
+    
+    return (dist(this.unscaleCoord(mouseX, x, scale), this.unscaleCoord(mouseY, y, scale), this.x, this.y) <= this.radius());
   } 
   
   float kineticEnergy() {

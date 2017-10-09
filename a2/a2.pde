@@ -21,22 +21,24 @@ Button resetConstantsButton = new Button(105, 420, 75, 40, color(240), "Reset Co
 
 int movementSpeed = 5;
 
+import processing.awt.PSurfaceAWT.SmoothCanvas;
+import javax.swing.JFrame;
+import java.awt.Dimension;
+
 void setup() {
   size(800, 500);
   pixelDensity(displayDensity());
+  SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
+  JFrame jf = (JFrame) sc.getFrame();
+  Dimension d = new Dimension(400, 520);
+  jf.setMinimumSize(d);
+  println(jf.getMinimumSize());
   surface.setResizable(true);
-  
-  // SET INITIAL X AND Y OF DRAWING
-  x = 200;
-  y = 0;
-  
-  // CALCULATE WIDTH AND HEIGHT
-  w = width - x;
-  h = height;
     
   parser = new FDDParser("data2.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
-  diagram.performInitialLayout(x, 0, w, h);
+  
+  layoutDiagram();
   
   diagram.setSpringConstant(springSlider.getValue());
   diagram.setCoulombConstant(coulombSlider.getValue());
@@ -45,13 +47,26 @@ void setup() {
   lastFrame = frameCount;
 }
 
+void layoutDiagram() {
+  // SET INITIAL X AND Y OF DRAWING
+  x = 200;
+  y = 0;
+  
+  // CALCULATE WIDTH AND HEIGHT
+  w = width - x;
+  h = height;
+  
+  diagram.performInitialLayout(0, 0, w, h);
+}
+
 void mouseClicked() {
   if (resetNodesButton.mouseOver()) {
-    diagram.resetOffset();
     scaleSlider.setValue(1);
     diagram.setScale(1);
+    diagram.resetOffset();
 
-    diagram.performInitialLayout(0, 0, w, h); 
+
+    layoutDiagram();
   }
   
   if (resetConstantsButton.mouseOver()) {
