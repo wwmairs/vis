@@ -34,7 +34,7 @@ void setup() {
   w = width - x;
   h = height;
     
-  parser = new FDDParser("data2.fdd");
+  parser = new FDDParser("data0.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   diagram.performInitialLayout(0, 0, w, h);
   
@@ -85,6 +85,7 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
+  diagram.dragNode(x, y);
   
 }
 

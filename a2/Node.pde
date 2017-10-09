@@ -30,6 +30,9 @@ public class Node {
     float renderX = x + (scale * this.x);
     float renderY = y + (scale * this.y);
     fill(30, 99, 144);
+    if (this.hover(x, y, scale)) {
+      fill(255, 204, 0);
+    }
     ellipse(renderX, renderY, (scale * this.mass * 10), (scale * this.mass * 10));
     fill(0);
     strokeWeight(2);
@@ -62,6 +65,10 @@ public class Node {
     this.x = x;
     this.y = y;
   }
+  
+  boolean hover(float x, float y, float scale){
+    return (dist(mouseX - x, mouseY - y, this.x, this.y) <= (scale * this.mass * 10));
+  } 
   
   float kineticEnergy() {
     return 0.5 * this.mass * (this.velocity.magSq());
