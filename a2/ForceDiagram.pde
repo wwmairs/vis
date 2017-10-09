@@ -22,8 +22,8 @@ public class ForceDiagram {
   }
   
   void setScale(float newScale) {
-    this.xOffset += ((this.w * this.scale) - (this.w * newScale)) / 2;
-    this.yOffset += ((this.h * this.scale) - (this.h * newScale)) / 2;
+    this.xOffset += (((this.w * this.scale) - (this.w * newScale)) / 2);
+    this.yOffset += (((this.h * this.scale) - (this.h * newScale)) / 2);
     println(this.x, this.y, this.xOffset, this.yOffset);
     this.scale = newScale; 
   }

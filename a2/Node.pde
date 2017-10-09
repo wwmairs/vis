@@ -90,7 +90,7 @@ public class Node {
   
   void drag(float x, float y, float scale) {
     if (this.dragging) {
-      this.setPosition((mouseX - x) * scale, (mouseY - y) * scale);
+      this.setPosition(this.unscaleCoord(mouseX, x, scale), this.unscaleCoord(mouseY, y, scale));
     }
   }
   

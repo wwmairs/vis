@@ -5,12 +5,12 @@ float x, y, w, h;
 
 float springInitial = 30;
 float dampingInitial = 0.1;
-float coulombInitial = 70000;
+float coulombInitial = 100000;
 
-Slider scaleSlider = new Slider(1, 0, 4, "Scale");
+Slider scaleSlider = new Slider(1, 0, 10, "Scale");
 Slider springSlider = new Slider(springInitial, 0, 200, "Spring");
 Slider dampingSlider = new Slider(dampingInitial, 0.05, 0.4, "Damping");
-Slider coulombSlider = new Slider(coulombInitial, 0, 100000, "Coulomb");
+Slider coulombSlider = new Slider(coulombInitial, 0, 200000, "Coulomb");
 
 Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
 Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
