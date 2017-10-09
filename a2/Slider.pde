@@ -126,7 +126,7 @@ public class Slider {
       textSize(14);
       textAlign(LEFT, BOTTOM);
       rectMode(CORNERS);
-      text(this.title + ": " + nf(this.getValue()), this.x1, this.y1 - (this.buttonDiameter/2) - 30, this.x2, this.y2 - (this.buttonDiameter/2) - 5);
+      text(this.title + ": " + nfc(this.getValue(), 2), this.x1, this.y1 - (this.buttonDiameter/2) - 30, this.x2, this.y2 - (this.buttonDiameter/2) - 5);
       rectMode(CORNER);
     }
 

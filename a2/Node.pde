@@ -32,7 +32,12 @@ public class Node {
     fill(30, 99, 144);
     ellipse(renderX, renderY, (scale * this.mass * 10), (scale * this.mass * 10));
     fill(0);
-    line(renderX, renderY, renderX + this.coulombForce.x, renderY + this.coulombForce.y);
+    strokeWeight(2);
+    stroke(80, 44, 230);
+    line(renderX, renderY, renderX + (scale * this.coulombForce.x), renderY + (scale * this.coulombForce.y));
+    strokeWeight(1);
+    stroke(0);
+    
     this.coulombForce = new PVector();
   }
 

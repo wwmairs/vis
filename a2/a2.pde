@@ -2,10 +2,15 @@ FDDParser parser;
 ForceDiagram diagram;
 int lastFrame;
 float x, y, w, h;
+
+float springInitial = 30;
+float dampingInitial = 0.1;
+float coulombInitial = 70000;
+
 Slider scaleSlider = new Slider(1, 0, 4, "Scale");
-Slider springSlider = new Slider(15, 0, 100, "Spring");
-Slider dampingSlider = new Slider(0.1, 0.1, 0.9, "Damping");
-Slider coulombSlider = new Slider(6000, 0, 10000, "Coulomb");
+Slider springSlider = new Slider(springInitial, 0, 200, "Spring");
+Slider dampingSlider = new Slider(dampingInitial, 0.05, 0.4, "Damping");
+Slider coulombSlider = new Slider(coulombInitial, 0, 100000, "Coulomb");
 
 Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
 Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
@@ -36,9 +41,6 @@ void setup() {
   diagram.setSpringConstant(springSlider.getValue());
   diagram.setCoulombConstant(coulombSlider.getValue());
   diagram.setDampingConstant(dampingSlider.getValue());
-  springSlider.setValue(diagram.getSpringConstant());
-  dampingSlider.setValue(diagram.getDampingConstant());
-  coulombSlider.setValue(diagram.getCoulombConstant());
   
   lastFrame = frameCount;
 }
@@ -48,6 +50,14 @@ void mouseClicked() {
     diagram.resetOffset();
     scaleSlider.setValue(1);
     diagram.setScale(1);
+    
+    //coulombSlider.setValue(coulombInitial);
+    //springSlider.setValue(springInitial);
+    //dampingSlider.setValue(dampingInitial);
+    //diagram.setSpringConstant(springSlider.getValue());
+    //diagram.setCoulombConstant(coulombSlider.getValue());
+    //diagram.setDampingConstant(dampingSlider.getValue());
+    
     diagram.performInitialLayout(0, 0, w, h); 
   }
 }
