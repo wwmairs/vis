@@ -2,14 +2,19 @@ FDDParser parser;
 ForceDiagram diagram;
 int lastFrame;
 float x, y, w, h;
-Slider scaleSlider = new Slider(0.25);
-Slider horizontalSlider = new Slider(0.5);
-Slider verticalSlider = new Slider(0.5);
+Slider scaleSlider = new Slider(0.25, 0, 4, "Scale");
+Slider springSlider = new Slider(0.5, 0, 100, "Spring");
+Slider dampingSlider = new Slider(0.5, 0, 50, "Damping");
+Slider coulombSlider = new Slider(0.5, 0, 400, "Coulomb");
 
-Button upButton = new Button(65, 40, 70, 40, color(240), "Up");
-Button downButton = new Button(65, 140, 70, 40, color(240), "Down");
-Button leftButton = new Button(25, 90, 70, 40, color(240), "Left");
-Button rightButton = new Button(105, 90, 70, 40, color(240), "Right");
+Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
+Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
+Button leftButton = new Button(25, 170, 70, 40, color(240), "Left");
+Button rightButton = new Button(105, 170, 70, 40, color(240), "Right");
+Button resetButton = new Button(40, 430, 120, 40, color(240), "Reset");
+
+boolean mouseDown = false;
+int movementSpeed = 5;
 
 void setup() {
   size(800, 500);
@@ -24,53 +29,70 @@ void setup() {
   w = width - x;
   h = height;
     
-  parser = new FDDParser("data2.fdd");
+  parser = new FDDParser("data1.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   diagram.performInitialLayout(0, 0, w, h);
+  
+  springSlider.setValue(diagram.getSpringConstant());
+  dampingSlider.setValue(diagram.getDampingConstant());
+  coulombSlider.setValue(diagram.getCoulombConstant());
+  
   lastFrame = frameCount;
 }
 
 void mouseClicked() {
-  if (upButton.mouseOver()) {
-    diagram.incementOffset(0, 20); 
+  if (resetButton.mouseOver()) {
+    diagram.performInitialLayout(0, 0, w, h); 
   }
-  if (downButton.mouseOver()) {
-    diagram.incementOffset(0, -20); 
-  }
-  if (leftButton.mouseOver()) {
-    diagram.incementOffset(20, 0); 
-  }
-  if (rightButton.mouseOver()) {
-    diagram.incementOffset(-20, 0); 
-  }
+  //if (upButton.mouseOver()) {
+  //  diagram.incementOffset(0, 20); 
+  //}
+  //if (downButton.mouseOver()) {
+  //  diagram.incementOffset(0, -20); 
+  //}
+  //if (leftButton.mouseOver()) {
+  //  diagram.incementOffset(20, 0); 
+  //}
+  //if (rightButton.mouseOver()) {
+  //  diagram.incementOffset(-20, 0); 
+  //}
 }
 
 void mousePressed() {
+  mouseDown = true;
+  
   scaleSlider.startDrag();
-  horizontalSlider.startDrag();
-  verticalSlider.startDrag();
+  springSlider.startDrag();
+  dampingSlider.startDrag();
+  coulombSlider.startDrag();
 }
 
 void mouseDragged() 
 {
   if (scaleSlider.drag()) {
-    diagram.setScale(scaleSlider.getPercentage() * 4.0);
+    diagram.setScale(scaleSlider.getValue());
   }
-  if (horizontalSlider.drag()) {
-    diagram.setScale(scaleSlider.getPercentage() * 4.0);
+  if (springSlider.drag()) {
+    diagram.setSpringConstant(springSlider.getValue());
   }
-  if (verticalSlider.drag()) {
-    diagram.setScale(scaleSlider.getPercentage() * 4.0);
+  if (dampingSlider.drag()) {
+    diagram.setDampingConstant(dampingSlider.getValue()) ;
   }
+  if (coulombSlider.drag()) {
+    diagram.setCoulombConstant(coulombSlider.getValue());
+  }
+  
 }
 
 
 void mouseReleased() {
+  mouseDown = false;
   if (scaleSlider.stopDrag()) {
     
   }
-  horizontalSlider.stopDrag();
-  verticalSlider.stopDrag();
+  springSlider.stopDrag();
+  coulombSlider.stopDrag();
+  dampingSlider.stopDrag();
 }
 
 
@@ -85,17 +107,45 @@ void draw() {
   
   // Render the diagram!
   diagram.render(x, y, w, h, time);
+
   
   // Render the sidebar
   fill(240);
-  rect(0, 0, 200, height);
-  scaleSlider.render(20, 20, 180, 20);
+  rect(0, 0, x, height);
+  
+  fill(230);
+  rect(0,0, x, 60);
+  
+  fill(0);
+  textSize(18);
+  textAlign(CENTER, BOTTOM);
+  text("Force-Directed", 0, 0, x, 30);
+  textAlign(CENTER, TOP);
+  text("Node-Link Diagram", 0, 30, x, 30);
+  
+  scaleSlider.render(20, 100, 180, 100);
   upButton.render();
   downButton.render();
   leftButton.render();
   rightButton.render();
-  //horizontalSlider.render(20, 50, 180, 50);
-  //verticalSlider.render(20, 80, 180, 80);
+  springSlider.render(20, 300, 180, 300);
+  dampingSlider.render(20,350, 180, 350);
+  coulombSlider.render(20, 400, 180, 400);
+  
+  if (mouseDown) {
+    if (upButton.mouseOver()) {
+      diagram.incementOffset(0, movementSpeed); 
+    }
+    if (downButton.mouseOver()) {
+      diagram.incementOffset(0, -1 * movementSpeed); 
+    }
+    if (leftButton.mouseOver()) {
+      diagram.incementOffset(movementSpeed, 0); 
+    }
+    if (rightButton.mouseOver()) {
+      diagram.incementOffset(-1 * movementSpeed, 0); 
+    }
+  }
 
   
 }

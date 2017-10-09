@@ -1,20 +1,38 @@
 public class Slider {
   private int buttonDiameter = 23;
   private float percentage, x1, y1, x2, y2, buttonX, buttonY;
+  private float lower, upper;
   private boolean dragging;
+  private String title = null;
   
   Slider() {
    this(0); 
   }
   
   Slider(float percentage) {
+    this(percentage, 0, 1);
+  }
+  
+  Slider(float percentage, float lower, float upper) {
+    this(percentage, lower, upper, null);
+  }
+  
+  Slider(float percentage, float lower, float upper, String title) {
     this.dragging = false;
     this.percentage = percentage;
     this.x1 = 0;
     this.x2 = 0;
     this.y1 = 0;
     this.y2 = 0;
+    this.lower = lower;
+    this.upper = upper;
+    this.title = title;
+    assert(this.upper > this.lower);
     this.calculateButtonPosition();
+  }
+  
+  public void setTitle(String title) {
+     this.title = title;
   }
   
   public float getPercentage() {
@@ -25,9 +43,26 @@ public class Slider {
     this.percentage = percentage;
   }
   
-  public float getInverse() {
+  public float getInversePercentage() {
     return 1-this.percentage;
   }
+  
+  public float getValue() {
+    return this.lower + ((this.upper -  this.lower) * this.percentage);
+  }
+  
+  public void setValue(float value) {
+    if (value > this.upper) {
+      value = this.upper; 
+    }
+    
+    if (value < this.lower) {
+      value = this.lower;
+    }
+    
+    this.percentage = (value - this.lower) / (this.upper - this.lower);
+  }
+  
   
   public boolean startDrag() {
     if(this.mouseOver()) {
@@ -85,6 +120,15 @@ public class Slider {
     fill(200);
     ellipse(this.buttonX, this.buttonY, this.buttonDiameter, this.buttonDiameter);
     strokeWeight(1);
+    
+    if (this.title != null) {
+      fill(0);
+      textSize(14);
+      textAlign(LEFT, BOTTOM);
+      rectMode(CORNERS);
+      text(this.title + ": " + nf(this.getValue()), this.x1, this.y1 - (this.buttonDiameter/2) - 30, this.x2, this.y2 - (this.buttonDiameter/2) - 5);
+      rectMode(CORNER);
+    }
 
     /*
     fill(0);
