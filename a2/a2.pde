@@ -18,7 +18,6 @@ Button leftButton = new Button(25, 170, 70, 40, color(240), "Left");
 Button rightButton = new Button(105, 170, 70, 40, color(240), "Right");
 Button resetButton = new Button(40, 430, 120, 40, color(240), "Reset");
 
-boolean mouseDown = false;
 int movementSpeed = 5;
 
 void setup() {
@@ -34,7 +33,7 @@ void setup() {
   w = width - x;
   h = height;
     
-  parser = new FDDParser("data0.fdd");
+  parser = new FDDParser("data2.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   diagram.performInitialLayout(0, 0, w, h);
   
@@ -63,12 +62,11 @@ void mouseClicked() {
 }
 
 void mousePressed() {
-  mouseDown = true;
-  
   scaleSlider.startDrag();
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
+  diagram.startDrag();
 }
 
 void mouseDragged() 
@@ -85,13 +83,12 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
-  diagram.dragNode(x, y);
+  diagram.drag();
   
 }
 
 
 void mouseReleased() {
-  mouseDown = false;
   if (scaleSlider.stopDrag()) {
     
   }
@@ -138,7 +135,7 @@ void draw() {
   dampingSlider.render(20,350, 180, 350);
   coulombSlider.render(20, 400, 180, 400);
   
-  if (mouseDown) {
+  if (mousePressed) {
     if (upButton.mouseOver()) {
       diagram.incementOffset(0, movementSpeed); 
     }

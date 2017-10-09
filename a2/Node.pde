@@ -2,7 +2,7 @@ public class Node {
   
   private float mass, x, y;
   private PVector velocity, acceleration, force;
-  private boolean dragging;
+  private boolean dragging = false;
   PVector coulombForce = new PVector();
   
   Node(float mass) {
@@ -17,12 +17,16 @@ public class Node {
   
   public void applyCoulombForce(Node otherNode, float coulombConstant) {
     PVector r = new PVector(otherNode.x - this.x, otherNode.y - this.y);
-    float force = coulombConstant * ((this.mass * otherNode.mass) / r.magSq());
-    fill(0);
-    otherNode.applyForce(r.copy().normalize().mult(force));
-    this.applyForce(r.copy().normalize().rotate(PI).mult(force));
-    this.coulombForce.add(r.copy().normalize().rotate(PI).mult(force));
-    otherNode.coulombForce.add(r.copy().normalize().mult(force));
+    
+    if (r.mag() != 0) {
+       //<>//
+      float force = coulombConstant * ((this.mass * otherNode.mass) / r.magSq());
+      fill(0);
+      otherNode.applyForce(r.copy().normalize().mult(force));
+      this.applyForce(r.copy().normalize().rotate(PI).mult(force));
+      this.coulombForce.add(r.copy().normalize().rotate(PI).mult(force));
+      otherNode.coulombForce.add(r.copy().normalize().mult(force));
+    }
   }
   
   void render(float x, float y, float scale) {
@@ -50,7 +54,7 @@ public class Node {
     
     
     this.velocity.add(acceleration.mult(time));
-    println("Velocity: ", this.velocity.mag());
+    //println("Velocity: ", this.velocity.mag());
     this.velocity.sub(this.velocity.copy().mult(dampingConstant));
     this.x += this.velocity.x * time;
     this.y += this.velocity.y * time;
@@ -66,8 +70,24 @@ public class Node {
     this.y = y;
   }
   
+  void startDrag(float x, float y, float scale) {
+    if (this.hover(x, y, scale)) {
+      this.dragging = true;
+    }
+  }
+  
+  void drag(float x, float y, float scale) {
+    if (this.dragging) {
+      
+    }
+  }
+  
+  void stopDrag() {
+    this.dragging = false; 
+  }
+  
   boolean hover(float x, float y, float scale){
-    return (dist(mouseX - x, mouseY - y, this.x, this.y) <= (scale * this.mass * 10));
+    return (dist(mouseX - x, mouseY - y, this.x, this.y) <= ((scale * this.mass * 10)/2));
   } 
   
   float kineticEnergy() {

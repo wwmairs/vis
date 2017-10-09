@@ -7,6 +7,7 @@ public class ForceDiagram {
   private float coulombConstant = 6000;
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float currWidth, currHeight;
+  private float x, y, w, h;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -81,16 +82,31 @@ public class ForceDiagram {
       this.nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
     }
   }
-  void dragNode(float x, float y){
+  
+  void startDrag() {
     for (int i = 0; i < nodes.size(); i++) {
-      if (mousePressed && nodes.get(i).hover(x, y, this.scale)) {
-         nodes.get(i).setPosition(mouseX - x, mouseY - y);
-       }
+      nodes.get(i).startDrag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
     }
   }
+  
+  void drag(){
+    for (int i = 0; i < nodes.size(); i++) {
+      nodes.get(i).drag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
+    }
+    
+  }
+  
+  void stopDrag() {
+    for (int i = 0; i < nodes.size(); i++) {
+      nodes.get(i).stopDrag();
+    }
+  }
+  
   void render(float x, float y, float w, float h, float time) {
-    this.currWidth = w;
-    this.currHeight = h;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
     
     for (int i = 0; i < edges.size(); i++) {
       this.edges.get(i).applyHookeForces(this.springConstant);
@@ -106,7 +122,7 @@ public class ForceDiagram {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
     }
-    println(ke);
+    //println(ke);
 
 
     for (int i = 0; i < nodes.size(); i++) {
