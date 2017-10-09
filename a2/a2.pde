@@ -67,6 +67,7 @@ void mousePressed() {
   dampingSlider.startDrag();
   coulombSlider.startDrag();
   diagram.startDrag();
+  diagram.makeNode();
 }
 
 void mouseDragged() 
@@ -89,6 +90,7 @@ void mouseDragged()
 
 
 void mouseReleased() {
+  println("mouse realeased");
   if (scaleSlider.stopDrag()) {
     
   }

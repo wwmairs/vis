@@ -10,7 +10,10 @@ public class Node {
     this.force = new PVector();
     this.velocity = new PVector();
   }
-  
+  void incrementMass() {
+    println("current mass", this.mass);
+    this.mass += .1;
+  }
   void applyForce(PVector appliedForce) {
     this.force.add(appliedForce);
   }
@@ -78,7 +81,7 @@ public class Node {
   
   void drag(float x, float y, float scale) {
     if (this.dragging) {
-      
+      this.setPosition(mouseX - x, mouseY - y);
     }
   }
   

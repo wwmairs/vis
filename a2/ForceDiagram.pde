@@ -8,6 +8,8 @@ public class ForceDiagram {
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float currWidth, currHeight;
   private float x, y, w, h;
+  private Node latest;
+  private int drawingNewNode = 2;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -83,6 +85,24 @@ public class ForceDiagram {
     }
   }
   
+  void updateNewNodeState() {
+    drawingNewNode = (drawingNewNode + 1) % 3;
+  }
+  void makeNode(){
+    boolean anyNodeHovered = false;
+    for (int i = 0; i < this.nodes.size(); i++) {
+      anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover(x, y, scale);
+    }
+    if (!anyNodeHovered) {
+      diagram.updateNewNodeState();
+      Node newNode = new Node(2);
+      latest = newNode;
+      newNode.setPosition(mouseX - x, mouseY - y);
+      this.nodes.add(newNode);
+    }
+    return;
+  }
+  
   void startDrag() {
     for (int i = 0; i < nodes.size(); i++) {
       nodes.get(i).startDrag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
@@ -102,36 +122,64 @@ public class ForceDiagram {
     }
   }
   
+  void makeEdge() {
+    Edge newEdge = new Edge
+  }
+  
   void render(float x, float y, float w, float h, float time) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
     
-    for (int i = 0; i < edges.size(); i++) {
-      this.edges.get(i).applyHookeForces(this.springConstant);
-    }
-    for (int i = 0; i < nodes.size(); i++) {
-      for (int j = i + 1; j < nodes.size(); j++) {
-        this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
-      }
+    println(drawingNewNode);
+    switch (drawingNewNode) {
+      // determining size of new node
+      case 0 :
+        println(latest);
+        if (latest != null) {
+          println("gonna increase mass");
+          latest.incrementMass();
+        }
+        if (!mousePressed){
+          updateNewNodeState();
+        }
+        break;
+      // determining which node this one is connected to
+      case 1 :
+        // make edge
+        line(latest.x + x, latest.y + y, mouseX, mouseY);
+        if (mousePressed){
+          makeEdge();
+          updateNewNodeState();
+        }
+        break;
+      // normal behavior
+      case 2 :
+        for (int i = 0; i < edges.size(); i++) {
+          this.edges.get(i).applyHookeForces(this.springConstant);
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+          for (int j = i + 1; j < nodes.size(); j++) {
+            this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
+          }
+        }
+    
+        float ke = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+          nodes.get(i).updatePosition(time, this.dampingConstant);
+          ke += this.nodes.get(i).kineticEnergy();
+        }
+        //println(ke);
+        break;
     }
     
-    float ke = 0;
-    for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).updatePosition(time, this.dampingConstant);
-      ke += this.nodes.get(i).kineticEnergy();
-    }
-    //println(ke);
-
-
     for (int i = 0; i < nodes.size(); i++) {
       this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
     }
     for (int i = 0; i < edges.size(); i++) {
       this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
     }
-    
     
     
     
