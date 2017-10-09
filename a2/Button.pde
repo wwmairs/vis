@@ -44,7 +44,8 @@ public class Button {
     rect(x, y, w, h);
     fill(0);
     textSize(14);
+    textLeading(12);
     textAlign(CENTER, CENTER);
-    text(text, x, y, w, h);
+    text(text, x, y, w, h-5);
   }
 }

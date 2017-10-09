@@ -5,37 +5,40 @@ float x, y, w, h;
 
 float springInitial = 30;
 float dampingInitial = 0.1;
-float coulombInitial = 70000;
+float coulombInitial = 100000;
 
-Slider scaleSlider = new Slider(1, 0, 4, "Scale");
+Slider scaleSlider = new Slider(1, 0, 10, "Scale");
 Slider springSlider = new Slider(springInitial, 0, 200, "Spring");
 Slider dampingSlider = new Slider(dampingInitial, 0.05, 0.4, "Damping");
-Slider coulombSlider = new Slider(coulombInitial, 0, 100000, "Coulomb");
+Slider coulombSlider = new Slider(coulombInitial, 0, 200000, "Coulomb");
 
 Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
 Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
 Button leftButton = new Button(25, 170, 70, 40, color(240), "Left");
 Button rightButton = new Button(105, 170, 70, 40, color(240), "Right");
-Button resetButton = new Button(40, 430, 120, 40, color(240), "Reset");
+Button resetNodesButton = new Button(20, 420, 75, 40, color(240), "Reset Nodes");
+Button resetConstantsButton = new Button(105, 420, 75, 40, color(240), "Reset Constants");
 
 int movementSpeed = 5;
+
+import processing.awt.PSurfaceAWT.SmoothCanvas;
+import javax.swing.JFrame;
+import java.awt.Dimension;
 
 void setup() {
   size(800, 500);
   pixelDensity(displayDensity());
+  SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
+  JFrame jf = (JFrame) sc.getFrame();
+  Dimension d = new Dimension(400, 520);
+  jf.setMinimumSize(d);
+  println(jf.getMinimumSize());
   surface.setResizable(true);
-  
-  // SET INITIAL X AND Y OF DRAWING
-  x = 200;
-  y = 0;
-  
-  // CALCULATE WIDTH AND HEIGHT
-  w = width - x;
-  h = height;
     
   parser = new FDDParser("data2.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
-  diagram.performInitialLayout(0, 0, w, h);
+  
+  layoutDiagram();
   
   diagram.setSpringConstant(springSlider.getValue());
   diagram.setCoulombConstant(coulombSlider.getValue());
@@ -44,20 +47,35 @@ void setup() {
   lastFrame = frameCount;
 }
 
+void layoutDiagram() {
+  // SET INITIAL X AND Y OF DRAWING
+  x = 200;
+  y = 0;
+  
+  // CALCULATE WIDTH AND HEIGHT
+  w = width - x;
+  h = height;
+  
+  diagram.performInitialLayout(0, 0, w, h);
+}
+
 void mouseClicked() {
-  if (resetButton.mouseOver()) {
-    diagram.resetOffset();
+  if (resetNodesButton.mouseOver()) {
     scaleSlider.setValue(1);
     diagram.setScale(1);
-    
-    //coulombSlider.setValue(coulombInitial);
-    //springSlider.setValue(springInitial);
-    //dampingSlider.setValue(dampingInitial);
-    //diagram.setSpringConstant(springSlider.getValue());
-    //diagram.setCoulombConstant(coulombSlider.getValue());
-    //diagram.setDampingConstant(dampingSlider.getValue());
-    
-    diagram.performInitialLayout(0, 0, w, h); 
+    diagram.resetOffset();
+
+
+    layoutDiagram();
+  }
+  
+  if (resetConstantsButton.mouseOver()) {
+    coulombSlider.setValue(coulombInitial);
+    springSlider.setValue(springInitial);
+    dampingSlider.setValue(dampingInitial);
+    diagram.setSpringConstant(springSlider.getValue());
+    diagram.setCoulombConstant(coulombSlider.getValue());
+    diagram.setDampingConstant(dampingSlider.getValue());
   }
 }
 
@@ -84,7 +102,6 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
-  diagram.drag();
   
 }
 
@@ -97,13 +114,13 @@ void mouseReleased() {
   springSlider.stopDrag();
   coulombSlider.stopDrag();
   dampingSlider.stopDrag();
+  diagram.stopDrag();
 }
 
 
 void draw() {
   background(255);
-  
-  
+    
   // Calculate the delta time using the frame difference between the last two draw periods and the frame rate
   int currFrame = frameCount;
   float time = (float)(currFrame - lastFrame) / (float)frameRate;
@@ -127,17 +144,23 @@ void draw() {
   textAlign(CENTER, TOP);
   text("Node-Link Diagram", 0, 30, x, 30);
   
+
+  
+
+  
   scaleSlider.render(20, 100, 180, 100);
   upButton.render();
   downButton.render();
   leftButton.render();
   rightButton.render();
-  resetButton.render();
+  resetNodesButton.render();
+  resetConstantsButton.render();
   springSlider.render(20, 300, 180, 300);
   dampingSlider.render(20,350, 180, 350);
   coulombSlider.render(20, 400, 180, 400);
   
   if (mousePressed) {
+    diagram.drag();
     if (upButton.mouseOver()) {
       diagram.incementOffset(0, movementSpeed); 
     }
@@ -151,6 +174,13 @@ void draw() {
       diagram.incementOffset(-1 * movementSpeed, 0); 
     }
   }
+  
+   fill(230);
+  rect(0, height-20, x, 20);
+  fill(70, 90, 200);
+  textSize(10);
+  textAlign(CENTER, CENTER);
+  text("by William Mairs and Max Greenwald", 0, height-20, x, 20);
 
   
 }
