@@ -59,7 +59,6 @@ void mousePressed() {
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
-  diagram.dragNode(x, y);
 }
 
 void mouseDragged() 
@@ -76,6 +75,7 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
+  diagram.dragNode(x, y);
   
 }
 
