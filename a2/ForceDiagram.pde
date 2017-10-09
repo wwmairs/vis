@@ -26,7 +26,6 @@ public class ForceDiagram {
   void setScale(float newScale) {
     this.xOffset += (((this.w * this.scale) - (this.w * newScale)) / 2);
     this.yOffset += (((this.h * this.scale) - (this.h * newScale)) / 2);
-    println(this.x, this.y, this.xOffset, this.yOffset);
     this.scale = newScale; 
   }
   
@@ -94,13 +93,14 @@ public class ForceDiagram {
   void makeNode(){
     boolean anyNodeHovered = false;
     for (int i = 0; i < this.nodes.size(); i++) {
-      anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover(x, y, scale);
+      anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover(x + xOffset, y + yOffset, scale);
     }
+    println(anyNodeHovered);
     if (!anyNodeHovered) {
       diagram.updateNewNodeState();
       Node newNode = new Node(2);
       latest = newNode;
-      newNode.setPosition(mouseX - x, mouseY - y);
+      newNode.setPosition(mouseX - x - xOffset, mouseY - y - yOffset);
       this.nodes.add(newNode);
     }
     return;
@@ -125,9 +125,26 @@ public class ForceDiagram {
     }
   }
   
-<<<<<<< HEAD
-  void makeEdge() {
-    Edge newEdge = new Edge
+  void makeEdge(Node node1) {
+    Node node2 = null;
+    for (int i = 0; i < this.nodes.size(); i++) {
+      if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
+        node2 = this.nodes.get(i);
+        Edge newEdge = new Edge(node1, node2, dist(node1.x, node1.y, node2.x, node2.y));
+        println(newEdge);
+        edges.add(newEdge);
+      }
+    } 
+  }
+  
+  void makeNewEdge() {
+    println("about to make new edge");
+    updateNewNodeState();
+    for (int i = 0; i < this.nodes.size(); i++) {
+      if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
+        this.latest = this.nodes.get(i);
+      }
+    }
   }
   
   void render(float x, float y, float w, float h, float time) {
@@ -135,14 +152,11 @@ public class ForceDiagram {
     this.y = y;
     this.w = w;
     this.h = h;
-    
-    println(drawingNewNode);
+    float ke = 0;
     switch (drawingNewNode) {
       // determining size of new node
       case 0 :
-        println(latest);
         if (latest != null) {
-          println("gonna increase mass");
           latest.incrementMass();
         }
         if (!mousePressed){
@@ -152,9 +166,9 @@ public class ForceDiagram {
       // determining which node this one is connected to
       case 1 :
         // make edge
-        line(latest.x + x, latest.y + y, mouseX, mouseY);
-        if (mousePressed){
-          makeEdge();
+        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
+        if (mousePressed && (mouseButton == 37)){
+          makeEdge(latest);
           updateNewNodeState();
         }
         break;
@@ -169,13 +183,20 @@ public class ForceDiagram {
           }
         }
     
-        float ke = 0;
+        
         for (int i = 0; i < nodes.size(); i++) {
           nodes.get(i).updatePosition(time, this.dampingConstant);
           ke += this.nodes.get(i).kineticEnergy();
         }
         //println(ke);
         break;
+      case 3:
+        // make edge
+        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
+        if (!mousePressed){
+          makeEdge(latest);
+          drawingNewNode = 0;
+        }
     }
     
     textSize(12);

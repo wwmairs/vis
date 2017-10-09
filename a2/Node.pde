@@ -11,7 +11,6 @@ public class Node {
     this.velocity = new PVector();
   }
   void incrementMass() {
-    println("current mass", this.mass);
     this.mass += .1;
   }
   void applyForce(PVector appliedForce) {

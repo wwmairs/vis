@@ -35,7 +35,7 @@ void setup() {
   println(jf.getMinimumSize());
   surface.setResizable(true);
     
-  parser = new FDDParser("data2.fdd");
+  parser = new FDDParser("data0.dd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   
   layoutDiagram();
@@ -84,8 +84,16 @@ void mousePressed() {
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
-  diagram.startDrag();
-  diagram.makeNode();
+  if (mouseButton == 37) {
+    diagram.startDrag();
+      if (mouseX > 200) { 
+        diagram.makeNode();
+      }
+  } else if (mouseButton == 39) {
+    diagram.makeNewEdge();
+  }
+
+  println(mouseButton);
 }
 
 void mouseDragged() 
@@ -102,12 +110,10 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
-  
 }
 
 
 void mouseReleased() {
-  println("mouse realeased");
   if (scaleSlider.stopDrag()) {
     
   }
@@ -162,16 +168,16 @@ void draw() {
   if (mousePressed) {
     diagram.drag();
     if (upButton.mouseOver()) {
-      diagram.incementOffset(0, movementSpeed); 
-    }
-    if (downButton.mouseOver()) {
       diagram.incementOffset(0, -1 * movementSpeed); 
     }
+    if (downButton.mouseOver()) {
+      diagram.incementOffset(0, movementSpeed); 
+    }
     if (leftButton.mouseOver()) {
-      diagram.incementOffset(movementSpeed, 0); 
+      diagram.incementOffset(-1 * movementSpeed, 0); 
     }
     if (rightButton.mouseOver()) {
-      diagram.incementOffset(-1 * movementSpeed, 0); 
+      diagram.incementOffset(movementSpeed, 0); 
     }
   }
   
