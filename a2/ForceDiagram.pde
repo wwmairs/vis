@@ -2,9 +2,9 @@ public class ForceDiagram {
   
   private List<Node> nodes;
   private List<Edge> edges;
-  private float springConstant = 100.0;
-  private float dampingConstant = 30;
-  private float coulombConstant = 500.0;
+  private float springConstant = 15;
+  private float dampingConstant = 0.1;
+  private float coulombConstant = 6000;
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float currWidth, currHeight;
   
@@ -27,7 +27,12 @@ public class ForceDiagram {
     this.scale = newScale; 
   }
   
-  void incementOffset(float x, float y) {
+  public void resetOffset() {
+    this.xOffset = 0;
+    this.yOffset = 0;
+  }
+  
+  public void incementOffset(float x, float y) {
     this.xOffset += x;
     this.yOffset += y; 
   }
@@ -72,6 +77,7 @@ public class ForceDiagram {
       rightX = leftX + spacing - (padding * 2);
        
       // Update the node's position to be random
+      this.nodes.get(i).resetVelocity();
       this.nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
     }
   }

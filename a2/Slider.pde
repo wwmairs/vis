@@ -13,19 +13,19 @@ public class Slider {
     this(percentage, 0, 1);
   }
   
-  Slider(float percentage, float lower, float upper) {
-    this(percentage, lower, upper, null);
+  Slider(float value, float lower, float upper) {
+    this(value, lower, upper, null);
   }
   
-  Slider(float percentage, float lower, float upper, String title) {
+  Slider(float value, float lower, float upper, String title) {
     this.dragging = false;
-    this.percentage = percentage;
     this.x1 = 0;
     this.x2 = 0;
     this.y1 = 0;
     this.y2 = 0;
     this.lower = lower;
     this.upper = upper;
+    this.setValue(value);
     this.title = title;
     assert(this.upper > this.lower);
     this.calculateButtonPosition();
