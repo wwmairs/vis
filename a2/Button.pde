@@ -19,6 +19,11 @@ public class Button {
     text = l;
   }
   
+  public void setPosition(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+  
   public void setWidth(int w) {
     this.w = w;
   }

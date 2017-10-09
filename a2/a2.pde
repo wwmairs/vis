@@ -1,25 +1,24 @@
 FDDParser parser;
 ForceDiagram diagram;
 int lastFrame;
-float x, y, w, h;
+float x, y, w, h, scale;
+float translateX, translateY;
+float mx = 0;
+float my = 0;
 
 float springInitial = 30;
 float dampingInitial = 0.1;
 float coulombInitial = 100000;
 
-Slider scaleSlider = new Slider(1, 0, 10, "Scale");
+boolean draggingNode = false;
+boolean draggingDiagram = false;
+
 Slider springSlider = new Slider(springInitial, 0, 200, "Spring");
 Slider dampingSlider = new Slider(dampingInitial, 0.05, 0.4, "Damping");
 Slider coulombSlider = new Slider(coulombInitial, 0, 200000, "Coulomb");
 
-Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
-Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
-Button leftButton = new Button(25, 170, 70, 40, color(240), "Left");
-Button rightButton = new Button(105, 170, 70, 40, color(240), "Right");
 Button resetNodesButton = new Button(20, 420, 75, 40, color(240), "Reset Nodes");
 Button resetConstantsButton = new Button(105, 420, 75, 40, color(240), "Reset Constants");
-
-int movementSpeed = 5;
 
 import processing.awt.PSurfaceAWT.SmoothCanvas;
 import javax.swing.JFrame;
@@ -30,12 +29,12 @@ void setup() {
   pixelDensity(displayDensity());
   SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
   JFrame jf = (JFrame) sc.getFrame();
-  Dimension d = new Dimension(400, 520);
+  Dimension d = new Dimension(400, 305);
   jf.setMinimumSize(d);
   println(jf.getMinimumSize());
   surface.setResizable(true);
     
-  parser = new FDDParser("data2.fdd");
+  parser = new FDDParser("data2.dd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   
   layoutDiagram();
@@ -51,7 +50,11 @@ void layoutDiagram() {
   // SET INITIAL X AND Y OF DRAWING
   x = 200;
   y = 0;
+  scale = 1.0;
   
+  translateX = 0;
+  translateY = 0;
+    
   // CALCULATE WIDTH AND HEIGHT
   w = width - x;
   h = height;
@@ -61,11 +64,6 @@ void layoutDiagram() {
 
 void mouseClicked() {
   if (resetNodesButton.mouseOver()) {
-    scaleSlider.setValue(1);
-    diagram.setScale(1);
-    diagram.resetOffset();
-
-
     layoutDiagram();
   }
   
@@ -80,18 +78,54 @@ void mouseClicked() {
 }
 
 void mousePressed() {
-  scaleSlider.startDrag();
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
-  diagram.startDrag();
+  
+  beginScaling();
+  draggingNode = diagram.startDrag();
+  endScaling();
+  
+  if (!draggingNode) {
+    if (mouseX > x && mouseY > y) {
+      draggingDiagram = true;
+    }
+  }
+}
+
+void beginScaling() {
+  pushMatrix();
+
+  translate(x + translateX, y + translateY);
+  mx -= (x + translateX);
+  my -= (y + translateY);
+  scale(scale); 
+}
+
+void endScaling() {
+  mx += (x + translateX);
+  my += (y + translateY);
+  popMatrix();
+}
+
+float getMouseX() {
+  return (mouseX + mx) / scale; 
+}
+
+float getMouseY() {
+  return (mouseY + my) / scale; 
+}
+
+void keyPressed() {
+  if (key == 'r') {
+    scale = 1;
+    x = 200;
+    y = 0;
+  }
 }
 
 void mouseDragged() 
 {
-  if (scaleSlider.drag()) {
-    diagram.setScale(scaleSlider.getValue());
-  }
   if (springSlider.drag()) {
     diagram.setSpringConstant(springSlider.getValue());
   }
@@ -102,19 +136,36 @@ void mouseDragged()
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
   
+
+  
+  if (draggingDiagram) {
+    translateX += (mouseX - pmouseX);
+    translateY += (mouseY - pmouseY);
+  }
 }
 
 
 void mouseReleased() {
-  if (scaleSlider.stopDrag()) {
-    
-  }
+
   springSlider.stopDrag();
   coulombSlider.stopDrag();
   dampingSlider.stopDrag();
   diagram.stopDrag();
+  draggingNode = false;
+  draggingDiagram = false;
 }
 
+
+void mouseWheel(MouseEvent e) {
+  translateX -= (mouseX - x);
+  translateY -= (mouseY - y);
+  float delta = e.getCount() > 0 ? 1.05 : e.getCount() < 0 ? 1.0/1.05 : 1.0;
+  scale *= delta;
+  translateX *= delta;
+  translateY *= delta;
+  translateX += (mouseX - x);
+  translateY += (mouseY - y);
+}
 
 void draw() {
   background(255);
@@ -124,8 +175,14 @@ void draw() {
   float time = (float)(currFrame - lastFrame) / (float)frameRate;
   lastFrame = currFrame;
   
+  beginScaling();
   // Render the diagram!
-  diagram.render(x, y, w, h, time);
+  diagram.render(time);
+  if (mousePressed) {
+    draggingNode = diagram.drag(); 
+  }
+  
+  endScaling();
 
   
   // Render the sidebar
@@ -142,38 +199,17 @@ void draw() {
   textAlign(CENTER, TOP);
   text("Node-Link Diagram", 0, 30, x, 30);
   
-
-  
-
-  
-  scaleSlider.render(20, 100, 180, 100);
-  upButton.render();
-  downButton.render();
-  leftButton.render();
-  rightButton.render();
+  resetNodesButton.setPosition(20,height-80);
   resetNodesButton.render();
+  
+  resetConstantsButton.setPosition(105,height-80);
   resetConstantsButton.render();
-  springSlider.render(20, 300, 180, 300);
-  dampingSlider.render(20,350, 180, 350);
-  coulombSlider.render(20, 400, 180, 400);
   
-  if (mousePressed) {
-    diagram.drag();
-    if (upButton.mouseOver()) {
-      diagram.incementOffset(0, movementSpeed); 
-    }
-    if (downButton.mouseOver()) {
-      diagram.incementOffset(0, -1 * movementSpeed); 
-    }
-    if (leftButton.mouseOver()) {
-      diagram.incementOffset(movementSpeed, 0); 
-    }
-    if (rightButton.mouseOver()) {
-      diagram.incementOffset(-1 * movementSpeed, 0); 
-    }
-  }
-  
-   fill(230);
+  springSlider.render(20, 100, 180, 100);
+  dampingSlider.render(20,150, 180, 150);
+  coulombSlider.render(20, 200, 180, 200);
+  println(height);
+  fill(230);
   rect(0, height-20, x, 20);
   fill(70, 90, 200);
   textSize(10);

@@ -5,8 +5,6 @@ public class ForceDiagram {
   private float springConstant = 15;
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
-  private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
-  private float x, y, w, h;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -19,23 +17,6 @@ public class ForceDiagram {
         if (nodeOne.mass < nodeTwo.mass) return 1;
         return 0;
       }});
-  }
-  
-  void setScale(float newScale) {
-    this.xOffset += (((this.w * this.scale) - (this.w * newScale)) / 2);
-    this.yOffset += (((this.h * this.scale) - (this.h * newScale)) / 2);
-    println(this.x, this.y, this.xOffset, this.yOffset);
-    this.scale = newScale; 
-  }
-  
-  public void resetOffset() {
-    this.xOffset = 0;
-    this.yOffset = 0;
-  }
-  
-  public void incementOffset(float x, float y) {
-    this.xOffset += x;
-    this.yOffset += y; 
   }
   
   void setSpringConstant(float springConstant) {
@@ -86,17 +67,22 @@ public class ForceDiagram {
     }
   }
   
-  void startDrag() {
+  boolean startDrag() {
     for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).startDrag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
+      if (nodes.get(i).startDrag()) {
+        return true;
+      }
     }
+    return false;
   }
   
-  void drag(){
+  boolean drag(){
     for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).drag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
+      if (nodes.get(i).drag()) {
+        return true;
+      }
     }
-    
+    return false;
   }
   
   void stopDrag() {
@@ -106,11 +92,8 @@ public class ForceDiagram {
   }
   
   
-  void render(float x, float y, float w, float h, float time) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+  void render(float time) {
+    //println(getMouseX(), getMouseY());
     
     for (int i = 0; i < edges.size(); i++) {
       this.edges.get(i).applyHookeForces(this.springConstant);
@@ -129,13 +112,13 @@ public class ForceDiagram {
     textSize(12);
     textAlign(LEFT, TOP);
     fill(0);
-    text("Kinetic Energy: " + nfc(ke, 2), x + 3, y);
+    //text("Kinetic Energy: " + nfc(ke, 2), 0, 0);
 
     for (int i = 0; i < nodes.size(); i++) {
-      this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      this.nodes.get(i).render();
     }
     for (int i = 0; i < edges.size(); i++) {
-      this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      this.edges.get(i).render();
     }
     
   }
