@@ -16,7 +16,8 @@ Button upButton = new Button(65, 120, 70, 40, color(240), "Up");
 Button downButton = new Button(65, 220, 70, 40, color(240), "Down");
 Button leftButton = new Button(25, 170, 70, 40, color(240), "Left");
 Button rightButton = new Button(105, 170, 70, 40, color(240), "Right");
-Button resetButton = new Button(40, 430, 120, 40, color(240), "Reset");
+Button resetNodesButton = new Button(20, 420, 75, 40, color(240), "Reset Nodes");
+Button resetConstantsButton = new Button(105, 420, 75, 40, color(240), "Reset Constants");
 
 int movementSpeed = 5;
 
@@ -35,7 +36,7 @@ void setup() {
     
   parser = new FDDParser("data2.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
-  diagram.performInitialLayout(0, 0, w, h);
+  diagram.performInitialLayout(x, 0, w, h);
   
   diagram.setSpringConstant(springSlider.getValue());
   diagram.setCoulombConstant(coulombSlider.getValue());
@@ -45,19 +46,21 @@ void setup() {
 }
 
 void mouseClicked() {
-  if (resetButton.mouseOver()) {
+  if (resetNodesButton.mouseOver()) {
     diagram.resetOffset();
     scaleSlider.setValue(1);
     diagram.setScale(1);
-    
-    //coulombSlider.setValue(coulombInitial);
-    //springSlider.setValue(springInitial);
-    //dampingSlider.setValue(dampingInitial);
-    //diagram.setSpringConstant(springSlider.getValue());
-    //diagram.setCoulombConstant(coulombSlider.getValue());
-    //diagram.setDampingConstant(dampingSlider.getValue());
-    
+
     diagram.performInitialLayout(0, 0, w, h); 
+  }
+  
+  if (resetConstantsButton.mouseOver()) {
+    coulombSlider.setValue(coulombInitial);
+    springSlider.setValue(springInitial);
+    dampingSlider.setValue(dampingInitial);
+    diagram.setSpringConstant(springSlider.getValue());
+    diagram.setCoulombConstant(coulombSlider.getValue());
+    diagram.setDampingConstant(dampingSlider.getValue());
   }
 }
 
@@ -83,7 +86,6 @@ void mouseDragged()
   if (coulombSlider.drag()) {
     diagram.setCoulombConstant(coulombSlider.getValue());
   }
-  diagram.drag();
   
 }
 
@@ -95,13 +97,13 @@ void mouseReleased() {
   springSlider.stopDrag();
   coulombSlider.stopDrag();
   dampingSlider.stopDrag();
+  diagram.stopDrag();
 }
 
 
 void draw() {
   background(255);
-  
-  
+    
   // Calculate the delta time using the frame difference between the last two draw periods and the frame rate
   int currFrame = frameCount;
   float time = (float)(currFrame - lastFrame) / (float)frameRate;
@@ -125,17 +127,23 @@ void draw() {
   textAlign(CENTER, TOP);
   text("Node-Link Diagram", 0, 30, x, 30);
   
+
+  
+
+  
   scaleSlider.render(20, 100, 180, 100);
   upButton.render();
   downButton.render();
   leftButton.render();
   rightButton.render();
-  resetButton.render();
+  resetNodesButton.render();
+  resetConstantsButton.render();
   springSlider.render(20, 300, 180, 300);
   dampingSlider.render(20,350, 180, 350);
   coulombSlider.render(20, 400, 180, 400);
   
   if (mousePressed) {
+    diagram.drag();
     if (upButton.mouseOver()) {
       diagram.incementOffset(0, movementSpeed); 
     }
@@ -149,6 +157,13 @@ void draw() {
       diagram.incementOffset(-1 * movementSpeed, 0); 
     }
   }
+  
+   fill(230);
+  rect(0, height-20, x, 20);
+  fill(70, 90, 200);
+  textSize(10);
+  textAlign(CENTER, CENTER);
+  text("by William Mairs and Max Greenwald", 0, height-20, x, 20);
 
   
 }

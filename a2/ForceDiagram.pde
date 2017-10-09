@@ -102,6 +102,7 @@ public class ForceDiagram {
     }
   }
   
+  
   void render(float x, float y, float w, float h, float time) {
     this.x = x;
     this.y = y;
@@ -122,8 +123,10 @@ public class ForceDiagram {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
     }
-    //println(ke);
-
+    textSize(12);
+    textAlign(LEFT, TOP);
+    fill(0);
+    text("Kinetic Energy: " + nfc(ke, 2), x, y);
 
     for (int i = 0; i < nodes.size(); i++) {
       this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
@@ -131,9 +134,6 @@ public class ForceDiagram {
     for (int i = 0; i < edges.size(); i++) {
       this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
     }
-    
-    
-    
     
   }
     

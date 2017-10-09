@@ -15,6 +15,10 @@ public class Node {
     this.force.add(appliedForce);
   }
   
+  float radius() {
+    return sqrt((this.mass * 300 / PI));
+  }
+  
   public void applyCoulombForce(Node otherNode, float coulombConstant) {
     PVector r = new PVector(otherNode.x - this.x, otherNode.y - this.y);
     
@@ -37,11 +41,11 @@ public class Node {
     if (this.hover(x, y, scale)) {
       fill(255, 204, 0);
     }
-    ellipse(renderX, renderY, (scale * this.mass * 10), (scale * this.mass * 10));
+    ellipse(renderX, renderY, (scale * this.radius() * 2), (scale * this.radius() * 2));
     fill(0);
     strokeWeight(2);
     stroke(80, 44, 230);
-    line(renderX, renderY, renderX + (scale * this.coulombForce.x), renderY + (scale * this.coulombForce.y));
+    //line(renderX, renderY, renderX + (scale * this.coulombForce.x), renderY + (scale * this.coulombForce.y));
     strokeWeight(1);
     stroke(0);
     
@@ -78,7 +82,7 @@ public class Node {
   
   void drag(float x, float y, float scale) {
     if (this.dragging) {
-      
+      this.setPosition((mouseX - x) * scale, (mouseY - y) * scale);
     }
   }
   
@@ -87,7 +91,7 @@ public class Node {
   }
   
   boolean hover(float x, float y, float scale){
-    return (dist(mouseX - x, mouseY - y, this.x, this.y) <= ((scale * this.mass * 10)/2));
+    return (dist(mouseX - (x * scale), mouseY - (y * scale), this.x, this.y) <= ((scale * this.radius())));
   } 
   
   float kineticEnergy() {
