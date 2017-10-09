@@ -5,6 +5,7 @@ public class ForceDiagram {
   private float springConstant = 15;
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
+  private float kineticEnergy = 0;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -91,6 +92,10 @@ public class ForceDiagram {
     }
   }
   
+  float kineticEnergy() {
+    return this.kineticEnergy;
+  }
+  
   
   void render(float time) {
     //println(getMouseX(), getMouseY());
@@ -109,10 +114,10 @@ public class ForceDiagram {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
     }
+    this.kineticEnergy = ke;
     textSize(12);
     textAlign(LEFT, TOP);
     fill(0);
-    //text("Kinetic Energy: " + nfc(ke, 2), 0, 0);
 
     for (int i = 0; i < nodes.size(); i++) {
       this.nodes.get(i).render();

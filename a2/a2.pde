@@ -29,7 +29,7 @@ void setup() {
   pixelDensity(displayDensity());
   SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
   JFrame jf = (JFrame) sc.getFrame();
-  Dimension d = new Dimension(400, 305);
+  Dimension d = new Dimension(400, 330);
   jf.setMinimumSize(d);
   println(jf.getMinimumSize());
   surface.setResizable(true);
