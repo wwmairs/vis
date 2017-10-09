@@ -38,9 +38,7 @@ public class Node {
     
     
     this.velocity.add(acceleration.mult(time));
-    // I'm pretty sure this vector should NOT be normalized
-    //this.velocity.sub(this.velocity.copy().normalize().mult(dampingConstant));
-    this.velocity.sub(this.velocity.copy().mult(dampingConstant));
+    this.velocity.sub(this.velocity.copy().normalize().mult(dampingConstant));
     this.x += this.velocity.x * time;
     this.y += this.velocity.y * time;
     this.force.setMag(0);
@@ -52,7 +50,7 @@ public class Node {
   }
   
   boolean hover(float x, float y, float scale){
-    return (dist(mouseX + x, mouseY + y, this.x, this.y) <= (scale * this.mass * 10));
+    return (dist(mouseX - x, mouseY - y, this.x, this.y) <= (scale * this.mass * 10));
   } 
   
   float kineticEnergy() {

@@ -75,7 +75,13 @@ public class ForceDiagram {
       this.nodes.get(i).setPosition(random(leftX, rightX), random(y, y + h));
     }
   }
-  
+  void dragNode(float x, float y){
+    for (int i = 0; i < nodes.size(); i++) {
+      if (mousePressed && nodes.get(i).hover(x, y, this.scale)) {
+         nodes.get(i).setPosition(mouseX - x, mouseY - y);
+       }
+    }
+  }
   void render(float x, float y, float w, float h, float time) {
     this.currWidth = w;
     this.currHeight = h;
@@ -93,11 +99,8 @@ public class ForceDiagram {
     for (int i = 0; i < nodes.size(); i++) {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
-      if (mousePressed && nodes.get(i).hover(this.scale)) {
-        nodes.get(i).setPosition(mouseX, mouseY);
-      }
     }
-    //println(ke);
+    println(ke);
 
 
     for (int i = 0; i < nodes.size(); i++) {

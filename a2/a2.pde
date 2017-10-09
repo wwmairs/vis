@@ -29,7 +29,7 @@ void setup() {
   w = width - x;
   h = height;
     
-  parser = new FDDParser("data1.fdd");
+  parser = new FDDParser("data0.fdd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
   diagram.performInitialLayout(0, 0, w, h);
   
@@ -65,6 +65,7 @@ void mousePressed() {
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
+  diagram.dragNode(x, y);
 }
 
 void mouseDragged() 
