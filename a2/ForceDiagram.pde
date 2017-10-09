@@ -2,9 +2,9 @@ public class ForceDiagram {
   
   private List<Node> nodes;
   private List<Edge> edges;
-  private float springConstant = 1.0;
-  private float dampingConstant = 0.4;
-  private float coulombConstant = 1000.0;
+  private float springConstant = 100.0;
+  private float dampingConstant = 30;
+  private float coulombConstant = 500.0;
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float currWidth, currHeight;
   
@@ -30,6 +30,33 @@ public class ForceDiagram {
   void incementOffset(float x, float y) {
     this.xOffset += x;
     this.yOffset += y; 
+  }
+  
+  void setSpringConstant(float springConstant) {
+    this.springConstant = springConstant; 
+    println("Spring: ", this.springConstant);
+  }
+  
+  float getSpringConstant() {
+    return this.springConstant;
+  }
+  
+  void setDampingConstant(float dampingConstant) {
+    this.dampingConstant = dampingConstant; 
+    println("Damping: ", this.dampingConstant);
+  }
+  
+  float getDampingConstant() {
+    return this.dampingConstant;
+  }
+  
+  void setCoulombConstant(float coulombConstant) {
+    this.coulombConstant = coulombConstant; 
+    println("Coulomb: ", this.coulombConstant);
+  }
+  
+  float getCoulombConstant() {
+    return this.coulombConstant;
   }
   
   void performInitialLayout(float x, float y, float w, float h) {
@@ -67,7 +94,7 @@ public class ForceDiagram {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
     }
-    println(ke);
+    //println(ke);
 
 
     for (int i = 0; i < nodes.size(); i++) {
