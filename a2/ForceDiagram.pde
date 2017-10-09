@@ -66,6 +66,9 @@ public class ForceDiagram {
     for (int i = 0; i < nodes.size(); i++) {
       nodes.get(i).updatePosition(time, this.dampingConstant);
       ke += this.nodes.get(i).kineticEnergy();
+      if (mousePressed && nodes.get(i).hover(this.scale)) {
+        nodes.get(i).setPosition(mouseX, mouseY);
+      }
     }
     println(ke);
 
