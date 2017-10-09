@@ -1,72 +1,86 @@
-FDDParser parser;
-ForceDiagram diagram;
-int lastFrame;
-float x, y, w, h, scale;
+import processing.awt.PSurfaceAWT.SmoothCanvas;
+import javax.swing.JFrame;
+import java.awt.Dimension;
+
+// Translation variables
+float x, y, w, h;
+float scale;
 float translateX, translateY;
 float mx = 0;
 float my = 0;
+
+// Dragging Booleans
+boolean draggingNode = false;
+boolean draggingDiagram = false;
+
+// Constants
+int lastFrame;
 
 float springInitial = 30;
 float dampingInitial = 0.1;
 float coulombInitial = 100000;
 
-boolean draggingNode = false;
-boolean draggingDiagram = false;
+// Declare on-screen objects
+FDDParser parser;
+ForceDiagram diagram;
 
 Slider springSlider = new Slider(springInitial, 0, 200, "Spring");
 Slider dampingSlider = new Slider(dampingInitial, 0.05, 0.4, "Damping");
 Slider coulombSlider = new Slider(coulombInitial, 0, 200000, "Coulomb");
 
-Button resetNodesButton = new Button(20, 420, 75, 40, color(240), "Reset Nodes");
-Button resetConstantsButton = new Button(105, 420, 75, 40, color(240), "Reset Constants");
+Button resetNodesButton = new Button("Reset Nodes", color(240));
+Button resetConstantsButton = new Button("Reset Constants", color(240));
 
-import processing.awt.PSurfaceAWT.SmoothCanvas;
-import javax.swing.JFrame;
-import java.awt.Dimension;
 
 void setup() {
   size(800, 500);
+  surface.setResizable(true);
   pixelDensity(displayDensity());
+  
+  // Setup Canvas Minimum Size
   SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
   JFrame jf = (JFrame) sc.getFrame();
   Dimension d = new Dimension(400, 330);
   jf.setMinimumSize(d);
-  println(jf.getMinimumSize());
-  surface.setResizable(true);
+
     
   parser = new FDDParser("data2.dd");
   diagram = new ForceDiagram(parser.getNodes(), parser.getEdges());
-  
-  layoutDiagram();
   
   diagram.setSpringConstant(springSlider.getValue());
   diagram.setCoulombConstant(coulombSlider.getValue());
   diagram.setDampingConstant(dampingSlider.getValue());
   
   lastFrame = frameCount;
+  
+  // Layout the diagram!
+  layoutDiagram();
 }
 
 void layoutDiagram() {
-  // SET INITIAL X AND Y OF DRAWING
+  // Set canvas x, y and calculate w, h
   x = 200;
   y = 0;
-  scale = 1.0;
-  
-  translateX = 0;
-  translateY = 0;
-    
-  // CALCULATE WIDTH AND HEIGHT
   w = width - x;
   h = height;
   
+  // Set translation variables
+  scale = 1.0;
+  translateX = 0;
+  translateY = 0;
+   
+  // Perform initial Diagram layout
   diagram.performInitialLayout(0, 0, w, h);
 }
 
 void mouseClicked() {
+  
+  // Perform reset nutton action
   if (resetNodesButton.mouseOver()) {
     layoutDiagram();
   }
   
+  // Perform reset constants action
   if (resetConstantsButton.mouseOver()) {
     coulombSlider.setValue(coulombInitial);
     springSlider.setValue(springInitial);
@@ -82,14 +96,14 @@ void mousePressed() {
   dampingSlider.startDrag();
   coulombSlider.startDrag();
   
+  // Start Node Dragging Check
   beginScaling();
   draggingNode = diagram.startDrag();
   endScaling();
   
-  if (!draggingNode) {
-    if (mouseX > x && mouseY > y) {
-      draggingDiagram = true;
-    }
+  // If not dragging a node, initialize screen drag 
+  if (!draggingNode && mouseX > x && mouseY > y) {
+    draggingDiagram = true;
   }
 }
 
@@ -181,10 +195,13 @@ void draw() {
   if (mousePressed) {
     draggingNode = diagram.drag(); 
   }
-  
   endScaling();
-
   
+  textSize(12);
+  textAlign(LEFT, TOP);
+  fill(0);
+  text("Kinetic Energy: " + nfc(diagram.kineticEnergy(), 2), x+3, y);
+
   // Render the sidebar
   fill(240);
   rect(0, 0, x, height);
@@ -199,22 +216,21 @@ void draw() {
   textAlign(CENTER, TOP);
   text("Node-Link Diagram", 0, 30, x, 30);
   
-  resetNodesButton.setPosition(20,height-80);
-  resetNodesButton.render();
+  resetNodesButton.render(20, height-80, 75, 40);
   
-  resetConstantsButton.setPosition(105,height-80);
-  resetConstantsButton.render();
+  resetConstantsButton.render(105, height-80, 75, 40);
   
   springSlider.render(20, 100, 180, 100);
   dampingSlider.render(20,150, 180, 150);
   coulombSlider.render(20, 200, 180, 200);
-  println(height);
+  
   fill(230);
   rect(0, height-20, x, 20);
   fill(70, 90, 200);
   textSize(10);
   textAlign(CENTER, CENTER);
   text("by William Mairs and Max Greenwald", 0, height-20, x, 20);
+
 
   
 }

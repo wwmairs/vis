@@ -115,9 +115,7 @@ public class ForceDiagram {
       ke += this.nodes.get(i).kineticEnergy();
     }
     this.kineticEnergy = ke;
-    textSize(12);
-    textAlign(LEFT, TOP);
-    fill(0);
+
 
     for (int i = 0; i < nodes.size(); i++) {
       this.nodes.get(i).render();
