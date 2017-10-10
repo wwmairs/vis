@@ -5,14 +5,10 @@ public class ForceDiagram {
   private float springConstant = 15;
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
-<<<<<<< HEAD
   private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
   private float x, y, w, h;
   private Node latest;
   private int drawingNewNode = 2;
-=======
-  private float kineticEnergy = 0;
->>>>>>> bb9997f0efbf394aa541595887d0d753c363e510
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -27,7 +23,6 @@ public class ForceDiagram {
       }});
   }
   
-<<<<<<< HEAD
   void setScale(float newScale) {
     this.xOffset += (((this.w * this.scale) - (this.w * newScale)) / 2);
     this.yOffset += (((this.h * this.scale) - (this.h * newScale)) / 2);
@@ -44,8 +39,6 @@ public class ForceDiagram {
     this.yOffset += y; 
   }
   
-=======
->>>>>>> bb9997f0efbf394aa541595887d0d753c363e510
   void setSpringConstant(float springConstant) {
     this.springConstant = springConstant; 
     println("Spring: ", this.springConstant);
@@ -94,7 +87,6 @@ public class ForceDiagram {
     }
   }
   
-<<<<<<< HEAD
   void updateNewNodeState() {
     drawingNewNode = (drawingNewNode + 1) % 3;
   }
@@ -115,24 +107,16 @@ public class ForceDiagram {
   }
   
   void startDrag() {
-=======
-  boolean startDrag() {
->>>>>>> bb9997f0efbf394aa541595887d0d753c363e510
     for (int i = 0; i < nodes.size(); i++) {
-      if (nodes.get(i).startDrag()) {
-        return true;
-      }
+      nodes.get(i).startDrag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
     }
-    return false;
   }
   
-  boolean drag(){
+  void drag(){
     for (int i = 0; i < nodes.size(); i++) {
-      if (nodes.get(i).drag()) {
-        return true;
-      }
+      nodes.get(i).drag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
     }
-    return false;
+    
   }
   
   void stopDrag() {
@@ -141,7 +125,6 @@ public class ForceDiagram {
     }
   }
   
-<<<<<<< HEAD
   void makeEdge(Node node1) {
     Node node2 = null;
     for (int i = 0; i < this.nodes.size(); i++) {
@@ -155,6 +138,7 @@ public class ForceDiagram {
   }
   
   void makeNewEdge() {
+    println("about to make new edge");
     updateNewNodeState();
     for (int i = 0; i < this.nodes.size(); i++) {
       if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
@@ -198,15 +182,6 @@ public class ForceDiagram {
             this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
           }
         }
-=======
-  float kineticEnergy() {
-    return this.kineticEnergy;
-  }
-  
-  
-  void render(float time) {
-    //println(getMouseX(), getMouseY());
->>>>>>> bb9997f0efbf394aa541595887d0d753c363e510
     
         
         for (int i = 0; i < nodes.size(); i++) {
@@ -215,28 +190,25 @@ public class ForceDiagram {
         }
         //println(ke);
         break;
+      case 3:
+        // make edge
+        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
+        if (!mousePressed){
+          makeEdge(latest);
+          drawingNewNode = 0;
+        }
     }
     
-<<<<<<< HEAD
     textSize(12);
     textAlign(LEFT, TOP);
     fill(0);
     text("Kinetic Energy: " + nfc(ke, 2), x + 3, y);
-=======
-    float ke = 0;
-    for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).updatePosition(time, this.dampingConstant);
-      ke += this.nodes.get(i).kineticEnergy();
-    }
-    this.kineticEnergy = ke;
-
->>>>>>> bb9997f0efbf394aa541595887d0d753c363e510
 
     for (int i = 0; i < nodes.size(); i++) {
-      this.nodes.get(i).render();
+      this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
     }
     for (int i = 0; i < edges.size(); i++) {
-      this.edges.get(i).render();
+      this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
     }
   }
     
