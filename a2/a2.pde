@@ -108,13 +108,11 @@ void mousePressed() {
     
   }  else {
     
-        boolean madeNode = false;
         if (mouseX > x) { 
-          madeNode = diagram.makeNode();
+          diagram.makeNode();
         }
-        
-       diagram.makeNewEdge(); 
-
+          
+        diagram.makeNewEdge(); 
   }
 
   endScaling();
