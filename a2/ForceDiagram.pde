@@ -5,7 +5,6 @@ public class ForceDiagram {
   private float springConstant = 15;
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
-    private float xOffset = 0.0, yOffset = 0.0;
   private Node latest;
   private int drawingNewNode = 2;
   private float kineticEnergy = 0;
@@ -78,11 +77,12 @@ public class ForceDiagram {
     drawingNewNode = (drawingNewNode + 1) % 3;
   }
   
-  void makeNode(){
+  boolean makeNode(){
     boolean anyNodeHovered = false;
     for (int i = 0; i < this.nodes.size(); i++) {
       anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover();
     }
+    println(anyNodeHovered);
     if (!anyNodeHovered) {
       diagram.updateNewNodeState();
       Node newNode = new Node(2);
@@ -90,7 +90,7 @@ public class ForceDiagram {
       newNode.setPosition(getMouseX(),getMouseY());
       this.nodes.add(newNode);
     }
-    return;
+    return !anyNodeHovered;
   }
   
 
@@ -132,6 +132,7 @@ public class ForceDiagram {
   }
   
   void makeNewEdge() {
+    println("about to make new edge");
     updateNewNodeState();
     for (int i = 0; i < this.nodes.size(); i++) {
       if (this.nodes.get(i).hover()){
@@ -146,22 +147,55 @@ public class ForceDiagram {
   
   
   void render(float time) {
-
-    for (int i = 0; i < edges.size(); i++) {
-      this.edges.get(i).applyHookeForces(this.springConstant);
-    }
-    
-    for (int i = 0; i < nodes.size(); i++) {
-      for (int j = i + 1; j < nodes.size(); j++) {
-        this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
-      }
-    }
     
     float ke = 0;
-    for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).updatePosition(time, this.dampingConstant);
-      ke += this.nodes.get(i).kineticEnergy();
+
+     switch (drawingNewNode) {
+      // determining size of new node
+      case 0 :
+        if (latest != null) {
+          latest.incrementMass();
+        }
+        if (!mousePressed){
+          updateNewNodeState();
+        }
+        break;
+      // determining which node this one is connected to
+      case 1 :
+        // make edge
+        line(latest.x, latest.y, getMouseX(), getMouseY());
+        if (mousePressed && (mouseButton == LEFT)){
+          makeEdge(latest);
+          updateNewNodeState();
+        }
+        break;
+      // normal behavior
+      case 2 :
+        for (int i = 0; i < edges.size(); i++) {
+          this.edges.get(i).applyHookeForces(this.springConstant);
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+          for (int j = i + 1; j < nodes.size(); j++) {
+            this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
+          }
+        }
+    
+        
+        for (int i = 0; i < nodes.size(); i++) {
+          nodes.get(i).updatePosition(time, this.dampingConstant);
+          ke += this.nodes.get(i).kineticEnergy();
+        }
+        break;
+      case 3:
+        // make edge
+        line(latest.x, latest.y, getMouseX(), getMouseY());
+        if (!mousePressed){
+          makeEdge(latest);
+          drawingNewNode = 0;
+        }
     }
+    
+ 
     this.kineticEnergy = ke;
 
     for (int i = 0; i < nodes.size(); i++) {
