@@ -5,10 +5,10 @@ public class ForceDiagram {
   private float springConstant = 15;
   private float dampingConstant = 0.1;
   private float coulombConstant = 6000;
-  private float xOffset = 0.0, yOffset = 0.0, scale = 1.0;
-  private float x, y, w, h;
+    private float xOffset = 0.0, yOffset = 0.0;
   private Node latest;
   private int drawingNewNode = 2;
+  private float kineticEnergy = 0;
   
   ForceDiagram(List<Node> nodes, List<Edge> edges) {
     // Set local nodes and edges
@@ -23,22 +23,8 @@ public class ForceDiagram {
       }});
   }
   
-  void setScale(float newScale) {
-    this.xOffset += (((this.w * this.scale) - (this.w * newScale)) / 2);
-    this.yOffset += (((this.h * this.scale) - (this.h * newScale)) / 2);
-    this.scale = newScale; 
-  }
-  
-  public void resetOffset() {
-    this.xOffset = 0;
-    this.yOffset = 0;
-  }
-  
-  public void incementOffset(float x, float y) {
-    this.xOffset += x;
-    this.yOffset += y; 
-  }
-  
+
+
   void setSpringConstant(float springConstant) {
     this.springConstant = springConstant; 
     println("Spring: ", this.springConstant);
@@ -87,36 +73,43 @@ public class ForceDiagram {
     }
   }
   
+
   void updateNewNodeState() {
     drawingNewNode = (drawingNewNode + 1) % 3;
   }
+  
   void makeNode(){
     boolean anyNodeHovered = false;
     for (int i = 0; i < this.nodes.size(); i++) {
-      anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover(x + xOffset, y + yOffset, scale);
+      anyNodeHovered = anyNodeHovered || this.nodes.get(i).hover();
     }
-    println(anyNodeHovered);
     if (!anyNodeHovered) {
       diagram.updateNewNodeState();
       Node newNode = new Node(2);
       latest = newNode;
-      newNode.setPosition(mouseX - x - xOffset, mouseY - y - yOffset);
+      newNode.setPosition(getMouseX(),getMouseY());
       this.nodes.add(newNode);
     }
     return;
   }
   
-  void startDrag() {
+
+  boolean startDrag() {
     for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).startDrag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
+      if (nodes.get(i).startDrag()) {
+        return true;
+      }
     }
+    return false;
   }
   
-  void drag(){
+  boolean drag(){
     for (int i = 0; i < nodes.size(); i++) {
-      nodes.get(i).drag(this.x + this.xOffset, this.y + this.yOffset, this.scale);
+      if (nodes.get(i).drag()) {
+        return true;
+      }
     }
-    
+    return false;
   }
   
   void stopDrag() {
@@ -125,10 +118,11 @@ public class ForceDiagram {
     }
   }
   
+
   void makeEdge(Node node1) {
     Node node2 = null;
     for (int i = 0; i < this.nodes.size(); i++) {
-      if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
+      if (this.nodes.get(i).hover()){
         node2 = this.nodes.get(i);
         Edge newEdge = new Edge(node1, node2, dist(node1.x, node1.y, node2.x, node2.y));
         println(newEdge);
@@ -138,77 +132,43 @@ public class ForceDiagram {
   }
   
   void makeNewEdge() {
-    println("about to make new edge");
     updateNewNodeState();
     for (int i = 0; i < this.nodes.size(); i++) {
-      if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
+      if (this.nodes.get(i).hover()){
         this.latest = this.nodes.get(i);
       }
     }
   }
+
+  float kineticEnergy() {
+    return this.kineticEnergy;
+  }
   
-  void render(float x, float y, float w, float h, float time) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    float ke = 0;
-    switch (drawingNewNode) {
-      // determining size of new node
-      case 0 :
-        if (latest != null) {
-          latest.incrementMass();
-        }
-        if (!mousePressed){
-          updateNewNodeState();
-        }
-        break;
-      // determining which node this one is connected to
-      case 1 :
-        // make edge
-        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
-        if (mousePressed && (mouseButton == 37)){
-          makeEdge(latest);
-          updateNewNodeState();
-        }
-        break;
-      // normal behavior
-      case 2 :
-        for (int i = 0; i < edges.size(); i++) {
-          this.edges.get(i).applyHookeForces(this.springConstant);
-        }
-        for (int i = 0; i < nodes.size(); i++) {
-          for (int j = i + 1; j < nodes.size(); j++) {
-            this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
-          }
-        }
-    
-        
-        for (int i = 0; i < nodes.size(); i++) {
-          nodes.get(i).updatePosition(time, this.dampingConstant);
-          ke += this.nodes.get(i).kineticEnergy();
-        }
-        //println(ke);
-        break;
-      case 3:
-        // make edge
-        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
-        if (!mousePressed){
-          makeEdge(latest);
-          drawingNewNode = 0;
-        }
+  
+  void render(float time) {
+
+    for (int i = 0; i < edges.size(); i++) {
+      this.edges.get(i).applyHookeForces(this.springConstant);
     }
     
-    textSize(12);
-    textAlign(LEFT, TOP);
-    fill(0);
-    text("Kinetic Energy: " + nfc(ke, 2), x + 3, y);
+    for (int i = 0; i < nodes.size(); i++) {
+      for (int j = i + 1; j < nodes.size(); j++) {
+        this.nodes.get(i).applyCoulombForce(nodes.get(j), this.coulombConstant);
+      }
+    }
+    
+    float ke = 0;
+    for (int i = 0; i < nodes.size(); i++) {
+      nodes.get(i).updatePosition(time, this.dampingConstant);
+      ke += this.nodes.get(i).kineticEnergy();
+    }
+    this.kineticEnergy = ke;
 
     for (int i = 0; i < nodes.size(); i++) {
-      this.nodes.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      this.nodes.get(i).render();
     }
     for (int i = 0; i < edges.size(); i++) {
-      this.edges.get(i).render(x + this.xOffset, y + this.yOffset, this.scale);
+      this.edges.get(i).render();
     }
   }
     
