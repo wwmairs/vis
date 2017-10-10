@@ -19,8 +19,8 @@ public class Edge {
     this.nodeTwo.applyForce(nodeTwoForce);
   }
   
-  void render(float x, float y, float scale) {
+  void render() {
     fill(0);
-    line(x + (scale * this.nodeOne.x), y + (scale * this.nodeOne.y), x + (scale * this.nodeTwo.x), y + (scale * this.nodeTwo.y));
+    line(this.nodeOne.x, this.nodeOne.y, this.nodeTwo.x, this.nodeTwo.y);
   }
 }

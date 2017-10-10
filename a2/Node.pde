@@ -33,24 +33,17 @@ public class Node {
       otherNode.coulombForce.add(r.copy().normalize().mult(force));
     }
   }
+
   
-  float scaleCoord(float coord, float start, float scale) {
-    return start + (scale * coord);
-  }
-  
-  float unscaleCoord(float coord, float start, float scale) {
-    return (coord - start) / scale;
-  }
-  
-  void render(float x, float y, float scale) {
+  void render() {
     fill(0);
-    float renderX = this.scaleCoord(this.x, x, scale);
-    float renderY = this.scaleCoord(this.y, y, scale);
+    
     fill(30, 99, 144);
-    if (this.hover(x, y, scale)) {
+    if (this.hover()) {
+
       fill(255, 204, 0);
     }
-    ellipse(renderX, renderY, (scale * this.radius() * 2), (scale * this.radius() * 2));
+    ellipse(this.x, this.y, this.radius() * 2, this.radius() * 2);
     fill(0);
     strokeWeight(2);
     stroke(80, 44, 230);
@@ -83,25 +76,27 @@ public class Node {
     this.y = y;
   }
   
-  void startDrag(float x, float y, float scale) {
-    if (this.hover(x, y, scale)) {
+  boolean startDrag() {
+    if (this.hover()) {
+      println("dragging");
       this.dragging = true;
     }
+    return this.dragging;
   }
   
-  void drag(float x, float y, float scale) {
+  boolean drag() {
     if (this.dragging) {
-      this.setPosition(this.unscaleCoord(mouseX, x, scale), this.unscaleCoord(mouseY, y, scale));
+      this.setPosition(getMouseX(), getMouseY());
     }
+    return this.dragging;
   }
   
   void stopDrag() {
     this.dragging = false; 
   }
   
-  boolean hover(float x, float y, float scale){
-    
-    return (dist(this.unscaleCoord(mouseX, x, scale), this.unscaleCoord(mouseY, y, scale), this.x, this.y) <= this.radius());
+  boolean hover(){
+    return (dist(getMouseX(), getMouseY(), this.x, this.y) <= this.radius());
   } 
   
   float kineticEnergy() {
