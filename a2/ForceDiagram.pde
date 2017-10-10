@@ -138,7 +138,6 @@ public class ForceDiagram {
   }
   
   void makeNewEdge() {
-    println("about to make new edge");
     updateNewNodeState();
     for (int i = 0; i < this.nodes.size(); i++) {
       if (this.nodes.get(i).hover(x + xOffset, y + yOffset, scale)){
@@ -190,13 +189,6 @@ public class ForceDiagram {
         }
         //println(ke);
         break;
-      case 3:
-        // make edge
-        line(latest.x + x + xOffset, latest.y + y + yOffset, mouseX, mouseY);
-        if (!mousePressed){
-          makeEdge(latest);
-          drawingNewNode = 0;
-        }
     }
     
     textSize(12);
