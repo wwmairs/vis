@@ -8,10 +8,12 @@ float scale;
 float translateX, translateY;
 float mx = 0;
 float my = 0;
+char pressedKey;
 
 // Dragging Booleans
 boolean draggingNode = false;
 boolean draggingDiagram = false;
+boolean makingNode = false;
 
 // Constants
 int lastFrame;
@@ -95,6 +97,7 @@ void mousePressed() {
   springSlider.startDrag();
   dampingSlider.startDrag();
   coulombSlider.startDrag();
+  println(mouseButton);
   beginScaling();
   if (mouseButton == LEFT) {
     
@@ -104,14 +107,14 @@ void mousePressed() {
     }
     
   }  else {
-    if (mouseX > x) { 
-      diagram.makeNode();
-    }
     
+        if (mouseX > x) { 
+          diagram.makeNode();
+        }
+          
+        diagram.makeNewEdge(); 
   }
-  //} else if (mouseButton == 39) {
-  //  diagram.makeNewEdge();
-  //}
+
   endScaling();
   // If not dragging a node, initialize screen drag 
   
@@ -141,6 +144,7 @@ float getMouseY() {
 }
 
 void keyPressed() {
+  pressedKey = key;
   if (key == 'r') {
     scale = 1;
     x = 200;

@@ -12,6 +12,7 @@ public class Node {
   }
   void incrementMass() {
     this.mass += .1;
+    println("Increment Mass");
   }
   void applyForce(PVector appliedForce) {
     this.force.add(appliedForce);
