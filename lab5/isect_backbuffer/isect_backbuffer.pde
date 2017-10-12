@@ -44,8 +44,14 @@ void draw () {
 void drawPickBuffer() {
   pickbuffer.beginDraw();
   
-  //TODO: Fill in this function
-
+  for (int i=0; i<numCircles; i++) { 
+    if (circles[i].getSelected() == true) {
+      circles[i].renderSelected();
+    }
+    else {
+      circles[i].renderIsect(pickbuffer);
+    }
+  }
   
   pickbuffer.endDraw();  
 }
@@ -65,15 +71,3 @@ void mouseMoved () {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
