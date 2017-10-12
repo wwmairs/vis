@@ -1,0 +1,7 @@
+Max Greenwald and William Mairs
+
+This is a supplemental submission to our previous one, including cool 
+new features.  Click and hold to create a new node; right click to create
+a new edge.
+
+
