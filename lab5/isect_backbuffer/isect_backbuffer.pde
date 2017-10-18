@@ -63,7 +63,7 @@ void mouseMoved () {
 
     //TODO: You will need to change the way that isect is called
 
-    if (circles[i].isect() == true) {
+    if (circles[i].isect(pickbuffer) == true) {
       circles[i].setSelected(true);
     }
     else {
