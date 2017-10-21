@@ -1,0 +1,26 @@
+1. first method: 4 points in the ab plane and then rotate
+	try to find 8 equidistant points in L*a*b space geometrically
+	point 1 50, -80, 0
+	point 2 60, -70 -80
+	point 3 100, 0, -90
+	point 4 
+	point 5
+	point 6
+	point 7
+	point 8
+
+
+2. all in the ab plane
+
+
+3. random method
+	1st algorithm for determing if a color palette is 'better'
+	compute random rbg value on each call to draw
+	compare previous best avg / previous best sd with new avg / sd
+	if new value higher, update best values and best colors
+	
+	2nd algorithm
+	avg / std squared	
+
+	3rd
+	std squared / avg

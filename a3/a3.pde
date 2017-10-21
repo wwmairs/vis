@@ -1,23 +1,42 @@
-import java.util.List;
-import java.util.HashMap;
+static float MARGIN = 20;
+static float SPACE = 0.15;
+static float GLOBAL_SCALE = 500;
 
 BarToLine barToLine;
-BarPoint barpoint;
-float temp_width = 50;
-float temp_height = 200;
-float temp_x = 400;
-float temp_y = 500;
+VbarHbar testVbar;
+BarToPie barToPie;
+
+float temp_width = 25;
+float temp_height = 100;
+float temp_x = 300;
+float temp_y = 400;
 
 void setup() {
-  size(1000, 800);
+  size(800, 600);
   surface.setResizable(true);
   
-  barpoint = new BarPoint(temp_width, temp_height, temp_x, temp_y);
-  barToLine = new BarToLine(8);
+  barToLine = new BarToLine(parseData("data1.csv"));
+  barToPie = new BarToPie(parseData("data1.csv"));
+  testVbar = new VbarHbar(temp_x, temp_y, temp_width, temp_height, 400, 0.1);
 }
 
 void draw() {
   background(255);
-  //barpoint.render();
-  barToLine.render();
+  //barToLine.render();
+  barToPie.render();
+  //testVbar.render();
+}
+
+float [] parseData(String filename) {
+  String [] unparsedData = loadStrings(filename);
+  int numRows = unparsedData.length;
+  float [] keys = new float [numRows - 1];
+  float [] values = new float [numRows - 1];
+  
+  for (int i = 1; i < numRows; i++) {
+    String [] line = unparsedData[i].split(",");
+    keys[i - 1] = float(line[0]);
+    values[i - 1] = float(line[1]);
+  }
+  return values;
 }
