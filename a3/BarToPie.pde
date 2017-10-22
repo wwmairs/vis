@@ -1,6 +1,6 @@
-//static float BAR_TO_POINT = 0.5;
-//static float FULL_LINES = 0.7;
-//static float COMPLETE_LINES = 1; 
+static float BARS = 0.5;
+static float BAR_SQUISH = 0.8;
+static float SOMETHING_ELSE = 1; 
 
 
 // sample array of bars
@@ -52,7 +52,7 @@ class BarToPie {
       float barHeight = data[i]  * ratio;
       float barSquished = data[i] * vbarRatio;
       
-      VbarHbars[i] = new VbarHbar(start, (yOrigin + barHeight), bar, -barHeight, GLOBAL_SCALE * BAR_TO_POINT, barSquished);
+      VbarHbars[i] = new VbarHbar(start, (yOrigin + barHeight), bar, -barHeight, GLOBAL_SCALE * BARS, barSquished);
       start += barSpace;
     }
   }
@@ -62,10 +62,24 @@ class BarToPie {
     // some axes
     line(xOrigin, yOrigin, xOrigin, yCoord);
     line(xOrigin, yOrigin, xCoord, yOrigin);
-    println(width - MARGIN);
     
-    for (int i = 0; i < dataSize; i++) {
-      VbarHbars[i].render();
+   if (counter < (GLOBAL_SCALE * BARS)) {
+     for (int i = 0; i < dataSize; i++) {
+       VbarHbars[i].renderShrink();
+     }
+   } else if ((counter >= (GLOBAL_SCALE * BARS)) && (counter < (GLOBAL_SCALE * BAR_SQUISH))) {
+     float localCount = counter - (GLOBAL_SCALE * BARS);
+     float countPerBar = ((GLOBAL_SCALE * SOMETHING_ELSE) - (GLOBAL_SCALE * BAR_SQUISH)) / dataSize;
+     int i = int(localCount) / int(countPerBar);
+     float prevX;
+     for (int j = 0; j < dataSize; j++) {
+       if (i != 0 && i == j){
+         prevX = VbarHbars[i - 1].getCurrX();
+         VbarHbars[i].renderSquish(prevX, (localCount % int(countPerBar)) * (100/int(countPerBar)));
+       } else {
+         VbarHbars[j].drawRect();
+       }
+     }   
    }
    counter++;
   }
