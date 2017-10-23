@@ -91,44 +91,15 @@ class BarToPie {
          VbarHbars[j].drawRect();
        }
      }   
-   } else if ((counter >= (GLOBAL_SCALE * BAR_SQUISH)) && (counter < (GLOBAL_SCALE * ARC_MOVE))) {
+   } else if (counter >= (GLOBAL_SCALE * BAR_SQUISH)) {
      if (this.arcs == null) {
        // make arcs
        makeArcs();
      }
-     // move arcs to center of screen
-     float targetX = ((width - MARGIN) / 2) + MARGIN;
-     float targetY = ((height - MARGIN) / 2) - MARGIN;
-     float xStep = (targetX - MARGIN) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
-     float yStep = (height - MARGIN - targetY) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
      // draw arcs
      float startTheta = 0;
      for (int i = 0; i < arcs.length; i++) {
-       arcs[i].render(startTheta);
-       startTheta += arcs[i].theta;
-       if (arcs[i].centerX < targetX) {
-         arcs[i].centerX += xStep;
-         arcs[i].centerY -= yStep;
-       }
-     }
-   }
-   else if ((counter >= (GLOBAL_SCALE * ARC_MOVE)) && (counter < (GLOBAL_SCALE * ARC_WRAP))){
-     // wrap arcs
-     // draw arcs
-     //float radiusStep = (log(START_RADIUS) / log(2)) / ((GLOBAL_SCALE * ARC_WRAP) - (GLOBAL_SCALE * ARC_MOVE));
-     float startTheta = 0;
-     for (int i = 0; i < arcs.length; i++) {
-       if (arcs[i].totalTheta < TWO_PI) {
-         arcs[i].updateRadius(arcs[i].radius / 16);
-       }
-       arcs[i].render(startTheta);
-       startTheta += arcs[i].theta;
-     }
-   } else {
-     // draw arcs
-     float startTheta = 0;
-     for (int i = 0; i < arcs.length; i++) {
-       arcs[i].render(startTheta);
+       arcs[i].renderAt(counter, startTheta);
        startTheta += arcs[i].theta;
      }
    }

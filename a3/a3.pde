@@ -25,10 +25,10 @@ void setup() {
 
 void draw() {
   background(BACKGROUND_COLOR);
-  barToLine.renderAt(per);
-  per--;
-  println(per);
-  //barToPie.render();
+  //barToLine.renderAt(per);
+  //per--;
+  //println(per);
+  barToPie.render();
   //testVbar.render();
 }
 
