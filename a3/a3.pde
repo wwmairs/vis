@@ -1,6 +1,7 @@
 static float MARGIN = 20;
 static float SPACE = 0.15;
 static float GLOBAL_SCALE = 1000;
+static color BACKGROUND_COLOR = #C5FFEB;
 
 BarToLine barToLine;
 VbarHbar testVbar;
@@ -21,7 +22,7 @@ void setup() {
 }
 
 void draw() {
-  background(#C5FFEB);
+  background(BACKGROUND_COLOR);
   //barToLine.render();
   barToPie.render();
   //testVbar.render();

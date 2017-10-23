@@ -1,6 +1,8 @@
-static float BARS = 0.5;
-static float BAR_SQUISH = 0.8;
-static float SOMETHING_ELSE = 1; 
+static float BARS = 0.3;
+static float BAR_SQUISH = 0.65;
+static float ARC_MOVE = 0.7;
+static float ARC_WRAP = 1; 
+static float START_RADIUS = 100000;
 
 
 // sample array of bars
@@ -10,6 +12,7 @@ class BarToPie {
   float xCoord, yCoord;
   VbarHbar [] VbarHbars;
   Line [] lines;
+  Arc [] arcs;
   int dataSize;
   float [] data;
   float counter;
@@ -26,6 +29,7 @@ class BarToPie {
     this.yCoord = MARGIN;
     this.counter = 0;
     
+    println("arcs =", arcs);
     makeBars();
   }
   
@@ -57,11 +61,18 @@ class BarToPie {
     }
   }
   
+  void makeArcs() {
+    float totalArcLength = 0;
+    for (int i = 0; i < VbarHbars.length; i++) {
+      totalArcLength += VbarHbars[i].currWidth;
+    }
+    arcs = new Arc[dataSize];
+    for (int i = 0; i < VbarHbars.length; i++) {
+      arcs[i] = new Arc(VbarHbars[i].currWidth, totalArcLength, START_RADIUS, VbarHbars[i].currHeight);
+    }
+  }
   
   void render(){
-    // some axes
-    line(xOrigin, yOrigin, xOrigin, yCoord);
-    line(xOrigin, yOrigin, xCoord, yOrigin);
     
    if (counter < (GLOBAL_SCALE * BARS)) {
      for (int i = 0; i < dataSize; i++) {
@@ -69,7 +80,7 @@ class BarToPie {
      }
    } else if ((counter >= (GLOBAL_SCALE * BARS)) && (counter < (GLOBAL_SCALE * BAR_SQUISH))) {
      float localCount = counter - (GLOBAL_SCALE * BARS);
-     float countPerBar = ((GLOBAL_SCALE * SOMETHING_ELSE) - (GLOBAL_SCALE * BAR_SQUISH)) / dataSize;
+     float countPerBar = ((GLOBAL_SCALE * ARC_WRAP) - (GLOBAL_SCALE * BAR_SQUISH)) / dataSize;
      int i = int(localCount) / int(countPerBar);
      float prevX;
      for (int j = 0; j < dataSize; j++) {
@@ -80,7 +91,51 @@ class BarToPie {
          VbarHbars[j].drawRect();
        }
      }   
+   } else if ((counter >= (GLOBAL_SCALE * BAR_SQUISH)) && (counter < (GLOBAL_SCALE * ARC_MOVE))) {
+     if (this.arcs == null) {
+       // make arcs
+       makeArcs();
+     }
+     // move arcs to center of screen
+     float targetX = ((width - MARGIN) / 2) + MARGIN;
+     float targetY = ((height - MARGIN) / 2) - MARGIN;
+     float xStep = (targetX - MARGIN) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
+     float yStep = (height - MARGIN - targetY) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
+     // draw arcs
+     float startTheta = 0;
+     for (int i = 0; i < arcs.length; i++) {
+       arcs[i].render(startTheta);
+       startTheta += arcs[i].theta;
+       if (arcs[i].centerX < targetX) {
+         arcs[i].centerX += xStep;
+         arcs[i].centerY -= yStep;
+       }
+     }
+   }
+   else if ((counter >= (GLOBAL_SCALE * ARC_MOVE)) && (counter < (GLOBAL_SCALE * ARC_WRAP))){
+     // wrap arcs
+     // draw arcs
+     //float radiusStep = (log(START_RADIUS) / log(2)) / ((GLOBAL_SCALE * ARC_WRAP) - (GLOBAL_SCALE * ARC_MOVE));
+     float startTheta = 0;
+     for (int i = 0; i < arcs.length; i++) {
+       if (arcs[i].totalTheta < TWO_PI) {
+         arcs[i].updateRadius(arcs[i].radius / 16);
+       }
+       arcs[i].render(startTheta);
+       startTheta += arcs[i].theta;
+     }
+   }     }
+   } else {
+     // draw arcs
+     float startTheta = 0;
+     for (int i = 0; i < arcs.length; i++) {
+       arcs[i].render(startTheta);
+       startTheta += arcs[i].theta;
+     }
    }
    counter++;
+   // some axes
+   line(xOrigin, yOrigin, xOrigin, yCoord);
+   line(xOrigin, yOrigin, xCoord, yOrigin);
   }
 }

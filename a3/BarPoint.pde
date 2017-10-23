@@ -54,9 +54,9 @@ class BarPoint {
     rect(this.currX, this.currY, this.currWidth, this.currHeight);
     fill(#000000);
   }
-
   float rangeToPercent(float start, float end, float count) {
     text((count - (scale * start)) * (100 / (scale * (end - start))), 50, 50);
     return (count - (scale * start)) * (100 / (scale * (end - start)));
-  }
+}
+
 }
