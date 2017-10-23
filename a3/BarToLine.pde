@@ -12,7 +12,6 @@ class BarToLine {
   Line [] lines;
   int dataSize;
   float [] data;
-  float counter;
  
  //HashMap<String, String []> data this is an argument
   public BarToLine(float [] data){
@@ -24,7 +23,6 @@ class BarToLine {
     this.yOrigin = height - MARGIN;
     this.xCoord = width - MARGIN;
     this.yCoord = MARGIN;
-    this.counter = 0;
     
     makeBars();
   }
@@ -64,28 +62,28 @@ class BarToLine {
     }
   }
   
-  void render(){
+
+  void renderAt(float counter){
     // some axes
     line(xOrigin, yOrigin, xOrigin, yCoord);
     line(xOrigin, yOrigin, xCoord, yOrigin);
-    println(width - MARGIN);
     
     for (int i = 0; i < dataSize; i++) {
-     barPoints[i].render();
-   }
+      barPoints[i].renderAt(counter);
+    }
+   
    
    makeLines();
-   if (counter >= (GLOBAL_SCALE * BAR_TO_POINT)) {
-     for (int i = 0; i < dataSize - 1; i++) {
-       lines[i].renderComplete();
-     }
-   }
+   //if (counter >= (GLOBAL_SCALE * BAR_TO_POINT)) {
+   //  for (int i = 0; i < dataSize - 1; i++) {
+   //    lines[i].renderComplete();
+   //  }
+   //}
    
    if (counter >= (GLOBAL_SCALE * FULL_LINES)) {
-     for (int i = 0; i < dataSize - 1; i++) {
+     for (int i = 0; i < dataSize; i++) {
        lines[i].renderRetract();
      }
    }
-   counter++;
   }
 }

@@ -12,6 +12,8 @@ float temp_height = 100;
 float temp_x = 300;
 float temp_y = 400;
 
+float per = 1000;
+
 void setup() {
   size(800, 600);
   surface.setResizable(true);
@@ -23,8 +25,10 @@ void setup() {
 
 void draw() {
   background(BACKGROUND_COLOR);
-  //barToLine.render();
-  barToPie.render();
+  barToLine.renderAt(per);
+  per--;
+  println(per);
+  //barToPie.render();
   //testVbar.render();
 }
 

@@ -124,7 +124,6 @@ class BarToPie {
        arcs[i].render(startTheta);
        startTheta += arcs[i].theta;
      }
-   }     }
    } else {
      // draw arcs
      float startTheta = 0;
