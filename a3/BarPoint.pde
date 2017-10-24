@@ -55,7 +55,7 @@ class BarPoint {
   
   void renderAt(float count) {
     float counter = 0;
-    println("trying to renderAt: " + count);
+    //println("trying to renderAt: " + count);
     while (counter <= count) {
       float localPercent;
       if ((counter >= 0) && (counter < scale * BAR_SHRINK_UP)) {
@@ -64,11 +64,10 @@ class BarPoint {
         this.currX = this.x;
         this.currY = this.y;
         localPercent = rangeToPercent(0, BAR_SHRINK_UP, counter);
-        rectMode(CORNER);;
-        if (this.currHeight > this.pointHeight) {
-          this.currHeight = (this.fullHeight * ((100 - localPercent)/100));
-        }
+        rectMode(CORNER);
+        this.currHeight = max((this.fullHeight * ((100 - localPercent)/100)), this.pointHeight);
       } else if ((counter >= scale * BAR_SHRINK_UP) && (counter < scale * BAR_SHRINK_IN)){
+        this.currHeight = this.pointHeight;
         this.currWidth = this.fullWidth;
         this.currX = this.x;
         this.currY = this.y;
@@ -76,9 +75,7 @@ class BarPoint {
         rectMode(CENTER);
         this.currX = this.x + (this.fullWidth / 2);
         this.currY = this.y + (this.currHeight / 2);
-        if (this.currWidth > this.pointWidth) {
-          this.currWidth = (this.fullWidth * ((100 - localPercent)/100));
-        } 
+        this.currWidth = max((this.fullWidth * ((100 - localPercent)/100)), this.pointWidth);
       } else if ((counter >= scale * BAR_SHRINK_IN) && (counter < scale * POINT_RISE)) {
         this.currWidth = this.pointWidth;
         this.currHeight = this.pointHeight;

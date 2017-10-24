@@ -1,12 +1,12 @@
 public class Button {
-  int Width;
-  int Height;
-  int centerX;
-  int centerY;
+  float Width;
+  float Height;
+  float centerX;
+  float centerY;
   String label;
   color backgroundColor;
   
-  public Button(int x, int y, int w, int h, color c, String l) {
+  public Button(float x, float y, float w, float h, color c, String l) {
     Width = w;
     Height = h;
     centerX = x;
@@ -15,16 +15,18 @@ public class Button {
     backgroundColor = c;
   }
   
-  
+  public void setColor(color c) {
+    this.backgroundColor = c;
+  }
   public void setLabel(String l) {
     label = l;
   }
   
-  public void setWidth(int w) {
+  public void setWidth(float w) {
     Width = w;
   }
   
-  public void setHeight(int h) {
+  public void setHeight(float h) {
     Height = h;
   }
   
@@ -42,6 +44,7 @@ public class Button {
     fill(backgroundColor);
     println("mouse at: ", mouseX, mouseY);
     println("about to draw rect: ", centerX, centerY, Width, Height);
+    rectMode(CORNER);
     rect(centerX, centerY, Width, Height);
     fill(0);
     textSize(14);
