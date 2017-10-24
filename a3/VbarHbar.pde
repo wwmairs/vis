@@ -1,12 +1,12 @@
-static float BAR_SHRINK = .4;
-static float BAR_ROTATE = .6;
-static float BAR_FALL = 1;
+static float BAR_SHRINK = .17;
+static float BAR_ROTATE = .19;
+static float BAR_FALL = .3;
 
 class VbarHbar {
   float x, y, fullHeight, fullWidth, fall;
   float currX, currY, currHeight, currWidth;
-  float counter;
-  float scale;
+  //float globalCounter;
+  //float scale;
   float barSquished;
 
 
@@ -20,8 +20,8 @@ class VbarHbar {
     this.currY = y;
     this.currHeight = h;
     this.currWidth = w;
-    this.counter = 0;
-    this.scale = scale;
+    //this.globalCounter = 0;
+    //this.GLOBAL_SCALE = GLOBAL_SCALE;
     this.barSquished = barSquished;
   }
 
@@ -29,25 +29,26 @@ class VbarHbar {
   public void renderShrink() {
     float localPercent;
     //float yStep = (height - MARGIN - this.currY) / 100;
-    if ((counter >= 0) && (counter < scale * BAR_SHRINK)) {
-      localPercent = rangeToPercent(0, BAR_SHRINK, counter);
+    if ((globalCounter >= 0) && (globalCounter < GLOBAL_SCALE * BAR_SHRINK)) {
+      localPercent = rangeToPercent(0, BAR_SHRINK, globalCounter);
       rectMode(CORNER);
       ;
       if (this.currHeight > this.barSquished) {
         this.currHeight = (this.fullHeight * ((100 - localPercent)/100));
       }
       drawRect();
-    } else if ((counter >= scale * BAR_SHRINK) && (counter <= scale * BAR_ROTATE)) {
-      localPercent = rangeToPercent((BAR_SHRINK), (BAR_ROTATE), counter);
+    } else if ((globalCounter >= GLOBAL_SCALE * BAR_SHRINK) && (globalCounter <= GLOBAL_SCALE * BAR_ROTATE)) {
+      localPercent = rangeToPercent((BAR_SHRINK), (BAR_ROTATE), globalCounter);
       pushMatrix();
       // do something
       translate(x, y);
       rotate(-1 * radians(90) * (localPercent/100));
       // draw bar
+      fill(255);
       rect(0, 0, this.currWidth, this.currHeight);
       popMatrix();
-    } else if ((counter > scale * BAR_ROTATE) && (counter <= scale * BAR_FALL)) {
-      if (counter == int(scale * BAR_ROTATE) + 1) {
+    } else if ((globalCounter > GLOBAL_SCALE * BAR_ROTATE) && (globalCounter <= GLOBAL_SCALE * BAR_FALL)) {
+      if (globalCounter == int(GLOBAL_SCALE * BAR_ROTATE) + 1) {
         println("inside the conditional!");
         this.currY -= this.currWidth;
         float swap = this.currWidth;
@@ -55,7 +56,7 @@ class VbarHbar {
         this.currHeight = swap;
       }
       // move y coordinate down! until at bottom of screen  
-      localPercent = rangeToPercent(BAR_ROTATE, BAR_FALL, counter);
+      localPercent = rangeToPercent(BAR_ROTATE, BAR_FALL, globalCounter);
       text(localPercent, 50, 50);
       this.currY += fall / 100;
       if (this.currY >= (height - MARGIN - currHeight)) {
@@ -66,9 +67,6 @@ class VbarHbar {
     else {
       drawRect();
     }
-    if (counter < scale + 1) {
-      counter++;
-    } 
   }
   
   public void renderSquish(float prevX, float percent) {
@@ -92,7 +90,7 @@ class VbarHbar {
   }
 
   float rangeToPercent(float start, float end, float count) {
-    //text((count - (scale * start)) * (100 / (scale * (end - start))), 50, 50);
-    return (count - (scale * start)) * (100 / (scale * (end - start)));
+    //text((count - (GLOBAL_SCALE * start)) * (100 / (GLOBAL_SCALE * (end - start))), 50, 50);
+    return (count - (GLOBAL_SCALE * start)) * (100 / (GLOBAL_SCALE * (end - start)));
   }
 }

@@ -4,22 +4,17 @@ static float GLOBAL_SCALE = 1000;
 static color BACKGROUND_COLOR = #C5FFEB;
 
 BarToLine barToLine;
-VbarHbar testVbar;
 BarToPie barToPie;
 
 Button barButton  = new Button(200, 570, 50, 20, 255, "BAR");
 Button lineButton = new Button(400, 570, 50, 20, 255, "LINE");
 Button pieButton  = new Button(600, 570, 50, 20, 255, "PIE");
 
-float temp_width = 25;
-float temp_height = 100;
-float temp_x = 300;
-float temp_y = 400;
+float globalCounter;
+boolean active;
+boolean ascend;
 
 String currChart = "TOLINE";
-
-float counter = 0;
-float target  = 0;
 
 void setup() {
   size(800, 600);
@@ -27,33 +22,41 @@ void setup() {
   
   barToLine = new BarToLine(parseData("data1.csv"));
   barToPie = new BarToPie(parseData("data1.csv"));
-  testVbar = new VbarHbar(temp_x, temp_y, temp_width, temp_height, 400, 0.1);
+  ascend = true;
+  active = false;
 }
 
 void draw() {
   background(BACKGROUND_COLOR);
-  if (target != counter) {
-    if (target == 1000) {
-      counter++;
-    } else {
-      counter--;
-    }
-  }
-  if (currChart == "TOLINE") {
-    barToLine.renderAt(counter);
-    if (target == 1000) {
+  
+  if (currChart == "TOLINE" || currChart == "LINETOBAR") {
+    barToLine.renderAt(globalCounter);
+    if (active) { //<>//
       pieButton.setColor(100);
     } else {
       pieButton.setColor(255);
     }
-  } else if (currChart == "TOPIE") {
+  } else if (currChart == "TOPIE" || currChart == "PIETOBAR") {
     barToPie.render();
-    if (target == 1000) {
+    if (active) {
       lineButton.setColor(100);
     } else {
       lineButton.setColor(255);
     }
   } 
+  
+  if (ascend && globalCounter == GLOBAL_SCALE) {
+    ascend = false;
+    active = false;
+  } else if (!ascend && globalCounter == 0) {
+    ascend = true;
+    active = false;
+  }
+  if (ascend && active) {
+    globalCounter++;
+  } else if (active) {
+    globalCounter--;
+  }
   
   barButton.render();
   lineButton.render();
@@ -61,22 +64,17 @@ void draw() {
 }
 
 void mouseClicked(){
-  if (barButton.clickedOn()) {
-    target = 0;
-  } else if (lineButton.clickedOn()) {
-    if (currChart == "TOLINE") {
-      target = 1000;
-    } else if (currChart == "TOPIE" && target == 0) {
-      currChart = "TOLINE";
-      target = 1000;
-    }
-  } else if (pieButton.clickedOn()) {
+  if (barButton.clickedOn() && !active && !ascend) {
     if (currChart == "TOPIE") {
-      target = 1000;
-    } else if (currChart == "TOLINE" && target == 0) {
-      currChart = "TOPIE";
-      target = 1000;
-    }
+      currChart = "PIETOBAR";
+    } else currChart = "LINETOBAR";
+    active = true;
+  } else if (lineButton.clickedOn() && !active && ascend) {
+    currChart = "TOLINE";
+    active = true;
+  } else if (pieButton.clickedOn() && !active && ascend) {
+    currChart = "TOPIE";
+    active = true;
   }
 }
 
