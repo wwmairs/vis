@@ -1,5 +1,6 @@
 class Arc {
   float arcLength, totalArcLength, theta, totalTheta, radius, centerX, centerY, barHeight;
+  color clr;
   
   Arc(float aLength, float tLength, float r, float h) {
     this.arcLength = aLength;
@@ -10,13 +11,14 @@ class Arc {
     this.centerX = totalArcLength / 2 + MARGIN;
     this.centerY = height - MARGIN -  (r/2);
     this.barHeight = h;
+    this.clr = 255;
   }
   
   void renderAt(float counter, float startTheta) {
-    if ((counter >= (GLOBAL_SCALE * BAR_SQUISH)) && (counter < (GLOBAL_SCALE * ARC_MOVE))) {
+    if ((globalCounter >= (GLOBAL_SCALE * BAR_SQUISH)) && (globalCounter < (GLOBAL_SCALE * ARC_MOVE))) {
        // move arcs to center of screen
-       float targetX = ((width - MARGIN) / 2) + MARGIN;
-       float targetY = ((height - MARGIN) / 2) - MARGIN;
+       float targetX = ((width - MARGIN) / 2);
+       float targetY = ((height - MARGIN) / 2) - MARGIN * 4;
        float xStep = (targetX - MARGIN) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
        float yStep = (height - MARGIN - targetY) / ((GLOBAL_SCALE * ARC_MOVE) - (GLOBAL_SCALE * BAR_SQUISH));
        // draw arcs
@@ -25,7 +27,9 @@ class Arc {
            centerX += xStep;
            centerY -= yStep;
          }
-    } else if ((counter >= (GLOBAL_SCALE * ARC_MOVE)) && (counter < (GLOBAL_SCALE * ARC_WRAP))){
+    }  else if ((globalCounter >= (GLOBAL_SCALE * ARC_MOVE)) && (globalCounter < (GLOBAL_SCALE * ARC_COLOR))){
+       render(startTheta);
+     } else if ((globalCounter >= (GLOBAL_SCALE * ARC_COLOR)) && (globalCounter < (GLOBAL_SCALE * ARC_WRAP))){
        // wrap arcs
        // draw arcs
        //float radiusStep = (log(START_RADIUS) / log(2)) / ((GLOBAL_SCALE * ARC_WRAP) - (GLOBAL_SCALE * ARC_MOVE));
@@ -33,9 +37,9 @@ class Arc {
            updateRadius(radius / 16);
          }
        render(startTheta);
+     }else {
+       render(startTheta);
      }
-     render(startTheta);
-
    }
   
   void render(float startTheta){
@@ -43,15 +47,23 @@ class Arc {
     translate(centerX, centerY);
     rotate(angleToBottom());
     //ellipse(0, 0, radius, radius);
-    fill(255);
+    fill(clr);
     stroke(0);
     arc(0, 0, radius, radius, startTheta, startTheta + theta, PIE);
     noStroke();
     fill(BACKGROUND_COLOR);
-    ellipse(0, 0, radius - (barHeight * 2), radius - (barHeight * 2));
+    //if (active) ellipse(0, 0, radius - (barHeight * 2), radius - (barHeight * 2));
     fill(255);
     stroke(0);
     popMatrix();
+  }
+  
+  void setColor() {
+    if (ascend) {
+    clr = color(random(225), random(225), random(225));
+    } else if (!ascend && clr != 255) {
+      clr = 255;
+    }
   }
   
   float angleToBottom() {

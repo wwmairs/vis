@@ -1,7 +1,8 @@
-static float BARS = 0.3;
-static float BAR_SQUISH = 0.65;
-static float ARC_MOVE = 0.7;
-static float ARC_WRAP = 1; 
+static float BAR_SQUISH = .6;
+static float ARC_MOVE = .65;//.75;
+static float ARC_COLOR = .7;
+static float ARC_WRAP = 1;//1;
+static float ARC_GROW = 1;
 static float START_RADIUS = 100000;
 
 // sample array of bars
@@ -54,7 +55,7 @@ class BarToPie {
       float barHeight = data[i]  * ratio;
       float barSquished = data[i] * vbarRatio;
       
-      VbarHbars[i] = new VbarHbar(start, (yOrigin + barHeight), bar, -barHeight, GLOBAL_SCALE * BARS, barSquished);
+      VbarHbars[i] = new VbarHbar(start, (yOrigin + barHeight), bar, -barHeight, barSquished);
       start += barSpace;
     }
   }
@@ -72,12 +73,12 @@ class BarToPie {
   
   void render(){
     
-   if (globalCounter < (GLOBAL_SCALE * BARS)) {
+   if (globalCounter < (GLOBAL_SCALE * BAR_FALL)) {
      for (int i = 0; i < dataSize; i++) {
        VbarHbars[i].renderShrink();
      }
-   } else if ((globalCounter >= (GLOBAL_SCALE * BARS)) && (globalCounter < (GLOBAL_SCALE * BAR_SQUISH))) {
-     float localCount = globalCounter - (GLOBAL_SCALE * BARS);
+   } else if ((globalCounter > (GLOBAL_SCALE * BAR_FALL)) && (globalCounter < (GLOBAL_SCALE * BAR_SQUISH))) {
+     float localCount = globalCounter - (GLOBAL_SCALE * BAR_FALL);
      float countPerBar = ((GLOBAL_SCALE * ARC_WRAP) - (GLOBAL_SCALE * BAR_SQUISH)) / dataSize;
      int i = int(localCount) / int(countPerBar);
      if (ascend) {
@@ -91,13 +92,27 @@ class BarToPie {
          }
        }   
      } else {
-       // unsquish bars
+       for (int j = 0; j < dataSize; j++) {
+         if (i != 0 && i == j){
+           VbarHbars[i].renderUnSquish((localCount % int(countPerBar)) * (100/int(countPerBar)));
+         } else {
+           VbarHbars[j].drawRect();
+         }
+       }
      }
    } else if (globalCounter >= (GLOBAL_SCALE * BAR_SQUISH)) {
      if (this.arcs == null) {
        // make arcs
        makeArcs();
      }
+     
+     if (globalCounter > GLOBAL_SCALE * ARC_MOVE && globalCounter <= GLOBAL_SCALE * ARC_COLOR) {
+       float localCount = globalCounter - (GLOBAL_SCALE * ARC_MOVE);
+       float countPerBar = ((GLOBAL_SCALE * ARC_COLOR) - (GLOBAL_SCALE * ARC_MOVE)) / dataSize; 
+       int i = dataSize - (int(localCount) / int(countPerBar));  
+       if (i < dataSize && i >= 0) arcs[i].setColor();
+     }
+     
      // draw arcs
      float startTheta = 0;
      for (int i = 0; i < arcs.length; i++) {
@@ -106,9 +121,9 @@ class BarToPie {
      }
    }
    
-   if (globalCounter > (GLOBAL_SCALE / 2) && ascend) {
+   if (globalCounter > (GLOBAL_SCALE / 2) && ascend && active) {
      this.axisOpacity -= 1;
-   } else if (globalCounter > (GLOBAL_SCALE / 2)) {
+   } else if (globalCounter > (GLOBAL_SCALE / 2) && active) {
      this.axisOpacity += 1;
    }
    stroke(0, 0, 0, axisOpacity);

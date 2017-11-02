@@ -31,7 +31,7 @@ void draw() {
   
   if (currChart == "TOLINE" || currChart == "LINETOBAR") {
     barToLine.renderAt(globalCounter);
-    if (active) { //<>//
+    if (active) {
       pieButton.setColor(100);
     } else {
       pieButton.setColor(255);
@@ -58,6 +58,8 @@ void draw() {
     globalCounter--;
   }
   
+  println(globalCounter);
+  
   barButton.render();
   lineButton.render();
   pieButton.render();
@@ -73,6 +75,7 @@ void mouseClicked(){
     currChart = "TOLINE";
     active = true;
   } else if (pieButton.clickedOn() && !active && ascend) {
+    barToPie = new BarToPie(parseData("data1.csv"));
     currChart = "TOPIE";
     active = true;
   }
