@@ -133,7 +133,10 @@ public class RectangleNode {
         return this.children.get(i).nodeHoveredOver();
       }
     }
-    return this;
+    if (hoverOver()) {
+      return this;
+    }
+    return null;
   }
   
   public boolean hoverOver()  {

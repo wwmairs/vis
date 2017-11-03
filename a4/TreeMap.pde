@@ -1,7 +1,7 @@
 static int MAX_TARGET_DEPTH = 2;
-static color BOI = #6fcb9f;
-static color WOMAN = #fb2e01;
-static color BACKGROUND = #ffe28a;
+static color BOI = #fb9d9b;
+static color WOMAN = #e17775;
+static color BACKGROUND = #7379d4;
 
 public class TreeMap {
   
@@ -10,8 +10,8 @@ public class TreeMap {
   private RectangleNode currNode;
   private float padding = 10;
   private int maxDepth = 0, currDepth = 0;
-  private color rootColor = color(255, 255, 255);
-  private color leafColor = color(0, 102, 153);
+  private color rootColor = BACKGROUND;
+  private color leafColor = #c3c5ec;
   private int targetDepth = 0;
   
   // TreeMap Constructor
@@ -61,7 +61,7 @@ public class TreeMap {
     }
     
     // Pad single children around the outside for extra visibility
-    if (node.children.size() == 1) {
+    /*if (node.children.size() == 1) {
       if ((node.w > (6)) && (node.h > (6))) {
         currX = node.x + (this.padding/4);
         currY = node.y + (this.padding/4);
@@ -75,7 +75,7 @@ public class TreeMap {
         currWidth = node.w + (this.padding);
         currHeight = node.h + (this.padding);
       }
-    }
+    } */
     
     // Find if should layout horizontal or vertical row
     boolean horizontal = (currHeight < currWidth);
@@ -147,16 +147,21 @@ public class TreeMap {
     // After we have layed out the children, draw the current node
     
     // If the node is currently being hovered over, fill it in gray
-    if (node.id == currNode.nodeHoveredOver().id) {
-      fill(255);
-      
+    
+    if (node == currNode.nodeHoveredOver()) {
+      if (node.id == currNode.nodeHoveredOver().id)
+        fill(#d5ffed);
     // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
-      fill(BACKGROUND);
+      fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
+    }
+    
+    if (node.hoverOver() && targetDepth == depth) {
+      fill(#ffe2b9);
     }
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
-    strokeWeight(min(this.maxDepth - depth + 1, 2.5));
+    strokeWeight(min(this.maxDepth - depth + 1, 1.5));
     
     // Draw the node!
     rect(node.x, node.y, node.w, node.h, 3);
@@ -386,13 +391,12 @@ public class TreeMap {
     // After we have layed out the children, draw the current node
     
     // If the node is currently being hovered over, fill it in gray
-    if (node.id == currNode.nodeHoveredOver().id) {
+    /*if (node.id == currNode.nodeHoveredOver().id) {
       fill(100);
-      
     // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
       fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
-    }
+    } */
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
     strokeWeight(min(this.maxDepth - depth + 1, 2.5));
