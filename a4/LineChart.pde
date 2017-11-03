@@ -15,10 +15,7 @@ class DataPoint {
     this.id = _id;
   }
   
-  void render(float xCoord, float startY, float chartHeight) {
-    println("trying to render a point from year", this.x);
-    println("this point's percent value is", this.y);
-    println("x, y, radius are", xCoord, startY + (1 - this.y) * chartHeight, POINT_RADIUS); //<>//
+  void render(float xCoord, float startY, float chartHeight) { //<>//
     ellipse(xCoord, yCoord(startY, chartHeight), POINT_RADIUS, POINT_RADIUS);
   }
   
@@ -39,9 +36,9 @@ class Line {
   void render(float x, float y, float w, float h) {
     float xStep = w / (float) this.numPoints();
     for (int i = 0; i < this.numPoints(); i++) {
-      this.pointAt(i).render(x + (xStep * i), y, h);
+      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h);
       if (i < this.numPoints() - 1) {
-        line(x + (xStep * i), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)), this.pointAt(i + 1).yCoord(y, h));
+        line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h));
       }
     }
   }
@@ -78,7 +75,17 @@ class LineChart{
     this.lines = _lines;
   }
   
-  void render(float x, float y, float w, float h) {
+  void renderCategory(float x, float y, float w, float h, String c) {
+    // x axis
+    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + w - CHART_MARGIN, y + h - CHART_MARGIN);
+    // y axis
+    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + CHART_MARGIN, y + CHART_MARGIN);
+    
+    Line aLine = lines.get(c);
+    aLine.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
+  }
+  
+  void renderAll(float x, float y, float w, float h) {
     // x axis
     line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + w - CHART_MARGIN, y + h - CHART_MARGIN);
     // y axis
