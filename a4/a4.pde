@@ -3,7 +3,7 @@ TreeMapWrapper ts;
 
 
 void setup() {
-  size(500,800);
+  size(650,850);
   
   Parser parser = new Parser("data.csv");
   ts = new TreeMapWrapper(parser.getRoots());
