@@ -1,7 +1,8 @@
 static int MAX_TARGET_DEPTH = 2;
-static color BOI = #fb9d9b;
-static color WOMAN = #e17775;
-static color BACKGROUND = #7379d4;
+static color BOI = PRIMARY2;
+static color WOMAN = PRIMARY1;
+static color BACKGROUND = SECONDARY1;
+static color FOREGROUND = SECONDARY2;
 
 public class TreeMap {
   
@@ -11,7 +12,7 @@ public class TreeMap {
   private float padding = 10;
   private int maxDepth = 0, currDepth = 0;
   private color rootColor = BACKGROUND;
-  private color leafColor = #c3c5ec;
+  private color leafColor = FOREGROUND;
   private int targetDepth = 0;
   
   // TreeMap Constructor
@@ -98,7 +99,7 @@ public class TreeMap {
         
         // Get the "next" row (one longer than the current row)
         List<RectangleNode> nextRow = node.children.subList(rowStart, currChild+2);
-        
+         //<>//
  //<>// //<>//
         
         // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if necessary
@@ -128,8 +129,8 @@ public class TreeMap {
       // If we get here, we are going to start a new row      
       
       // If we are drawing a horizontal row, update the current x points. If not, update the y points.
-      if (horizontal) {
-        currX = currX + currRowWidth; //<>//
+      if (horizontal) { //<>//
+        currX = currX + currRowWidth; //<>// //<>//
         currWidth = currWidth - currRowWidth ; //<>//
       } else {
         currY = currY + currRowWidth;
@@ -184,7 +185,7 @@ public class TreeMap {
   }
   
   // worst
-  //   - finds the worst aspect ratio in the row
+  //   - finds the worst aspect ratio in the row //<>//
   private float worst(List<RectangleNode> row, float rowWidth) { //<>//
     
     // Calculate rowWidth^2, rowArea^2, and the sum pixelRowArea for the row
@@ -199,7 +200,7 @@ public class TreeMap {
   // rowWidth
   //   - Get the width of a row, using the ratio of nodeArea (w*h) / rectArea (node.area())
   private float rowWidth(float rowArea, float ratio, float w, float h) {
-    boolean horizontal = (h < w);
+    boolean horizontal = (h < w); //<>//
     return ratio * (rowArea / (horizontal ? h : w)); //<>//
   }
   
@@ -313,7 +314,7 @@ public class TreeMap {
     // Set local variables to keep track of the remaining x, y, width, and height
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
     
-    // For all nodes being drawn (except the outermost node), pad it by this.padding on each side
+    // For all nodes being drawn (except the outermost node), pad it by this.padding on each side //<>//
     if (node != this.currNode) { //<>//
       node.x = node.x + this.padding; 
       node.y = node.y + this.padding; 
@@ -342,7 +343,7 @@ public class TreeMap {
         
         // Get the "next" row (one longer than the current row)
         List<RectangleNode> nextRow = node.genderBreakdown.subList(rowStart, currChild+2);
-        
+         //<>//
  //<>//
         
         // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if necessary
@@ -372,8 +373,8 @@ public class TreeMap {
       // If we get here, we are going to start a new row       //<>//
       
       // If we are drawing a horizontal row, update the current x points. If not, update the y points.
-      if (horizontal) {
-        currX = currX + currRowWidth; //<>//
+      if (horizontal) { //<>//
+        currX = currX + currRowWidth; //<>// //<>//
         currWidth = currWidth - currRowWidth ; //<>//
       } else {
         currY = currY + currRowWidth;
@@ -404,7 +405,7 @@ public class TreeMap {
     // Draw the node! //<>//
     //rect(node.x, node.y, node.w, node.h, 3);
 
-    // Recursively draw all children, adding 1 to the depth
+    // Recursively draw all children, adding 1 to the depth //<>//
       for (int i = 0; i < 2 ; i++) { //node.genderBreakdown.size() //<>//
         RectangleNode drawMe = node.genderBreakdown.get(i);
         if (i == 0) fill(BOI);
