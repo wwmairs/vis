@@ -18,7 +18,7 @@ void draw() {
   if ((keyPressed == true) && (key == ' ')) {
     ts.currTreeMap.getCurrentNode().nodeHoveredOver().toolTip();
   }
-  lc.renderCategory(0, height / 3, width, height / 3, "flight attendant");
+  lc.renderAll(0, height / 3, width, height / 3);
 }
 
 void mouseClicked() {
