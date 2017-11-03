@@ -1,5 +1,9 @@
 class Parser {
+  // for TreeMaps, keys are years, values are roots to trees
   Map<String, RectangleNode> roots;
+  // for LineChart, keys are jobs, values are arrays of points
+  // a point has a y value, a number (Q), and an x value, a year (O)
+  Map<String, Line> lines;
   List<String []> data;
   
   Parser(String filePath) {
@@ -17,7 +21,29 @@ class Parser {
     }
     
    makeRoots();
+   makeLines();
   }  
+  
+  void makeLines() {
+    lines = new HashMap<String, Line>();
+    
+    for (int i = 0; i < data.size(); i++) {
+      String [] values = data.get(i);
+      String job      = values[1];
+      String year     = values[2];
+      float numTotal  = parseFloat(values[3]);
+      float numWomen  = parseFloat(values[4]);
+      float percent   = numTotal / numWomen;
+      
+      if (!lines.containsKey(job)) {
+        Line newLine = new Line(job);
+        newLine.addPoint(year, percent, numWomen);
+        lines.put(job, newLine);
+      } else {
+        lines.get(job).addPoint(year, percent, numWomen);
+      }
+    }
+  }
   
   void makeRoots() {
     roots = new HashMap<String, RectangleNode>();
@@ -59,9 +85,10 @@ class Parser {
     return newRoot;
   }
   
+  
   Map<String, RectangleNode> getRoots() {
     return roots;
-  }
+  } //<>//
   
   void printData() {
      for (int i = 0; i < data.size(); i++) {

@@ -1,11 +1,14 @@
 TreeMapWrapper ts;
 
+
+
 void setup() {
   size(500,800);
   
   Parser parser = new Parser("data.csv");
   ts = new TreeMapWrapper(parser.getRoots());
   ts.setCurrByYear("2011");
+  parser.printLines();
 
 }
 
