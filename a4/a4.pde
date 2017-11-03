@@ -1,6 +1,10 @@
 TreeMapWrapper ts;
 LineChart lc;
 
+static color PRIMARY1 = #e17775;
+static color PRIMARY2 = #fb9d9b;
+static color SECONDARY1 = #7379d4;
+static color SECONDARY2 = #c3c5ec;
 
 void setup() {
   size(600,700);
@@ -22,12 +26,37 @@ void draw() {
 }
 
 void mouseClicked() {
-  if (mouseY < height / 3) {
-    // the mouse is over the treemap
+  if (inTreeMap()) {
     if (mouseButton == LEFT) {
       ts.currTreeMap.setTargetDepth(1);
     } else if (mouseButton == RIGHT) {
       ts.currTreeMap.setTargetDepth(-1);
     }
+  } else if (inLineChart()) {
+  
+  } else if (inFlowChart()) {
+  
   }
+}
+
+void mouseDragged() {
+  if (inTreeMap()) {
+    
+  } else if (inLineChart()) {
+  
+  } else if (inFlowChart()) {
+  
+  }
+}
+
+boolean inTreeMap() {
+  return mouseY < height / 3;
+}
+
+boolean inLineChart() {
+  return mouseY < 2 * (height / 3);
+}
+
+boolean inFlowChart() {
+  return mouseY < height;
 }
