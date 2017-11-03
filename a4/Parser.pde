@@ -1,120 +1,72 @@
-import java.util.*; 
-
-class FakeParser {
-  // A parser for a .shf file for building Trees of RectangleNodes
+class Parser {
+  Map<String, RectangleNode> roots;
+  List<String []> data;
   
-  // the root node of the rectangleNodes
-  private RectangleNode rootNode;
+  Parser(String filePath) {
+    String[] lines = loadStrings(filePath);
+
+    data = new ArrayList(lines.length - 2);
+    int numYears = 0;
+    int numCareers = 0;  
+    
+    for (int i = 0; i < lines.length ; i++) {
+      String [] values = lines[i].split(",");
+      if (i == 0) numYears = int(values[0]);
+      else if (i == 1) numCareers = int(values[0]);
+      else data.add(values);
+    }
+    
+   makeRoots();
+  }  
   
-  // Parser Constructor
-  // Args:
-  //   * String filePath - the relative path to the .shf file to parse
-  FakeParser(String filePath) {
+  void makeRoots() {
+    roots = new HashMap<String, RectangleNode>();
     
-    // Begin by loading an array of strings from the file
-    String[] lines = loadStrings(filePath);    
-    
-    // Initialize some helpful integers using the specified counts in the .shf file
-    int numberOfLeafNodes = Integer.parseInt(lines[0]);
-    int numberOfRelationships = Integer.parseInt(lines[numberOfLeafNodes + 1]);
-    int maxIndex = 0;
-    
-    // Iterate through the nodes and find the maximum nodeID so we can create an array of nodes and not exceed the length
-    for (int i = 1; i < lines.length; i++) {
+    for (int i = 0; i < data.size(); i++) {
+      String [] values = data.get(i);
+      String year = values[2];
       
-      // Only update the maxIndex when looking at a line with an index instead of a count
-      if (i != numberOfLeafNodes + 1) {
-        
-        // Update the new maxIndex using the maximum of the current maxIndex and the given index from the input line
-        maxIndex = max(maxIndex, Integer.parseInt(split(lines[i], " ")[0]));
+      if (roots.isEmpty() || !roots.containsKey(year)) {
+        roots.put(year, initRoot(year));
+      }
+      
+      RectangleNode newNode = new RectangleNode(float(values[3]));
+      newNode.setWomen(float(values[4]));
+      newNode.id = values[1];
+      if (values[0].equals("pilot")) {
+        // add to pilot child of correct root
+        newNode.setParent(roots.get(year).childAtIndex(0));
+      } else if (values[0].equals("non-pilot")) {
+        // add to non-pilot child of correct root
+        newNode.setParent(roots.get(year).childAtIndex(1));
+      } else {
+        // an unexpected value in the datafile
       }
     }
-    
-    // Create an array of RectangleNodes the length of the number of nodes we have (maxIndex)
-    RectangleNode[] nodes = new RectangleNode[maxIndex+1];
-
-    // Create a helper array to get info from the .shf file
-    String[] infoStrings = new String[2];
-    
-    // Iterate over the first set of data, the child nodes, and set the area of the child nodes (via their
-    // corresponding ID) to the specified area
-    for (int index = 1; index <= numberOfLeafNodes; index++) {
-      
-      // Get the info from the given line (splitting the string by a space)
-      infoStrings = split(lines[index], " ");
-      
-      // Set the area of the specifed node, converting the given strings into integers
-      nodes[Integer.parseInt(infoStrings[0])] = new RectangleNode(Integer.parseInt(infoStrings[1])); 
-      nodes[Integer.parseInt(infoStrings[0])].id = infoStrings[0];
-    }
-    
-    // Create integers to store the parent and child indexes for each relationship in the file
-    int parentIndex;
-    int childIndex;
-    
-    // Iterate over the second half of the input data: the parent/child relationships
-    for (int index = numberOfLeafNodes + 2; index <= numberOfLeafNodes + numberOfRelationships + 1; index++) {
-      
-      // Get the parent and child indexes from the data file
-      infoStrings = split(lines[index], " ");
-      parentIndex = Integer.parseInt(infoStrings[0]);
-      childIndex = Integer.parseInt(infoStrings[1]);
-      
-      if (nodes[childIndex] == null) {
-        nodes[childIndex] = new RectangleNode(); 
-        nodes[childIndex].id = String.valueOf(childIndex);
-      }
-      if (nodes[parentIndex] == null) {
-        nodes[parentIndex] = new RectangleNode(); 
-        nodes[parentIndex].id = String.valueOf(parentIndex);
-
-      }
-      
-      
-      // For each child index, set its parent (which also removes the child from it's current parent's children array)
-      // and append the child to the new parent's child array
-      nodes[childIndex].setParent(nodes[parentIndex]);
-    }
-    
-    // Find the root node
-    int potentialRootNodesCount = 0;
-    
-    // Iterate over all the nodes and find all the nodes that do not have parents
-    for (int i = 0; i < nodes.length; i++) {
-      if (nodes[i] != null) {
-        if (nodes[i].parent == null) {
-          potentialRootNodesCount++;
-          rootNode = nodes[i];
-        }
-      }
-      
-    } //<>// //<>//
-     
-    // Ensure that at least one node does not have a parent
-    assert(potentialRootNodesCount > 0);
-    
-    // If more than one node does not have a parent, create a new root node and set all of the parentless nodes' parent
-    // to the new root node
-    if (potentialRootNodesCount > 1) {
-      rootNode = new RectangleNode();
-      
-      // Find all the parentless nodes and set their parent to the root node
-      for (int i = 0; i < nodes.length; i++) {
-        if (nodes[i] != null && nodes[i].parent == null) {
-          nodes[i].setParent(rootNode);
-        }
-      }
-    }
-    
-    // Sort all of the children
-    this.rootNode.sortChildren();
-    
   }
   
-  // Get the root node 
-  RectangleNode getRootNode() {
-    return rootNode; 
+  RectangleNode initRoot(String year){
+    RectangleNode newRoot = new RectangleNode();
+    newRoot.id = year;
+    RectangleNode pilots = new RectangleNode();
+    pilots.id = "pilot";
+    RectangleNode nonPilots = new RectangleNode();
+    nonPilots.id = "non-pilot";
+    
+    pilots.setParent(newRoot);
+    nonPilots.setParent(newRoot);
+    
+    return newRoot;
   }
   
+  Map<String, RectangleNode> getRoots() {
+    return roots;
+  }
+  
+  void printData() {
+     for (int i = 0; i < data.size(); i++) {
+       printArray(data.get(i));
+     }
+  }
   
 }
