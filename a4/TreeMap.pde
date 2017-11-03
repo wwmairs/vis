@@ -99,7 +99,7 @@ public class TreeMap {
         // Get the "next" row (one longer than the current row)
         List<RectangleNode> nextRow = node.children.subList(rowStart, currChild+2);
         
- //<>//
+ //<>// //<>//
         
         // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if necessary
         this.updateRowBounds(nextRow, currX, currY, currWidth, currHeight, ratio);
@@ -180,7 +180,7 @@ public class TreeMap {
     fill(0);
     if (node.children.size() == 0) {
       text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
-    }
+    } //<>//
   }
   
   // worst
@@ -195,7 +195,7 @@ public class TreeMap {
     // Complete the "worst" caluculation to find the worst aspect ratio of all nodes in the row
     return max(((wSquared * row.get(0).pixelArea()) / rowAreaSquared), (rowAreaSquared / (wSquared * row.get(row.size() - 1).pixelArea())));
   }
-  
+   //<>//
   // rowWidth
   //   - Get the width of a row, using the ratio of nodeArea (w*h) / rectArea (node.area())
   private float rowWidth(float rowArea, float ratio, float w, float h) {
@@ -309,7 +309,7 @@ public class TreeMap {
     return 1 + this.getDepth(node.parent);
   }
   public void drawGenderBreakdown(RectangleNode node, int depth) {    
-
+ //<>//
     // Set local variables to keep track of the remaining x, y, width, and height
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
     
@@ -368,8 +368,8 @@ public class TreeMap {
       } else {
         currRowWidth = this.updateRowBounds(currRow, currX, currY, currWidth, currHeight, ratio);
       }
-      
-      // If we get here, we are going to start a new row      
+       //<>//
+      // If we get here, we are going to start a new row       //<>//
       
       // If we are drawing a horizontal row, update the current x points. If not, update the y points.
       if (horizontal) {
@@ -401,7 +401,7 @@ public class TreeMap {
     // Set the stroke weight depending on the depth, with a maximum of 2.5
     strokeWeight(min(this.maxDepth - depth + 1, 2.5));
     
-    // Draw the node!
+    // Draw the node! //<>//
     //rect(node.x, node.y, node.w, node.h, 3);
 
     // Recursively draw all children, adding 1 to the depth

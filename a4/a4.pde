@@ -1,14 +1,14 @@
 TreeMapWrapper ts;
-
+LineChart lc;
 
 
 void setup() {
-  size(650,850);
+  size(600,800);
   
   Parser parser = new Parser("data.csv");
   ts = new TreeMapWrapper(parser.getRoots());
   ts.setCurrByYear("2011");
-  parser.printLines();
+  lc = new LineChart(parser.getLines());
 
 }
 
@@ -18,6 +18,7 @@ void draw() {
   if ((keyPressed == true) && (key == ' ')) {
     ts.currTreeMap.getCurrentNode().nodeHoveredOver().toolTip();
   }
+  lc.render(0, height / 3, width, height / 3);
 }
 
 void mouseClicked() {

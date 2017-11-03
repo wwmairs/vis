@@ -15,6 +15,8 @@ class DataPoint {
   }
   
   void render(float xCoord, float startY, float chartHeight) {
+    println("trying to render a point from year", this.x);
+    println("x, y, radius are", xCoord, startY + (1 - this.y) * chartHeight, POINT_RADIUS); //<>//
     ellipse(xCoord, startY + (1 - this.y) * chartHeight, POINT_RADIUS, POINT_RADIUS);
   }
 }
@@ -43,6 +45,14 @@ class Line {
       }
     });
   }
+  
+  DataPoint pointAt(int i) {
+    return points.get(i);
+  }
+  
+  int numPoints() {
+    return points.size();
+  }
 }
 
 class LineChart{
@@ -53,7 +63,11 @@ class LineChart{
   }
   
   void render(float x, float y, float w, float h) {
-    flaot 
+    Line testLine = lines.get("student");
+    float xStep = w / (float) testLine.numPoints();
     
+    for (int i = 0; i < testLine.numPoints(); i++) {
+      testLine.pointAt(i).render(x + (xStep * i), y, h);
+    }
   }
 }

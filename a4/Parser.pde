@@ -28,12 +28,13 @@ class Parser {
     lines = new HashMap<String, Line>();
     
     for (int i = 0; i < data.size(); i++) {
+      
       String [] values = data.get(i);
       String job      = values[1];
       String year     = values[2];
       float numTotal  = parseFloat(values[3]);
       float numWomen  = parseFloat(values[4]);
-      float percent   = numTotal / numWomen;
+      float percent   = numWomen / numTotal ;
       
       if (!lines.containsKey(job)) {
         Line newLine = new Line(job);
@@ -43,6 +44,10 @@ class Parser {
         lines.get(job).addPoint(year, percent, numWomen);
       }
     }
+  }
+  
+  Map<String, Line> getLines() {
+    return lines;
   }
   
   void makeRoots() {
@@ -83,12 +88,12 @@ class Parser {
     nonPilots.setParent(newRoot);
     
     return newRoot;
-  }
+  } //<>//
   
   
   Map<String, RectangleNode> getRoots() {
     return roots;
-  } //<>//
+  }
   
   void printData() {
      for (int i = 0; i < data.size(); i++) {
