@@ -1,4 +1,5 @@
-static float POINT_RADIUS = 10;
+static float POINT_RADIUS = 5;
+static float CHART_MARGIN = 10;
 
 class DataPoint {
   // the year
@@ -16,8 +17,13 @@ class DataPoint {
   
   void render(float xCoord, float startY, float chartHeight) {
     println("trying to render a point from year", this.x);
+    println("this point's percent value is", this.y);
     println("x, y, radius are", xCoord, startY + (1 - this.y) * chartHeight, POINT_RADIUS); //<>//
-    ellipse(xCoord, startY + (1 - this.y) * chartHeight, POINT_RADIUS, POINT_RADIUS);
+    ellipse(xCoord, yCoord(startY, chartHeight), POINT_RADIUS, POINT_RADIUS);
+  }
+  
+  float yCoord(float startY, float chartHeight) {
+    return (startY + (1 - this.y) * chartHeight);
   }
 }
 
@@ -30,6 +36,16 @@ class Line {
     this.points = new ArrayList<DataPoint>(0);
   }
   
+  void render(float x, float y, float w, float h) {
+    float xStep = w / (float) this.numPoints();
+    for (int i = 0; i < this.numPoints(); i++) {
+      this.pointAt(i).render(x + (xStep * i), y, h);
+      if (i < this.numPoints() - 1) {
+        line(x + (xStep * i), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)), this.pointAt(i + 1).yCoord(y, h));
+      }
+    }
+  }
+  
   void addPoint(String year, float percent, float num) {
     this.points.add(new DataPoint(year, percent, num));
     // maintains that good chronological order
@@ -39,8 +55,8 @@ class Line {
   void sortPoints() {
     Collections.sort(this.points, new Comparator<DataPoint>() {
       public int compare(DataPoint p1, DataPoint p2) {
-        if (parseFloat(p1.x) > parseFloat(p2.x)) return -1;
-        if (parseFloat(p1.x) < parseFloat(p2.x)) return 1;
+        if (parseFloat(p1.x) > parseFloat(p2.x)) return 1;
+        if (parseFloat(p1.x) < parseFloat(p2.x)) return -1;
         return 0;
       }
     });
@@ -63,11 +79,15 @@ class LineChart{
   }
   
   void render(float x, float y, float w, float h) {
-    Line testLine = lines.get("student");
-    float xStep = w / (float) testLine.numPoints();
+    // x axis
+    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + w - CHART_MARGIN, y + h - CHART_MARGIN);
+    // y axis
+    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + CHART_MARGIN, y + CHART_MARGIN);
     
-    for (int i = 0; i < testLine.numPoints(); i++) {
-      testLine.pointAt(i).render(x + (xStep * i), y, h);
+    for (Map.Entry<String, Line> entry : lines.entrySet()) {
+      String key = entry.getKey();
+      Line value = entry.getValue();
+      value.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
     }
   }
 }

@@ -3,7 +3,7 @@ LineChart lc;
 
 
 void setup() {
-  size(600,800);
+  size(600,700);
   
   Parser parser = new Parser("data.csv");
   ts = new TreeMapWrapper(parser.getRoots());
