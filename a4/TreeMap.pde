@@ -1,3 +1,8 @@
+static int MAX_TARGET_DEPTH = 2;
+static color BOI = #6fcb9f;
+static color WOMAN = #fb2e01;
+static color BACKGROUND = #ffe28a;
+
 public class TreeMap {
   
   // Private Class Variables
@@ -15,8 +20,8 @@ public class TreeMap {
     this.rootNode = treeRoot;
     this.rootNode.women();
     this.maxDepth = this.getMaxDepth(this.rootNode);
-    this.setCurrentNode(this.rootNode);
     this.targetDepth = 1;
+    this.setCurrentNode(this.rootNode, 0);
   }
   
   // drawTreeMap
@@ -31,11 +36,16 @@ public class TreeMap {
     this.currNode.h = h;
     
     // Draw the current root node
-    newDrawNode(this.currNode, this.currDepth);
+    drawNode(this.currNode, this.currDepth);
   }
   
-  public void newDrawNode() {
-  
+  public void newDrawNode(RectangleNode node, int depth) {
+    if (depth == targetDepth) {
+      // draw gender breakdown
+    } else {
+      // draw children
+    }
+    float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
   }
   // drawNode
   //   - draw the given node and layout all of its children
@@ -138,11 +148,11 @@ public class TreeMap {
     
     // If the node is currently being hovered over, fill it in gray
     if (node.id == currNode.nodeHoveredOver().id) {
-      fill(100);
+      fill(255);
       
     // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
-      fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
+      fill(BACKGROUND);
     }
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
@@ -243,9 +253,21 @@ public class TreeMap {
    
   // setCurrentNode
   //   - Set the current node and update the currDepth
-  public void setCurrentNode(RectangleNode newCurr) {
+  public void setCurrentNode(RectangleNode newCurr, int depth) {
     this.currNode = newCurr;
     this.currDepth = this.getDepth(this.currNode);
+    this.targetDepth += depth;
+  }
+  
+  public void setTargetDepth(int depth) {
+    this.targetDepth += depth;
+    if (targetDepth > 2) {
+      targetDepth = 2;
+    }
+    if (targetDepth < 0) {
+      targetDepth = 0;
+    }
+    println(targetDepth);
   }
       
   // getCurrentNode
@@ -287,9 +309,12 @@ public class TreeMap {
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
     
     // For all nodes being drawn (except the outermost node), pad it by this.padding on each side
-    if (node != this.currNode) {
-      node.x = node.x + this.padding; node.y = node.y + this.padding; node.w = node.w - (2 * this.padding); node.h = node.h - (2 * this.padding);
-    } //<>//
+    if (node != this.currNode) { //<>//
+      node.x = node.x + this.padding; 
+      node.y = node.y + this.padding; 
+      node.w = node.w - (2 * this.padding); 
+      node.h = node.h - (2 * this.padding);
+    }
     
     // Find if should layout horizontal or vertical row
     boolean horizontal = (currHeight < currWidth);
@@ -376,16 +401,21 @@ public class TreeMap {
     //rect(node.x, node.y, node.w, node.h, 3);
 
     // Recursively draw all children, adding 1 to the depth
-      for (int i = 0; i < node.genderBreakdown.size(); i++) { //<>//
+      for (int i = 0; i < 2 ; i++) { //node.genderBreakdown.size() //<>//
         RectangleNode drawMe = node.genderBreakdown.get(i);
-        if (i == 0) fill(#7186d3);
-        else fill(#fae0af);
+        if (i == 0) fill(BOI);
+        else fill(WOMAN);
+        drawMe.x = drawMe.x + this.padding; 
+        drawMe.y = drawMe.y + this.padding; 
+        drawMe.w = drawMe.w - (2 * this.padding); 
+        drawMe.h = drawMe.h - (2 * this.padding);
         rect(drawMe.x, drawMe.y, drawMe.w, drawMe.h, 3);
+        fill(255);
       }
     
     // Draw the 'id' text label for each leaf node in black in the center of the node
     fill(0);
-    
+    textAlign(CENTER);
     text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     
   }

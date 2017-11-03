@@ -9,7 +9,7 @@ class TreeMapWrapper {
     treeMaps = new HashMap<String, TreeMap>();
     for (int i = 0; i < keys.length; i++) {
       treeMaps.put(keys[i], new TreeMap(roots.get(keys[i])));
-      treeMaps.get(keys[i]).setCurrentNode(treeMaps.get(keys[i]).getRoot());
+      treeMaps.get(keys[i]).setCurrentNode(treeMaps.get(keys[i]).getRoot(), 0);
     }
   }
   

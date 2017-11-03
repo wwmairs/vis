@@ -1,0 +1,36 @@
+1. first method: 4 points in the ab plane and then rotate
+	try to find 8 equidistant points in L*a*b space geometrically
+	point 1 50, -80, 0
+	point 2 60, -70 -80
+	point 3 100, 0, -90
+	point 4 
+	point 5
+	point 6
+	point 7
+	point 8
+
+
+2. all in the ab plane
+        this is equally challenging
+
+
+3. random method
+	We've modified the lab files such that a random color palette is generated 
+        each cycle of the draw loop.  A current best color palette is stored, and whenever
+        a randomly generated palette performs 'better' than the current best, the current
+        best is updated.  It's hard to mathematically determine what makes one palette
+ 	'better' than another, but we figure it must take into account maximizing the
+  	average distance between colors while minimizing the standard deviation, so that
+	colors have a large discernability, but the discernability is reletively equal 
+	between all colors.
+
+	Here's how we tried to determine what makes a palette 'better':
+
+	1st algorithm:
+	compute random rbg value on each call to draw
+	compare previous best avg / previous best sd with new avg / sd
+	if new value higher, update best values and best colors
+	
+	2nd algorithm:
+	avg / std squared	
+
