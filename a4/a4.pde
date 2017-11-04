@@ -7,7 +7,7 @@ static color SECONDARY1 = #7379d4;
 static color SECONDARY2 = #c3c5ec;
 
 void setup() {
-  size(600,700);
+  size(600,600);
   
   Parser parser = new Parser("data.csv");
   ts = new TreeMapWrapper(parser.getRoots());

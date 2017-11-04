@@ -162,9 +162,10 @@ public class TreeMap {
     }
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
-    strokeWeight(min(this.maxDepth - depth + 1, 1.5));
+    //strokeWeight(min(this.maxDepth - depth + 1, 1.5));
     
     // Draw the node!
+    stroke(0);
     rect(node.x, node.y, node.w, node.h, 3);
 
     // Recursively draw all children, adding 1 to the depth
@@ -400,7 +401,7 @@ public class TreeMap {
     } */
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
-    strokeWeight(min(this.maxDepth - depth + 1, 2.5));
+    //strokeWeight(min(this.maxDepth - depth + 1, 2.5));
     
     // Draw the node! //<>//
     //rect(node.x, node.y, node.w, node.h, 3);
@@ -410,6 +411,7 @@ public class TreeMap {
         RectangleNode drawMe = node.genderBreakdown.get(i);
         if (i == 0) fill(BOI);
         else fill(WOMAN);
+        stroke(0);
         drawMe.x = drawMe.x + this.padding; 
         drawMe.y = drawMe.y + this.padding; 
         drawMe.w = drawMe.w - (2 * this.padding); 

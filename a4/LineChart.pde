@@ -1,5 +1,6 @@
 static float POINT_RADIUS = 5;
 static float CHART_MARGIN = 10;
+static color HIGHLIGHT_COLOR = #f45c42;
 
 class DataPoint {
   // the year
@@ -27,15 +28,27 @@ class DataPoint {
 class Line {
   String category;
   List<DataPoint> points;
+  boolean highlight;
   
   Line(String _c) {
     this.category = _c;
     this.points = new ArrayList<DataPoint>(0);
+    this.highlight = false;
+  }
+  
+  void highlight() {
+    this.highlight = true;
+  }
+  
+  void unHighlight() {
+    this.highlight = false;
   }
   
   void render(float x, float y, float w, float h) {
     float xStep = w / (float) this.numPoints();
     for (int i = 0; i < this.numPoints(); i++) {
+      fill((this.highlight) ? HIGHLIGHT_COLOR : 0);
+      stroke((this.highlight) ? HIGHLIGHT_COLOR : 0);
       this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h);
       if (i < this.numPoints() - 1) {
         line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h));
@@ -93,6 +106,7 @@ class LineChart{
     
     for (Map.Entry<String, Line> entry : lines.entrySet()) {
       String key = entry.getKey();
+      println("rendering line", key);
       Line value = entry.getValue();
       value.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
     }
