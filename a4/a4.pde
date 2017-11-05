@@ -19,10 +19,9 @@ void setup() {
   size(600,650);
   currYear = "2011";
   
-  Parser parser = new Parser("data.csv");
+  Parser parser = new Parser("data.csv", "scholarship_data.csv");
   categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
-  
   lc = new LineChart(parser.getLines());
 
 }

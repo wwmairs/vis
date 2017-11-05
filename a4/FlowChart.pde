@@ -9,6 +9,11 @@ class Source{
   Source(String _name, float _funds) {
     this.name  = _name;
     this.funds = _funds;
+    this.targets = new ArrayList<Target>();
+  }
+  
+  void addTarget(Target _target) {
+    this.targets.add(_target);
   }
   
   void render() {
@@ -38,9 +43,16 @@ class FlowChart{
   List<Source> sources;
   List<Target> targets;
   
-  FlowChart(List<Source> _sources, List<Target> _targets) {
+  FlowChart(List<Source> _sources) {
     this.sources = _sources;
-    this.targets = _targets;
+    for (int i = 0; i < this.sources.size(); i++) {
+      Source oneSource = this.sources.get(i);
+      for (int j = 0; j < oneSource.targets.size(); j++) {
+        if (!this.targets.contains(oneSource.targets.get(j))) {
+          this.targets.add(oneSource.targets.get(j));
+        }
+      }
+    }
   }
   
   void render(float x, float y, float w, float h) {
