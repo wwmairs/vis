@@ -1,5 +1,6 @@
 static float POINT_RADIUS = 5;
-static float CHART_MARGIN = 10;
+static float CHART_MARGIN_LEFT = 25;
+static float CHART_MARGIN_RIGHT = 10;
 
 class DataPoint {
   // the year
@@ -15,12 +16,12 @@ class DataPoint {
     this.id = _id;
   }
   
-  void render(float xCoord, float startY, float chartHeight) { //<>//
-    ellipse(xCoord, yCoord(startY, chartHeight), POINT_RADIUS, POINT_RADIUS);
+  void render(float xCoord, float startY, float chartHeight, float scale) { //<>//
+    ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS, POINT_RADIUS);
   }
   
-  float yCoord(float startY, float chartHeight) {
-    return (startY + (1 - this.y) * chartHeight);
+  float yCoord(float startY, float chartHeight, float scale) {
+    return (startY + (1 - (this.y / scale)) * chartHeight); //<>//
   }
 }
 
@@ -33,12 +34,12 @@ class Line {
     this.points = new ArrayList<DataPoint>(0);
   }
   
-  void render(float x, float y, float w, float h) {
+  void render(float x, float y, float w, float h, float scale) {
     float xStep = w / (float) this.numPoints();
     for (int i = 0; i < this.numPoints(); i++) {
-      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h);
+      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h, scale);
       if (i < this.numPoints() - 1) {
-        line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h));
+        line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h, scale), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h, scale));
       }
     }
   }
@@ -59,6 +60,15 @@ class Line {
     });
   }
   
+  float greatestY() {
+    float greatestY = points.get(0).y; 
+    for (int i = 1; i < points.size(); i++) {
+      float temp = points.get(i).y;
+      if (temp > greatestY) greatestY = temp;
+    }
+    return greatestY;
+  }
+  
   DataPoint pointAt(int i) {
     return points.get(i);
   }
@@ -70,31 +80,63 @@ class Line {
 
 class LineChart{
   Map<String, Line> lines;
+  Map<String, Line> currLines;
+  float scale;
   
   LineChart(Map<String, Line> _lines) {
     this.lines = _lines;
+    this.currLines = new HashMap<String, Line>();
+  }
+  
+  void calcScale() {
+    float greatestY = 0;
+    for (Map.Entry<String, Line> entry : currLines.entrySet()) {
+      String key = entry.getKey();
+      Line value = entry.getValue();
+      
+      float temp = value.greatestY();
+      if (temp > greatestY) greatestY = temp;
+    }
+    if (greatestY < .8) {
+    scale = greatestY * 1.2;
+    } else scale = greatestY;
+  }
+  
+  void updateLines(List<String> categories) {
+    this.currLines.clear();
+    for (int i = 0; i < categories.size(); i++) {
+      String currCat = categories.get(i);
+      Line currLine = lines.get(currCat);
+      currLines.put(currCat,currLine);
+    }
+    calcScale();
   }
   
   void renderCategory(float x, float y, float w, float h, String c) {
     // x axis
-    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + w - CHART_MARGIN, y + h - CHART_MARGIN);
+    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + w - CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT);
     // y axis
-    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + CHART_MARGIN, y + CHART_MARGIN);
+    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT);
     
     Line aLine = lines.get(c);
-    aLine.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
+    //aLine.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
   }
   
   void renderAll(float x, float y, float w, float h) {
+    stroke(0);
+    strokeWeight(.5);
     // x axis
-    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + w - CHART_MARGIN, y + h - CHART_MARGIN);
+    textAlign(CENTER);
+    text(str(int(scale * 100)) + "%", x + (CHART_MARGIN_LEFT/2), y + CHART_MARGIN_LEFT);
+    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + w - CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT);
     // y axis
-    line(x + CHART_MARGIN, y + h - CHART_MARGIN, x + CHART_MARGIN, y + CHART_MARGIN);
+    text("0%", x + (CHART_MARGIN_LEFT/2), y + h - CHART_MARGIN_RIGHT);
+    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT);
     
-    for (Map.Entry<String, Line> entry : lines.entrySet()) {
+    for (Map.Entry<String, Line> entry : currLines.entrySet()) {
       String key = entry.getKey();
       Line value = entry.getValue();
-      value.render(x + CHART_MARGIN, y + CHART_MARGIN, w - (2 * CHART_MARGIN), h - (2 * CHART_MARGIN));
+      value.render(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w - (2 * CHART_MARGIN_LEFT), h - (2 * CHART_MARGIN_RIGHT), scale);
     }
   }
 }
