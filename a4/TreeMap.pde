@@ -129,8 +129,8 @@ public class TreeMap {
       // If we get here, we are going to start a new row      
       
       // If we are drawing a horizontal row, update the current x points. If not, update the y points.
-      if (horizontal) { //<>//
-        currX = currX + currRowWidth; //<>// //<>//
+      if (horizontal) {
+        currX = currX + currRowWidth; //<>//
         currWidth = currWidth - currRowWidth ; //<>//
       } else {
         currY = currY + currRowWidth;
@@ -201,7 +201,7 @@ public class TreeMap {
   // rowWidth
   //   - Get the width of a row, using the ratio of nodeArea (w*h) / rectArea (node.area())
   private float rowWidth(float rowArea, float ratio, float w, float h) {
-    boolean horizontal = (h < w); //<>//
+    boolean horizontal = (h < w);
     return ratio * (rowArea / (horizontal ? h : w)); //<>//
   }
   
@@ -374,8 +374,8 @@ public class TreeMap {
       // If we get here, we are going to start a new row       //<>//
       
       // If we are drawing a horizontal row, update the current x points. If not, update the y points.
-      if (horizontal) { //<>//
-        currX = currX + currRowWidth; //<>// //<>//
+      if (horizontal) {
+        currX = currX + currRowWidth; //<>//
         currWidth = currWidth - currRowWidth ; //<>//
       } else {
         currY = currY + currRowWidth;

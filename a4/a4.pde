@@ -1,27 +1,36 @@
 TreeMapWrapper ts;
 LineChart lc;
 
-static color PRIMARY1 = #e17775;
-static color PRIMARY2 = #fb9d9b;
-static color SECONDARY1 = #7379d4;
-static color SECONDARY2 = #c3c5ec;
+List<String> categories;
+
+static color PRIMARY1 = #23AA84;
+static color PRIMARY2 = #a7ddcd;
+static color SECONDARY1 = #7e7e7e;
+static color SECONDARY2 = #d3d3d3;
+
+// TreeMap margins
+static float SIDE_MARGIN = 10;
+static float TOP_MARGIN = 10;
 
 void setup() {
-  size(600,600);
+  size(650,850);
   
   Parser parser = new Parser("data.csv");
+  categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
-  ts.setCurrByYear("2011");
+  ts.setCurrByYear("2016");
   lc = new LineChart(parser.getLines());
 
 }
 
 void draw() {
   background(255);
-  ts.currTreeMap.drawTreeMap(0, 0, width, height/3);
+  ts.currTreeMap.drawTreeMap(SIDE_MARGIN, TOP_MARGIN, width - (2* SIDE_MARGIN), height/3 - TOP_MARGIN);
   if ((keyPressed == true) && (key == ' ')) {
     ts.currTreeMap.getCurrentNode().nodeHoveredOver().toolTip();
   }
+  //categories.remove("flight attendant");
+  lc.updateLines(categories);
   lc.renderAll(0, height / 3, width, height / 3);
 }
 

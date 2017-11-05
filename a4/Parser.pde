@@ -4,6 +4,7 @@ class Parser {
   // for LineChart, keys are jobs, values are arrays of points
   // a point has a y value, a number (Q), and an x value, a year (O)
   Map<String, Line> lines;
+  List<String> categories;
   List<String []> data;
   
   Parser(String filePath) {
@@ -26,6 +27,7 @@ class Parser {
   
   void makeLines() {
     lines = new HashMap<String, Line>();
+    categories = new ArrayList<String>();
     
     for (int i = 0; i < data.size(); i++) {
       
@@ -37,6 +39,7 @@ class Parser {
       float percent   = numWomen / numTotal ;
       
       if (!lines.containsKey(job)) {
+        categories.add(job);
         Line newLine = new Line(job);
         newLine.addPoint(year, percent, numWomen);
         lines.put(job, newLine);
@@ -89,6 +92,10 @@ class Parser {
     
     return newRoot;
   } //<>//
+  
+  List<String> getCategories() {
+    return categories;
+  }
   
   
   Map<String, RectangleNode> getRoots() {
