@@ -32,6 +32,7 @@ void mouseClicked() {
     } else if (mouseButton == RIGHT) {
       ts.currTreeMap.setTargetDepth(-1);
     }
+    
   } else if (inLineChart()) {
   
   } else if (inFlowChart()) {
