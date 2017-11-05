@@ -99,7 +99,7 @@ public class TreeMap {
         
         // Get the "next" row (one longer than the current row)
         List<RectangleNode> nextRow = node.children.subList(rowStart, currChild+2);
-         //<>//
+         //<>// //<>//
  //<>// //<>//
         
         // Do nextRatio calculation first in order to use the currRatio calculation in this iteration if necessary
@@ -185,7 +185,7 @@ public class TreeMap {
     } //<>//
   }
   
-  // worst
+  // worst //<>//
   //   - finds the worst aspect ratio in the row //<>//
   private float worst(List<RectangleNode> row, float rowWidth) { //<>//
     
@@ -314,7 +314,7 @@ public class TreeMap {
  //<>//
     // Set local variables to keep track of the remaining x, y, width, and height
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
-    
+     //<>//
     // For all nodes being drawn (except the outermost node), pad it by this.padding on each side //<>//
     if (node != this.currNode) { //<>//
       node.x = node.x + this.padding; 
@@ -405,7 +405,7 @@ public class TreeMap {
     
     // Draw the node! //<>//
     //rect(node.x, node.y, node.w, node.h, 3);
-
+ //<>//
     // Recursively draw all children, adding 1 to the depth //<>//
       for (int i = 0; i < 2 ; i++) { //node.genderBreakdown.size() //<>//
         RectangleNode drawMe = node.genderBreakdown.get(i);

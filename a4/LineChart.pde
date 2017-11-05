@@ -21,7 +21,7 @@ class DataPoint {
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS, POINT_RADIUS);
   }
   
-  float yCoord(float startY, float chartHeight, float scale) {
+  float yCoord(float startY, float chartHeight, float scale) { //<>//
     return (startY + (1 - (this.y / scale)) * chartHeight); //<>//
   }
 }
@@ -110,9 +110,8 @@ class LineChart{
       float temp = value.greatestY();
       if (temp > greatestY) greatestY = temp;
     }
-    if (greatestY < .8) {
     scale = greatestY * 1.2;
-    } else scale = greatestY;
+    if (scale > .75) scale = 1; //<>//
   }
   
   void updateLines(List<String> categories) {
