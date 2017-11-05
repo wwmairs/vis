@@ -1,5 +1,6 @@
 TreeMapWrapper ts;
 LineChart lc;
+FlowChart fc;
 
 List<String> categories;
 String currYear;
@@ -23,6 +24,7 @@ void setup() {
   categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
   lc = new LineChart(parser.getLines());
+  fc = new FlowChart(parser.getScholarships());
 
 }
 

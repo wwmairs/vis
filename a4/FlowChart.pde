@@ -45,6 +45,7 @@ class FlowChart{
   
   FlowChart(List<Source> _sources) {
     this.sources = _sources;
+    this.targets = new ArrayList<Target>();
     for (int i = 0; i < this.sources.size(); i++) {
       Source oneSource = this.sources.get(i);
       for (int j = 0; j < oneSource.targets.size(); j++) {
@@ -53,11 +54,25 @@ class FlowChart{
         }
       }
     }
+    this.sortSources();
   }
   
   void render(float x, float y, float w, float h) {
+    updateDimensions(x, y, w, h);
   }
   
   void updateDimensions(float x, float y, float w, float h) {
+    float sourceStep = h / sources.size();
+    float targetStep = h / targets.size();
+  }
+  
+  void sortSources() {
+    Collections.sort(this.sources, new Comparator<Source>() {
+      public int compare(Source s1, Source s2) {
+        if (s1.funds > s2.funds) return 1;
+        if (s1.funds < s2.funds) return -1;
+        return 0;
+      }
+    });
   }
 }
