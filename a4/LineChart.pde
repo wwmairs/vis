@@ -51,9 +51,7 @@ class Line {
       stroke((this.highlight) ? HIGHLIGHT_COLOR : 0);
       this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h);
       if (i < this.numPoints() - 1) {
-        strokeWeight(3);
         line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h));
-        strokeWeight(1);
       }
     }
   }
