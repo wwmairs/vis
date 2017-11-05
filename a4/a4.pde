@@ -16,7 +16,7 @@ static float TOP_MARGIN = 10;
 
 
 void setup() {
-  size(650,850);
+  size(600,650);
   currYear = "2011";
   
   Parser parser = new Parser("data.csv");
