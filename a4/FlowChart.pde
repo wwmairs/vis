@@ -54,9 +54,9 @@ class Source{
     textSize(12);
     fill(255);
     textAlign(LEFT, CENTER);
-    rect(mouseX + (6 * this.name.length())/2, mouseY, 7 * this.name.length(), 15);
+    rect(mouseX + (6 * this.name.length())/2, mouseY, 6.5 * this.name.length(), 15);
     fill(0);
-    text(this.name, mouseX + 2, mouseY);
+    text(this.name, mouseX, mouseY);
     rectMode(CORNER);
   }
   
