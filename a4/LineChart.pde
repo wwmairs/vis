@@ -21,17 +21,23 @@ class DataPoint {
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS, POINT_RADIUS);
   }
   
+  void renderHighlight(float xCoord, float startY, float chartHeight, float scale) {
+    ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS + 5, POINT_RADIUS + 5);
+  }
+  
   float yCoord(float startY, float chartHeight, float scale) { //<>//
     return (startY + (1 - (this.y / scale)) * chartHeight); //<>//
   }
 }
 
 class Line {
+  String job;
   String category;
   List<DataPoint> points;
   boolean highlight;
   
-  Line(String _c) {
+  Line(String _j, String _c) {
+    this.job = _j;
     this.category = _c;
     this.points = new ArrayList<DataPoint>(0);
     this.highlight = false;
@@ -47,13 +53,32 @@ class Line {
   
   void render(float x, float y, float w, float h, float scale) {
     float xStep = w / (float) this.numPoints();
+    // draw lines
     for (int i = 0; i < this.numPoints(); i++) {
-      fill((this.highlight) ? HIGHLIGHT_COLOR : 0);
-      stroke((this.highlight) ? HIGHLIGHT_COLOR : 0);
-      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h, scale);
       if (i < this.numPoints() - 1) {
+        if (manager.career.equals(job) || manager.career.equals(category)) {
+          fill(HIGHLIGHT1);
+          stroke(HIGHLIGHT1);
+          strokeWeight(2);
+          line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h, scale), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h, scale));
+        }
+        fill(0);
+        stroke(0);
+        strokeWeight(.5);
         line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h, scale), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h, scale));
       }
+    }
+    // draw points
+    for (int i = 0; i < this.numPoints(); i++) {
+      if ((manager.career.equals(job) || manager.career.equals(category))) {
+        fill(HIGHLIGHT1);
+        stroke(HIGHLIGHT1);
+        //strokeWeight(2);
+        this.pointAt(i).renderHighlight(x + (xStep * i) + (xStep / 2), y, h, scale);
+      }
+      fill(0);
+      stroke(0);
+      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h, scale);
     }
   }
   
@@ -137,6 +162,9 @@ class LineChart{
   void renderAll(float x, float y, float w, float h) {
     stroke(0);
     strokeWeight(.5);
+    // background
+    fill(SECONDARY2);
+    rect(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w, h);
     // x axis
     textAlign(CENTER);
     text(str(int(scale * 100)) + "%", x + (CHART_MARGIN_LEFT/2), y + CHART_MARGIN_LEFT);

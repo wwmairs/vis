@@ -149,19 +149,21 @@ public class TreeMap {
     
     // If the node is currently being hovered over, fill it in gray
     
-    if (node == currNode.nodeHoveredOver()) {
+   /* if (node == currNode.nodeHoveredOver()) {
       if (node.id == currNode.nodeHoveredOver().id)
         fill(#d5ffed);
     // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
-      if (manager.career == node.id) fill(#d5ffed); //<>//
+      if (manager.career.equals(node.id)) fill(#d5ffed); //<>//
       else
       fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
-    }
+    } */
     
     if (node.hoverOver() && manager.depth == depth) {
-      fill(#ffe2b9);
-    }
+      manager.career = node.id;
+      fill(HIGHLIGHT1);
+    } else if (manager.career.equals(node.id)) fill(HIGHLIGHT1);
+    else fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
     
     // Set the stroke weight depending on the depth, with a maximum of 2.5
     //strokeWeight(min(this.maxDepth - depth + 1, 1.5));

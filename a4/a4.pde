@@ -10,6 +10,7 @@ static color PRIMARY1 = #23AA84;
 static color PRIMARY2 = #a7ddcd;
 static color SECONDARY1 = #7e7e7e;
 static color SECONDARY2 = #d3d3d3;
+static color HIGHLIGHT1 = #ffe2b9;
 
 // TreeMap margins
 static float SIDE_MARGIN = 10;
@@ -48,6 +49,9 @@ void mouseClicked() {
   if (inTreeMap()) {
     if (mouseButton == LEFT) {
       ts.currTreeMap.setTargetDepth(1);
+      if (manager.depth == 2) {
+        ts.toggleCareer();
+      }
     } else if (mouseButton == RIGHT) {
       ts.currTreeMap.setTargetDepth(-1);
     }
