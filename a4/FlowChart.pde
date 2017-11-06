@@ -1,4 +1,7 @@
 static float FLOW_DOT_MARGIN = 50;
+// these are bad colors, but they were easy to find
+color SOURCE_START_COLOR = color(204, 102, 0);
+color SOURCE_END_COLOR = color(0, 102, 153);
 
 class Source{
   String name;
@@ -7,6 +10,7 @@ class Source{
   float x;
   float y;
   float r;
+  color c;
   
   Source(String _name, float _funds) {
     this.name  = _name;
@@ -22,6 +26,8 @@ class Source{
     float controlX = _w / 3;
     // will draw source circle and curves to targets
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
+    stroke(c);
+    fill(c);
     ellipse(this.x, this.y, this.r, this.r);
     
     // let's try with one target first
@@ -30,8 +36,11 @@ class Source{
       println("drawing line to target:", t.category);
       println("t.x and t.y are", t.x, t.y);
       noFill();
+      stroke(c);
+      strokeWeight(3);
       bezier(this.x, this.y, this.x + controlX, this.y, t.x - controlX, t.y, t.x, t.y); //<>//
       // restore fill (?) maybe everything should just take care of its own stroke and fill
+      strokeWeight(1);
       fill(0);
     }
   }
@@ -67,14 +76,11 @@ class FlowChart{
     for (int i = 0; i < this.sources.size(); i++) {
       Source oneSource = this.sources.get(i);
       for (int j = 0; j < oneSource.targets.size(); j++) {
-        // this doesn't work! cause objects
-        //if (!this.targets.contains(oneSource.targets.get(j))) {
-        //  this.targets.add(oneSource.targets.get(j));
-        //}
           boolean contains = false;
           for (int k = 0; k < this.targets.size(); k++) {
             if (this.targets.get(k).category.equals(oneSource.targets.get(j).category)) {
               contains = true;
+              oneSource.targets.set(j, this.targets.get(k));
             }
           }
           if (!contains) {
@@ -104,12 +110,13 @@ class FlowChart{
     for (int i = 0; i < this.sources.size(); i++) {
       this.sources.get(i).x = sourceX;
       this.sources.get(i).y = y + (sourceStep * i);
-      this.sources.get(i).r = sourceStep * (this.sources.get(i).funds / this.maxFunds);
+      this.sources.get(i).r = (sourceStep / 2) + (this.sources.get(i).funds / this.maxFunds) * (sourceStep / 2);
+      this.sources.get(i).c = lerpColor()
     }
     for (int i = 0; i < this.targets.size(); i++) {
       this.targets.get(i).x = targetX;
       this.targets.get(i).y = y + (targetStep * i);
-      this.targets.get(i).r = targetStep;
+      this.targets.get(i).r = targetStep / 2;
     }
   }
   
