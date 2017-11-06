@@ -33,6 +33,7 @@ class DataPoint {
   void highlight(String job, float xc, float yc) {
     if (dist(mouseX, mouseY, xc, yc) <= POINT_RADIUS) {
       manager.career = job;
+      manager.year = x;
     } 
   }
 }
