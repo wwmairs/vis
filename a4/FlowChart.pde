@@ -145,6 +145,9 @@ class FlowChart{
       this.currentSources.get(i).render(x, y, w, h);
     }
     for (int i = 0; i < this.currentTargets.size(); i++) {
+      if (this.currentTargets.get(i).hover()) {
+        manager.career = this.currentTargets.get(i).category;
+      }
       this.currentTargets.get(i).render();
     }
     for (int i = 0; i < this.currentSources.size(); i++) {
@@ -198,5 +201,18 @@ class FlowChart{
       }
     });
     this.maxFunds = this.sources.get(0).funds;
+  }
+  
+  void toggleCareer() {
+    for (int i = 0; i < this.currentTargets.size(); i ++) {
+      if (this.currentTargets.get(i).hover()) {
+        // this is NOT what it should do
+        if (manager.careers.contains(manager.career)) {
+          manager.careers.remove(manager.career);
+        } else {
+          manager.careers.add(manager.career);
+        }
+      }
+    }
   }
 }

@@ -60,7 +60,7 @@ void mouseClicked() {
     lc.toggleCareer();
   
   } else if (inFlowChart()) {
-  
+    fc.toggleCareer();
   }
 }
 
