@@ -17,16 +17,23 @@ class DataPoint {
     this.id = _id;
   }
    //<>// //<>//
-  void render(float xCoord, float startY, float chartHeight, float scale) { //<>// //<>//
+  void render(float xCoord, float startY, float chartHeight, float scale, String job) { //<>// //<>//
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS, POINT_RADIUS);
+    highlight(job, xCoord, yCoord(startY, chartHeight, scale));
   }
   
   void renderHighlight(float xCoord, float startY, float chartHeight, float scale) {
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS + 5, POINT_RADIUS + 5);
   }
-  
+   //<>//
   float yCoord(float startY, float chartHeight, float scale) { //<>// //<>//
-    return (startY + (1 - (this.y / scale)) * chartHeight); //<>// //<>//
+    return (startY + (1 - (this.y / scale)) * chartHeight); //<>//
+  }
+  
+  void highlight(String job, float xc, float yc) {
+    if (dist(mouseX, mouseY, xc, yc) <= POINT_RADIUS) {
+      manager.career = job;
+    } 
   }
 }
 
@@ -40,14 +47,6 @@ class Line {
     this.job = _j;
     this.category = _c;
     this.points = new ArrayList<DataPoint>(0);
-    this.highlight = false;
-  }
-  
-  void highlight() {
-    this.highlight = true;
-  }
-  
-  void unHighlight() {
     this.highlight = false;
   }
   
@@ -78,7 +77,7 @@ class Line {
       }
       fill(0);
       stroke(0);
-      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h, scale);
+      this.pointAt(i).render(x + (xStep * i) + (xStep / 2), y, h, scale, job);
     }
   }
   
@@ -183,6 +182,14 @@ class LineChart{
       String key = entry.getKey();
       Line value = entry.getValue();
       value.render(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w - (2 * CHART_MARGIN_LEFT), h - (2 * CHART_MARGIN_RIGHT), scale);
+    }
+  }
+  
+  void toggleCareer() {
+    if (manager.careers.contains(manager.career)) {
+      manager.careers.remove(manager.career);
+    } else {
+      manager.careers.add(manager.career);
     }
   }
 }
