@@ -19,6 +19,7 @@ static float TOP_MARGIN = 10;
 void setup() {
   size(600,650);
   pixelDensity(displayDensity());
+  surface.setResizable(true);
   
   Parser parser = new Parser("data.csv", "scholarship_data.csv");
   manager = new Manager("2016", "", 2, parser.getCategories(), "");
