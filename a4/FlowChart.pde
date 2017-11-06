@@ -22,6 +22,11 @@ class Source{
     // will draw source circle and curves to targets
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
     ellipse(this.x, this.y, this.r, this.r);
+    
+    // let's try with one target first
+    Target t = this.targets.get(0);
+    fill(255);
+    bezier(this.x, this.y, t.x, this.y, this.x, t.y, t.x, t.y);
   }
   
 }
@@ -39,6 +44,7 @@ class Target{
   void render() {
     // will draw target circle
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
+    ellipse(this.x, this.y, this.r, this.r);
   }
 }
 
@@ -66,6 +72,9 @@ class FlowChart{
     updateDimensions(x, y, w, h);
     for (int i = 0; i < this.sources.size(); i++) {
       this.sources.get(i).render();
+    }
+    for (int i = 0; i < this.targets.size(); i++) {
+      this.targets.get(i).render();
     }
   }
   
