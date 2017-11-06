@@ -1,7 +1,7 @@
 static float FLOW_DOT_MARGIN = 50;
 // these are bad colors, but they were easy to find
-color SOURCE_START_COLOR = color(204, 102, 0);
-color SOURCE_END_COLOR = color(0, 102, 153);
+color SOURCE_START_COLOR = PRIMARY1;
+color SOURCE_END_COLOR = SECONDARY1;
 
 class Source{
   String name;
@@ -111,7 +111,7 @@ class FlowChart{
       this.sources.get(i).x = sourceX;
       this.sources.get(i).y = y + (sourceStep * i);
       this.sources.get(i).r = (sourceStep / 2) + (this.sources.get(i).funds / this.maxFunds) * (sourceStep / 2);
-      this.sources.get(i).c = lerpColor()
+      this.sources.get(i).c = lerpColor(SOURCE_START_COLOR, SOURCE_END_COLOR, (float)i / (float) this.sources.size());
     }
     for (int i = 0; i < this.targets.size(); i++) {
       this.targets.get(i).x = targetX;
