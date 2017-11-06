@@ -185,6 +185,7 @@ public class TreeMap {
     // Draw the 'id' text label for each leaf node in black in the center of the node
     fill(0);
     if (node.children.size() == 0) {
+      textAlign(CENTER);
       text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     } //<>//
   } //<>//
@@ -427,7 +428,7 @@ public class TreeMap {
     // Draw the 'id' text label for each leaf node in black in the center of the node
     fill(0);
     textAlign(CENTER);
-    text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
+    //text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     
   }
 }
