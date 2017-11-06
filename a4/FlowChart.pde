@@ -1,3 +1,5 @@
+static float FLOW_DOT_MARGIN = 50;
+
 class Source{
   String name;
   float funds;
@@ -59,11 +61,24 @@ class FlowChart{
   
   void render(float x, float y, float w, float h) {
     updateDimensions(x, y, w, h);
+    for (int i = 0; i < this.sources.size(); i++) {
+      this.sources.get(i).render();
+    }
   }
   
   void updateDimensions(float x, float y, float w, float h) {
     float sourceStep = h / sources.size();
     float targetStep = h / targets.size();
+    float sourceX = x + FLOW_DOT_MARGIN;
+    float targetX = x + w - FLOW_DOT_MARGIN;
+    for (int i = 0; i < this.sources.size(); i++) {
+      this.sources.get(i).x = sourceX;
+      this.sources.get(i).y = y + (sourceStep * i);
+    }
+    for (int i = 0; i < this.targets.size(); i++) {
+      this.targets.get(i).x = targetX;
+      this.targets.get(i).y = y + (targetStep * i);
+    }
   }
   
   void sortSources() {
