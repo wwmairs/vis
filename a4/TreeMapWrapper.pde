@@ -20,7 +20,12 @@ class TreeMapWrapper {
   }
   
   void toggleCareer() {
-    
+    if (manager.career != "pilot" && (manager.career != "non-pilot")) {
+     if (manager.careers.contains(manager.career)) {
+      manager.careers.remove(manager.career);
+      } else {
+        manager.careers.add(manager.career);
+      }
+    }
   }
-
 }

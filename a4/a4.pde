@@ -17,11 +17,11 @@ static float SIDE_MARGIN = 10;
 static float TOP_MARGIN = 10;
 
 void setup() {
-  size(600,650);
+  size(650,850);
   //currYear = "2011";
   
   Parser parser = new Parser("data.csv", "scholarship_data.csv");
-  manager = new Manager("2016", "student", 2, parser.getCategories(), "");
+  manager = new Manager("2016", "", 2, parser.getCategories(), "");
   //categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
   lc = new LineChart(parser.getLines());
