@@ -16,8 +16,8 @@ class DataPoint {
     this.y  = _y;
     this.id = _id;
   }
-   //<>//
-  void render(float xCoord, float startY, float chartHeight, float scale) { //<>//
+   //<>// //<>//
+  void render(float xCoord, float startY, float chartHeight, float scale) { //<>// //<>//
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS, POINT_RADIUS);
   }
   
@@ -25,8 +25,8 @@ class DataPoint {
     ellipse(xCoord, yCoord(startY, chartHeight, scale), POINT_RADIUS + 5, POINT_RADIUS + 5);
   }
   
-  float yCoord(float startY, float chartHeight, float scale) { //<>//
-    return (startY + (1 - (this.y / scale)) * chartHeight); //<>//
+  float yCoord(float startY, float chartHeight, float scale) { //<>// //<>//
+    return (startY + (1 - (this.y / scale)) * chartHeight); //<>// //<>//
   }
 }
 
@@ -164,13 +164,19 @@ class LineChart{
     strokeWeight(.5);
     // background
     fill(SECONDARY2);
-    rect(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w, h);
+    noStroke();
+    rect(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w - CHART_MARGIN_LEFT - CHART_MARGIN_RIGHT , h - (2 * CHART_MARGIN_RIGHT));
+    strokeWeight(1);
+    stroke(0);
+    fill(0);
     // x axis
     textAlign(CENTER);
+    textSize(10);
     text(str(int(scale * 100)) + "%", x + (CHART_MARGIN_LEFT/2), y + CHART_MARGIN_LEFT);
-    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + w - CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT);
+    line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + w - CHART_MARGIN_RIGHT, y + h - CHART_MARGIN_RIGHT);
     // y axis
     text("0%", x + (CHART_MARGIN_LEFT/2), y + h - CHART_MARGIN_RIGHT);
+    textSize(12);
     line(x + CHART_MARGIN_LEFT, y + h - CHART_MARGIN_RIGHT, x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT);
     
     for (Map.Entry<String, Line> entry : currLines.entrySet()) {
