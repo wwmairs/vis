@@ -206,7 +206,6 @@ class FlowChart{
   void toggleCareer() {
     for (int i = 0; i < this.currentTargets.size(); i ++) {
       if (this.currentTargets.get(i).hover()) {
-        // this is NOT what it should do
         if (manager.careers.contains(manager.career)) {
           manager.careers.remove(manager.career);
         } else {
