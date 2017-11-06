@@ -59,12 +59,12 @@ class Line {
         if (manager.career.equals(job) || manager.career.equals(category)) {
           fill(HIGHLIGHT1);
           stroke(HIGHLIGHT1);
-          strokeWeight(2);
+          strokeWeight(3);
           line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h, scale), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h, scale));
         }
         fill(0);
         stroke(0);
-        strokeWeight(.5);
+        strokeWeight(1);
         line(x + (xStep * i) + (xStep / 2), this.pointAt(i).yCoord(y, h, scale), x + (xStep * (i + 1)) + (xStep / 2), this.pointAt(i + 1).yCoord(y, h, scale));
       }
     }
