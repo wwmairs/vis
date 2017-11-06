@@ -25,26 +25,29 @@ class Source{
   void render(float _x, float _y, float _w, float _h) {
     float controlX = _w / 3;
     // will draw source circle and curves to targets
-    // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
-    stroke(c);
-    fill(c);
-    ellipse(this.x, this.y, this.r, this.r);
-    
+    // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS 
     // let's try with one target first
     for (int i = 0; i < this.targets.size(); i++ ) {
       Target t = this.targets.get(i);
-      println("drawing line to target:", t.category);
-      println("t.x and t.y are", t.x, t.y);
-      noFill();
-      stroke(c);
-      strokeWeight(3);
       if (manager.careers.contains(t.category)){ 
+        println("drawing line to target:", t.category);
+        println("t.x and t.y are", t.x, t.y);
+        noFill();
+        if (manager.career.equals(t.category)) {
+          stroke(HIGHLIGHT1);
+        } else {
+          stroke(c);
+        }
+        strokeWeight(3);
         bezier(this.x, this.y, this.x + controlX, this.y, t.x - controlX, t.y, t.x, t.y); //<>//
         // restore fill (?) maybe everything should just take care of its own stroke and fill
         strokeWeight(1);
         fill(0);
       }
     }
+    stroke(c);
+    fill(c);
+    ellipse(this.x, this.y, this.r, this.r);
   }
   
   boolean hover(){
@@ -77,6 +80,12 @@ class Target{
   void render() {
     // will draw target circle
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
+    if (manager.career.equals(this.category)) {
+      noStroke();
+      fill(HIGHLIGHT1);
+    } else {
+      fill(SECONDARY1);
+    }
     ellipse(this.x, this.y, this.r, this.r);
     if (this.hover()) {
       this.displayTooltip();
