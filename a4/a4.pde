@@ -36,6 +36,7 @@ void draw() {
   }
   //categories.remove("flight attendant");
   lc.renderAll(0, height / 3, width, height / 3);
+  fc.render(0, (height / 3) * 2, width, height / 3);
 }
 
 void update() {

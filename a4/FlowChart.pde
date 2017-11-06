@@ -21,6 +21,7 @@ class Source{
   void render() {
     // will draw source circle and curves to targets
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
+    ellipse(this.x, this.y, this.r, this.r);
   }
   
 }
@@ -44,8 +45,10 @@ class Target{
 class FlowChart{
   List<Source> sources;
   List<Target> targets;
+  float maxFunds;
   
   FlowChart(List<Source> _sources) {
+    this.maxFunds = 0;
     this.sources = _sources;
     this.targets = new ArrayList<Target>();
     for (int i = 0; i < this.sources.size(); i++) {
@@ -74,20 +77,23 @@ class FlowChart{
     for (int i = 0; i < this.sources.size(); i++) {
       this.sources.get(i).x = sourceX;
       this.sources.get(i).y = y + (sourceStep * i);
+      this.sources.get(i).r = sourceStep * (this.sources.get(i).funds / this.maxFunds);
     }
     for (int i = 0; i < this.targets.size(); i++) {
       this.targets.get(i).x = targetX;
       this.targets.get(i).y = y + (targetStep * i);
+      this.targets.get(i).r = targetStep;
     }
   }
   
   void sortSources() {
     Collections.sort(this.sources, new Comparator<Source>() {
       public int compare(Source s1, Source s2) {
-        if (s1.funds > s2.funds) return 1;
-        if (s1.funds < s2.funds) return -1;
+        if (s1.funds > s2.funds) return -1;
+        if (s1.funds < s2.funds) return 1;
         return 0;
       }
     });
+    this.maxFunds = this.sources.get(0).funds; //<>//
   }
 }
