@@ -45,6 +45,21 @@ class Source{
     }
   }
   
+  boolean hover(){
+    return (dist(mouseX, mouseY, this.x, this.y) <= this.r / 2);
+  }
+  
+  void displayTooltip() {
+    rectMode(CENTER);
+    textSize(12);
+    fill(255);
+    textAlign(LEFT, CENTER);
+    rect(mouseX + (6 * this.name.length())/2, mouseY, 6.5 * this.name.length(), 15);
+    fill(0);
+    text(this.name, mouseX, mouseY);
+    rectMode(CORNER);
+  }
+  
 }
 
 class Target{
@@ -61,6 +76,24 @@ class Target{
     // will draw target circle
     // at this point, POSITION WILL HAVE BEEN UPDATED BY FLOWCHART CLASS
     ellipse(this.x, this.y, this.r, this.r);
+    if (this.hover()) {
+      this.displayTooltip();
+    }
+  }
+  
+  boolean hover(){
+    return (dist(mouseX, mouseY, this.x, this.y) <= this.r / 2);
+  }
+  
+  void displayTooltip() {
+    rectMode(CENTER);
+    textSize(12);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    rect(mouseX, mouseY, 8 * this.category.length(), 15);
+    fill(0);
+    text(this.category, mouseX, mouseY);
+    rectMode(CORNER);
   }
 }
 
@@ -100,6 +133,11 @@ class FlowChart{
     for (int i = 0; i < this.targets.size(); i++) {
       this.targets.get(i).render();
     }
+    for (int i = 0; i < this.sources.size(); i++) {
+      if (this.sources.get(i).hover()) {
+        this.sources.get(i).displayTooltip();
+      }
+    }
   }
   
   void updateDimensions(float x, float y, float w, float h) {
@@ -109,13 +147,13 @@ class FlowChart{
     float targetX = x + w - FLOW_DOT_MARGIN;
     for (int i = 0; i < this.sources.size(); i++) {
       this.sources.get(i).x = sourceX;
-      this.sources.get(i).y = y + (sourceStep * i);
+      this.sources.get(i).y = y + (sourceStep * i) + (sourceStep / 2);
       this.sources.get(i).r = (sourceStep / 2) + (this.sources.get(i).funds / this.maxFunds) * (sourceStep / 2);
       this.sources.get(i).c = lerpColor(SOURCE_START_COLOR, SOURCE_END_COLOR, (float)i / (float) this.sources.size());
     }
     for (int i = 0; i < this.targets.size(); i++) {
       this.targets.get(i).x = targetX;
-      this.targets.get(i).y = y + (targetStep * i);
+      this.targets.get(i).y = y + (targetStep * i) + (targetStep / 2);
       this.targets.get(i).r = targetStep / 2;
     }
   }
