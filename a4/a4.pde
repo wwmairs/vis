@@ -18,6 +18,7 @@ static float TOP_MARGIN = 10;
 
 void setup() {
   size(600,650);
+  pixelDensity(displayDensity());
   //currYear = "2011";
   
   Parser parser = new Parser("data.csv", "scholarship_data.csv");
