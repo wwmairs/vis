@@ -1,5 +1,6 @@
 TreeMapWrapper ts;
 LineChart lc;
+FlowChart fc;
 
 //List<String> categories;
 //String currYear;
@@ -15,16 +16,15 @@ static float SIDE_MARGIN = 10;
 static float TOP_MARGIN = 10;
 
 void setup() {
-  size(650,850);
-  //currYear = "2016";
+  size(600,650);
+  //currYear = "2011";
   
-  Parser parser = new Parser("data.csv");
+  Parser parser = new Parser("data.csv", "scholarship_data.csv");
   manager = new Manager("2016", "student", 2, parser.getCategories(), "");
   //categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
   lc = new LineChart(parser.getLines());
-  
-
+  fc = new FlowChart(parser.getScholarships());
 }
 
 void draw() {
