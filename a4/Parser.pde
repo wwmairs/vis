@@ -65,6 +65,7 @@ class Parser {
     
     for (int i = 0; i < categoryData.size(); i++) {
       String [] values = categoryData.get(i);
+      String category = values[0];
       String job      = values[1];
       String year     = values[2];
       float numTotal  = parseFloat(values[3]);
@@ -73,7 +74,7 @@ class Parser {
       
       if (!lines.containsKey(job)) {
         categories.add(job);
-        Line newLine = new Line(job);
+        Line newLine = new Line(job, category);
         newLine.addPoint(year, percent, numWomen);
         lines.put(job, newLine);
       } else {

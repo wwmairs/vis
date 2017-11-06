@@ -18,5 +18,9 @@ class TreeMapWrapper {
     // treeMaps doesn't contain 'year'
     currTreeMap = treeMaps.get(manager.year);
   }
+  
+  void toggleCareer() {
+    
+  }
 
 }
