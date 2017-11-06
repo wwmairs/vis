@@ -111,13 +111,13 @@ class LineChart{
       if (temp > greatestY) greatestY = temp;
     }
     scale = greatestY * 1.2;
-    if (scale > .75) scale = 1; //<>//
+    if (scale > .75) scale = 1;
   }
   
-  void updateLines(List<String> categories) {
+  void updateLines() {
     this.currLines.clear();
-    for (int i = 0; i < categories.size(); i++) {
-      String currCat = categories.get(i);
+    for (int i = 0; i < manager.careers.size(); i++) {
+      String currCat = manager.careers.get(i);
       Line currLine = lines.get(currCat);
       currLines.put(currCat,currLine);
     }

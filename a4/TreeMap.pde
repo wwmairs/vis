@@ -13,7 +13,7 @@ public class TreeMap {
   private int maxDepth = 0, currDepth = 0;
   private color rootColor = BACKGROUND;
   private color leafColor = FOREGROUND;
-  private int targetDepth = 0;
+  //private int targetDepth = 0;
   
   // TreeMap Constructor
   //   - Set the root node, current node, and update the max tree depth
@@ -21,7 +21,7 @@ public class TreeMap {
     this.rootNode = treeRoot;
     this.rootNode.women();
     this.maxDepth = this.getMaxDepth(this.rootNode);
-    this.targetDepth = 1;
+    //this.targetDepth = 1;
     this.setCurrentNode(this.rootNode, 0);
   }
   
@@ -41,7 +41,7 @@ public class TreeMap {
   }
   
   public void newDrawNode(RectangleNode node, int depth) {
-    if (depth == targetDepth) {
+    if (depth == manager.depth) {
       // draw gender breakdown
     } else {
       // draw children
@@ -154,10 +154,12 @@ public class TreeMap {
         fill(#d5ffed);
     // Fill in the node to be on a spectrum between rootColor and leafColor, depending on its depth
     } else {
+      if (manager.career == node.id) fill(#d5ffed); //<>//
+      else
       fill(lerpColor(this.rootColor, this.leafColor, (this.maxDepth > 0) ? (float) depth / (float) this.maxDepth : 0));
     }
     
-    if (node.hoverOver() && targetDepth == depth) {
+    if (node.hoverOver() && manager.depth == depth) {
       fill(#ffe2b9);
     }
     
@@ -169,7 +171,7 @@ public class TreeMap {
     rect(node.x, node.y, node.w, node.h, 3);
 
     // Recursively draw all children, adding 1 to the depth
-    if (this.targetDepth > depth) {
+    if (manager.depth > depth) {
       for (int i = 0; i < node.children.size(); i++) {
         this.drawNode(node.children.get(i), depth + 1); 
       }
@@ -183,9 +185,9 @@ public class TreeMap {
     if (node.children.size() == 0) {
       text(node.id, node.x + (node.w/2) - 8, node.y + (node.h / 2) + 3);
     } //<>//
-  }
+  } //<>//
   
-  // worst //<>//
+  // worst
   //   - finds the worst aspect ratio in the row //<>//
   private float worst(List<RectangleNode> row, float rowWidth) { //<>//
     
@@ -263,18 +265,18 @@ public class TreeMap {
   public void setCurrentNode(RectangleNode newCurr, int depth) {
     this.currNode = newCurr;
     this.currDepth = this.getDepth(this.currNode);
-    this.targetDepth += depth;
+    manager.depth += depth;
   }
   
   public void setTargetDepth(int depth) {
-    this.targetDepth += depth;
-    if (targetDepth > 2) {
-      targetDepth = 2;
+    manager.depth += depth;
+    if (manager.depth > 2) {
+      manager.depth = 2;
     }
-    if (targetDepth < 0) {
-      targetDepth = 0;
+    if (manager.depth < 0) {
+      manager.depth = 0;
     }
-    println(targetDepth);
+    println(manager.depth);
   }
       
   // getCurrentNode
@@ -312,9 +314,9 @@ public class TreeMap {
   }
   public void drawGenderBreakdown(RectangleNode node, int depth) {    
  //<>//
-    // Set local variables to keep track of the remaining x, y, width, and height
+    // Set local variables to keep track of the remaining x, y, width, and height //<>//
     float currX = node.x, currY = node.y, currWidth = node.w, currHeight = node.h;
-     //<>//
+    
     // For all nodes being drawn (except the outermost node), pad it by this.padding on each side //<>//
     if (node != this.currNode) { //<>//
       node.x = node.x + this.padding; 
@@ -403,9 +405,9 @@ public class TreeMap {
     // Set the stroke weight depending on the depth, with a maximum of 2.5
     //strokeWeight(min(this.maxDepth - depth + 1, 2.5));
     
-    // Draw the node! //<>//
+    // Draw the node! //<>// //<>//
     //rect(node.x, node.y, node.w, node.h, 3);
- //<>//
+
     // Recursively draw all children, adding 1 to the depth //<>//
       for (int i = 0; i < 2 ; i++) { //node.genderBreakdown.size() //<>//
         RectangleNode drawMe = node.genderBreakdown.get(i);

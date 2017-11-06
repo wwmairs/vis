@@ -1,8 +1,9 @@
 TreeMapWrapper ts;
 LineChart lc;
 
-List<String> categories;
-String currYear;
+//List<String> categories;
+//String currYear;
+Manager manager;
 
 static color PRIMARY1 = #23AA84;
 static color PRIMARY2 = #a7ddcd;
@@ -13,30 +14,33 @@ static color SECONDARY2 = #d3d3d3;
 static float SIDE_MARGIN = 10;
 static float TOP_MARGIN = 10;
 
-
-
 void setup() {
   size(650,850);
-  currYear = "2016";
+  //currYear = "2016";
   
   Parser parser = new Parser("data.csv");
-  categories = parser.getCategories();
+  manager = new Manager("2016", "student", 2, parser.getCategories(), "");
+  //categories = parser.getCategories();
   ts = new TreeMapWrapper(parser.getRoots());
-  
   lc = new LineChart(parser.getLines());
+  
 
 }
 
 void draw() {
   background(255);
-  ts.setCurrByYear(currYear);
+  update();
   ts.currTreeMap.drawTreeMap(SIDE_MARGIN, TOP_MARGIN, width - (2* SIDE_MARGIN), height/3 - TOP_MARGIN);
   if ((keyPressed == true) && (key == ' ')) {
     ts.currTreeMap.getCurrentNode().nodeHoveredOver().toolTip();
   }
   //categories.remove("flight attendant");
-  lc.updateLines(categories);
   lc.renderAll(0, height / 3, width, height / 3);
+}
+
+void update() {
+  ts.setCurrByYear();
+  lc.updateLines();
 }
 
 void mouseClicked() {

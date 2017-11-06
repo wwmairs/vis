@@ -13,10 +13,10 @@ class TreeMapWrapper {
     }
   }
   
-  void setCurrByYear(String year) {
+  void setCurrByYear() {
     // maybe some error handling here would be nice.. if 
     // treeMaps doesn't contain 'year'
-    currTreeMap = treeMaps.get(year);
+    currTreeMap = treeMaps.get(manager.year);
   }
 
 }
