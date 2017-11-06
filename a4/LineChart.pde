@@ -147,7 +147,6 @@ class LineChart{
     
     for (Map.Entry<String, Line> entry : currLines.entrySet()) {
       String key = entry.getKey();
-      println("rendering line", key);
       Line value = entry.getValue();
       value.render(x + CHART_MARGIN_LEFT, y + CHART_MARGIN_RIGHT, w - (2 * CHART_MARGIN_LEFT), h - (2 * CHART_MARGIN_RIGHT), scale);
     }

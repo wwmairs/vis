@@ -27,8 +27,11 @@ class Source{
     // let's try with one target first
     for (int i = 0; i < this.targets.size(); i++ ) {
       Target t = this.targets.get(i);
+      println("drawing line to target:", t.category);
+      println("t.x and t.y are", t.x, t.y);
       noFill();
-      bezier(this.x, this.y, this.x + controlX, this.y, t.x - controlX, t.y, t.x, t.y);
+      bezier(this.x, this.y, this.x + controlX, this.y, t.x - controlX, t.y, t.x, t.y); //<>//
+      // restore fill (?) maybe everything should just take care of its own stroke and fill
       fill(0);
     }
   }
@@ -64,9 +67,19 @@ class FlowChart{
     for (int i = 0; i < this.sources.size(); i++) {
       Source oneSource = this.sources.get(i);
       for (int j = 0; j < oneSource.targets.size(); j++) {
-        if (!this.targets.contains(oneSource.targets.get(j))) {
-          this.targets.add(oneSource.targets.get(j));
-        }
+        // this doesn't work! cause objects
+        //if (!this.targets.contains(oneSource.targets.get(j))) {
+        //  this.targets.add(oneSource.targets.get(j));
+        //}
+          boolean contains = false;
+          for (int k = 0; k < this.targets.size(); k++) {
+            if (this.targets.get(k).category.equals(oneSource.targets.get(j).category)) {
+              contains = true;
+            }
+          }
+          if (!contains) {
+            this.targets.add(oneSource.targets.get(j));
+          }
       }
     }
     this.sortSources();
@@ -108,6 +121,6 @@ class FlowChart{
         return 0;
       }
     });
-    this.maxFunds = this.sources.get(0).funds; //<>//
+    this.maxFunds = this.sources.get(0).funds;
   }
 }
