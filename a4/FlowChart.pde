@@ -1,5 +1,5 @@
 static float FLOW_DOT_MARGIN = 50;
-// these are bad colors, but they were easy to find
+static float FLOW_MARGIN_BOTTOM = 20;
 color SOURCE_START_COLOR = PRIMARY1;
 color SOURCE_END_COLOR = SECONDARY1;
 
@@ -138,11 +138,11 @@ class FlowChart{
   }
   
   void render(float x, float y, float w, float h) {
-    updateDimensions(x, y, w, h);
+    updateDimensions(x, y, w, h - FLOW_MARGIN_BOTTOM);
     //this.sources.get(3).render(x, y, w, h);
     println("num curr sources", this.currentSources.size());
     for (int i = 0; i < this.currentSources.size(); i++) {
-      this.currentSources.get(i).render(x, y, w, h);
+      this.currentSources.get(i).render(x, y, w, h - FLOW_MARGIN_BOTTOM);
     }
     for (int i = 0; i < this.currentTargets.size(); i++) {
       if (this.currentTargets.get(i).hover()) {
@@ -155,6 +155,12 @@ class FlowChart{
         this.currentSources.get(i).displayTooltip();
       }
     }
+    
+    // labels!
+    textAlign(CENTER, CENTER);
+    fill(0);
+    text("Scholarships", x + FLOW_DOT_MARGIN, y + h - (FLOW_MARGIN_BOTTOM / 2));
+    text("Careers", x + w - FLOW_DOT_MARGIN, y + h - (FLOW_MARGIN_BOTTOM / 2));
   }
   
   void updateDimensions(float x, float y, float w, float h) {

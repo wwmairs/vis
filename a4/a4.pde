@@ -12,9 +12,15 @@ static color SECONDARY1 = #7e7e7e;
 static color SECONDARY2 = #d3d3d3;
 static color HIGHLIGHT1 = #ffe2b9;
 
+static float GLOBAL_MARGIN_TOP = 20;
+
 // TreeMap margins
 static float SIDE_MARGIN = 10;
 static float TOP_MARGIN = 10;
+
+
+// dear Katya, I can't come up with a good title
+static String TITLE = "Careers in Aviation and How to (not) Get Them";
 
 void setup() {
   size(600,650);
@@ -30,15 +36,22 @@ void setup() {
 }
 
 void draw() {
+  float W = width;
+  float H = height - GLOBAL_MARGIN_TOP;
   background(255);
   update();
-  ts.currTreeMap.drawTreeMap(SIDE_MARGIN, TOP_MARGIN, width - (2* SIDE_MARGIN), height/3 - TOP_MARGIN);
+  
+  textSize(20);
+  textAlign(CENTER);
+  text(TITLE, W / 2, GLOBAL_MARGIN_TOP);
+  
+  ts.currTreeMap.drawTreeMap(SIDE_MARGIN, TOP_MARGIN + GLOBAL_MARGIN_TOP, W - (2* SIDE_MARGIN), H/3 - TOP_MARGIN);
   if ((keyPressed == true) && (key == ' ')) {
     ts.currTreeMap.getCurrentNode().nodeHoveredOver().toolTip();
   }
   //categories.remove("flight attendant");
-  lc.renderAll(0, height / 3, width, height / 3);
-  fc.render(0, (height / 3) * 2, width, height / 3);
+  lc.renderAll(0, (H / 3) + GLOBAL_MARGIN_TOP, W, H / 3);
+  fc.render(0, ((H / 3) * 2) + GLOBAL_MARGIN_TOP, W, H / 3);
 }
 
 void update() {
