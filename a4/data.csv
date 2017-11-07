@@ -1,32 +1,130 @@
-6,,,,
-5,,,,
+16,,,,
+8,,,,
 pilot,student,2016,128501,15971
 pilot,student,2015,122729,14580
 pilot,student,2014,120546,14369
 pilot,student,2013,120285,14405
 pilot,student,2012,119946,14643
 pilot,student,2011,118657,14683
+pilot,student,2010,119119,14767
+pilot,student,2009,72280,8450
+pilot,student,2008,80989,9127
+pilot,student,2007,84339,9559
+pilot,student,2006,84866,9640
+pilot,student,2005,87213,9717
+pilot,student,2004,87910,9857
+pilot,student,2003,87296,9897
+pilot,student,2002,85991,10082
+pilot,student,2001,86731,10230
 pilot,commercial,2016,96081,6081
 pilot,commercial,2015,101164,6587
 pilot,commercial,2014,104322,6685
 pilot,commercial,2013,108206,6911
 pilot,commercial,2012,116400,7536
 pilot,commercial,2011,120865,7956
+pilot,commercial,2010,123705,8175
+pilot,commercial,2009,125738,8289
+pilot,commercial,2008,124746,8083
+pilot,commercial,2007,115127,7101
+pilot,commercial,2006,117610,7236
+pilot,commercial,2005,120614,7315
+pilot,commercial,2004,122592,7421
+pilot,commercial,2003,123990,7436
+pilot,commercial,2002,125920,7454
+pilot,commercial,2001,120502,5932
 pilot,private,2016,162313,10009
 pilot,private,2015,170718,11339
 pilot,private,2014,174883,11652
 pilot,private,2013,180214,11909
 pilot,private,2012,188001,12456
 pilot,private,2011,194441,12927
+pilot,private,2010,202020,13566
+pilot,private,2009,211619,14322
+pilot,private,2008,222596,15015
+pilot,private,2007,211096,13694
+pilot,private,2006,219233,14111
+pilot,private,2005,228619,14517
+pilot,private,2004,235994,15036
+pilot,private,2003,241045,15487
+pilot,private,2002,245230,15906
+pilot,private,2001,243823,13894
 non-pilot,flight attendant,2016,212607,169170
 non-pilot,flight attendant,2015,200319,159703
 non-pilot,flight attendant,2014,188936,150941
 non-pilot,flight attendant,2013,179531,143701
 non-pilot,flight attendant,2012,172357,138223
 non-pilot,flight attendant,2011,167037,134114
+non-pilot,flight attendant,2010,159946,128646
+non-pilot,flight attendant,2009,156741,126034
+non-pilot,flight attendant,2008,154671,124419
+non-pilot,flight attendant,2007,147013,118426
+non-pilot,flight attendant,2006,134874,108559
+non-pilot,flight attendant,2005,125032,100630
+non-pilot,flight attendant,2004,125032,100630
+non-pilot,flight attendant,2003,125032,100500
+non-pilot,flight attendant,2002,125032,111630
+non-pilot,flight attendant,2001,125032,110630
 non-pilot,mechanic,2016,279435,6536
 non-pilot,mechanic,2015,342528,8419
 non-pilot,mechanic,2014,341409,8151
 non-pilot,mechanic,2013,338844,7917
 non-pilot,mechanic,2012,337775,7729
 non-pilot,mechanic,2011,335431,7487
+non-pilot,mechanic,2010,331989,7215
+non-pilot,mechanic,2009,329027,6980
+non-pilot,mechanic,2008,326276,6740
+non-pilot,mechanic,2007,322852,6524
+non-pilot,mechanic,2006,323097,6345
+non-pilot,mechanic,2005,320293,6152
+non-pilot,mechanic,2004,317111,5932
+non-pilot,mechanic,2003,313032,5734
+non-pilot,mechanic,2002,315928,5559
+non-pilot,mechanic,2001,310850,5295
+non-pilot,flight engineer,2016,35761,1458
+non-pilot,flight engineer,2015,42460,1626
+non-pilot,flight engineer,2014,43803,1651
+non-pilot,flight engineer,2013,45317,1691
+non-pilot,flight engineer,2012,46639,1712
+non-pilot,flight engineer,2011,47659,1731
+non-pilot,flight engineer,2010,49038,1766
+non-pilot,flight engineer,2009,51022,1828
+non-pilot,flight engineer,2008,53135,1894
+non-pilot,flight engineer,2007,54394,1901
+non-pilot,flight engineer,2006,55952,1920
+non-pilot,flight engineer,2005,57756,1986
+non-pilot,flight engineer,2004,59376,2007
+non-pilot,flight engineer,2003,61643,2070
+non-pilot,flight engineer,2002,63681,2100
+non-pilot,flight engineer,2001,65398,2124
+non-pilot,dispatcher,2016,19758,3615
+non-pilot,dispatcher,2015,23754,4503
+non-pilot,dispatcher,2014,23113,4326
+non-pilot,dispatcher,2013,22401,4115
+non-pilot,dispatcher,2012,21862,3930
+non-pilot,dispatcher,2011,21363,3744
+non-pilot,dispatcher,2010,20691,3530
+non-pilot,dispatcher,2009,20132,3381
+non-pilot,dispatcher,2008,19590,3230
+non-pilot,dispatcher,2007,19043,3087
+non-pilot,dispatcher,2006,18610,2934
+non-pilot,dispatcher,2005,18079,2805
+non-pilot,dispatcher,2004,17493,2647
+non-pilot,dispatcher,2003,16955,2520
+non-pilot,dispatcher,2002,16695,2410
+non-pilot,dispatcher,2001,16070,2262
+pilot,airline transport,2016,157894,6888
+pilot,airline transport,2015,154730,6554
+pilot,airline transport,2014,152933,6408
+pilot,airline transport,2013,149824,6205
+pilot,airline transport,2012,145590,5818
+pilot,airline transport,2011,142511,5597
+pilot,airline transport,2010,142198,5580
+pilot,airline transport,2009,144600,5636
+pilot,airline transport,2008,146838,5657
+pilot,airline transport,2007,143953,5349
+pilot,airline transport,2006,141935,5071
+pilot,airline transport,2005,141992,5008
+pilot,airline transport,2004,142160,4908
+pilot,airline transport,2003,143504,4850
+pilot,airline transport,2002,144708,4792
+pilot,airline transport,2001,144702,4630
