@@ -9,7 +9,7 @@ public class Data{
 
     for (int i = 0; i < size; i++)
       this.dataPoints[i] = new DataPoint(random(20, 100), false);
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 1; i++) {
       int idx;
       do {
         idx = int(random(1, size));
