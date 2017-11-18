@@ -81,12 +81,26 @@ public class ExperimentKeeper{
   
   private float getMarkedPercentage(Data data) {
     ArrayList<Float> values = new ArrayList<Float>();
-    Float sum = data.getSum();
     for (int i = 0; i < data.size(); i++) {
-      if (data.get(i).isMarked()) values.add(data.get(i).getValue());
+      if (data.get(i).isMarked()) {
+        values.add(data.get(i).getValue());
+        values.add(data.get(i - 1).getValue());
+      }
     }
-    println("marked percentage", 100 * min(values.get(0), sum) / max(values.get(0), sum));
-    return 100 * min(values.get(0), sum) / max(values.get(0), sum);
+    Float areaSum = 0.0;
+    for (int i = 1; i < data.size(); i++) {
+      float a = data.get(i - 1).getValue();
+      float b = data.get(i).getValue();
+      float h = charts[0].getWidth() / charts[0].data.size();
+      areaSum += (a + b) / 2 * h;
+    }
+    Float markedArea = 0.0;
+    float a = values.get(0);
+    float b = values.get(1);
+    float h = charts[0].getWidth() / charts[0].data.size();
+    markedArea = (a + b) / 2 * h;
+    println ("markedArea", 100 * min(markedArea, areaSum) / max(markedArea, areaSum));
+    return 100 * min(markedArea, areaSum) / max(markedArea, areaSum);
   }
 
   public void onMouseClickedAt(int x, int y){
