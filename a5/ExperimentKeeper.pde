@@ -81,10 +81,11 @@ public class ExperimentKeeper{
   
   private float getMarkedPercentage(Data data) {
     ArrayList<Float> values = new ArrayList<Float>();
+    Float sum = data.getSum();
     for (int i = 0; i < data.size(); i++) {
       if (data.get(i).isMarked()) values.add(data.get(i).getValue());
     }
-    return 100 * min(values.get(0), values.get(0)) / max(values.get(0), values.get(0));
+    return 100 * min(values.get(0), sum) / max(values.get(0), sum);
   }
 
   public void onMouseClickedAt(int x, int y){
