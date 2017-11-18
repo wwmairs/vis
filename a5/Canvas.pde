@@ -51,11 +51,11 @@ public class Canvas extends Viewport{
     text("(" + trialNumber + "/" + totalTrials + ")", this.viewX + this.viewWidth, this.viewY);
     textSize(16);
     textAlign(CENTER);
-    text("Two values are marked with dots. \n" +
-         "What percentage is the smaller of the larger? \n" +
+    text("A subsection of the graph is represented between two lines, marked by a black dot. \n" +
+         "What percentage is the subsection of the whole?  " +
          "Please put your answer below. \n" +
-         "e.g. If you think the smaller is exactly a half of the larger, \n" +
-         "please input \"50\".", this.viewCenterX, y);
+         "e.g. If you think the subsection is 1/4 of the whole graph, " +
+         "please input \"25\".", this.viewCenterX, y + 20);
     this.answerTextField.draw(answer);
     fill(0);
     textSize(16);
