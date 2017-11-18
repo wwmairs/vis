@@ -85,6 +85,7 @@ public class ExperimentKeeper{
     for (int i = 0; i < data.size(); i++) {
       if (data.get(i).isMarked()) values.add(data.get(i).getValue());
     }
+    println("marked percentage", 100 * min(values.get(0), sum) / max(values.get(0), sum));
     return 100 * min(values.get(0), sum) / max(values.get(0), sum);
   }
 
