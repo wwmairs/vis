@@ -16,14 +16,19 @@ public class PieChart extends Chart {
     float offset = 0;
     for (int i = 0; i < this.data.size(); i++) {
       float a2 = TWO_PI * this.data.get(i).getValue() / dataSum;
-      stroke(0);
-      fill(255);
-      arc(getCenterX(), getCenterY(), getWidth() - 10, getHeight() - 10, offset, offset + a2, PIE);
+      
       if (this.data.get(i).isMarked()) {
+        stroke(0);
+        fill(255);
+        arc(getCenterX(), getCenterY(), getWidth() - 10, getHeight() - 10, offset, offset + a2, PIE);
         float mx = getCenterX() + cos(offset + a2/2) * getRadius() / 2;
         float my = getCenterY() + sin(offset + a2/2) * getRadius() / 2;
         fill(0);
         ellipse(mx, my, 10, 10);
+      } else {
+        stroke(0);
+        fill(255);
+        arc(getCenterX(), getCenterY(), getWidth() - 10, getHeight() - 10, offset, offset + a2, OPEN);
       }
       offset += a2;
     }

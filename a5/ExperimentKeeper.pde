@@ -84,7 +84,7 @@ public class ExperimentKeeper{
     for (int i = 0; i < data.size(); i++) {
       if (data.get(i).isMarked()) values.add(data.get(i).getValue());
     }
-    return 100 * min(values.get(0), values.get(1)) / max(values.get(0), values.get(1));
+    return 100 * min(values.get(0), values.get(0)) / max(values.get(0), values.get(0));
   }
 
   public void onMouseClickedAt(int x, int y){
