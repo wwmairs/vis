@@ -19,15 +19,28 @@ public class AreaChart extends Chart {
       float yPos = this.getHeight() * (this.data.get(i).getValue() / max);
       if (i > 0) {
         beginShape();
-        fill(150);
-        vertex(this.getX() + (xStep * i), this.getY() + yPos);
-        vertex(this.getX() + (xStep * i), this.getY() + this.getHeight());
-        vertex(this.getX() + (xStep * (i - 1)), this.getY() + this.getHeight());
-        vertex(this.getX() + (xStep * (i - 1)), this.getY() + (this.getHeight() * (this.data.get(i - 1).getValue() / max)));
+        // uncomment this to make the marked segment a different color
+        //fill(this.data.get(i).isMarked() ? 100 : 150);
+        
+        // shade in the area beneath
+        fill(255);
+        //noStroke();
+        //vertex(this.getX() + (xStep * i), this.getY() + yPos);
+        //vertex(this.getX() + (xStep * i), this.getY() + this.getHeight());
+        //vertex(this.getX() + (xStep * (i - 1)), this.getY() + this.getHeight());
+        //vertex(this.getX() + (xStep * (i - 1)), this.getY() + (this.getHeight() * (this.data.get(i - 1).getValue() / max)));
+        // draw the line between points
+        stroke(0);
+        line(this.getX() + (xStep * i), this.getY() + yPos, this.getX() + (xStep * (i - 1)), this.getY() + (this.getHeight() * (this.data.get(i - 1).getValue() / max)));
+        if (this.data.get(i).isMarked()) {
+          stroke(0);
+          line(this.getX() + (xStep * i), this.getY() + yPos, this.getX() + (xStep * i), this.getY() + this.getHeight());
+          line(this.getX() + (xStep * (i - 1)), this.getY() + this.getHeight(), this.getX() + (xStep * (i - 1)), this.getY() + (this.getHeight() * (this.data.get(i - 1).getValue() / max)));
+        }
         endShape(CLOSE);
       }
       fill(0);
-      ellipse(this.getX() + (xStep * i), this.getY() + yPos, 5, 5); 
+      ellipse(this.getX() + (xStep * i), this.getY() + yPos, 2, 2); 
     }
   }
 }
