@@ -4,7 +4,7 @@ final int DEFAULT_CANVAS_HEIGHT = 700;
 ExperimentKeeper experimentKeeper;
 
 void setup(){
-  //fullScreen();
+  fullScreen();
   size(1400, 800);
   int canvasWidth = DEFAULT_CANVAS_WIDTH;
   int canvasHeight = DEFAULT_CANVAS_HEIGHT;

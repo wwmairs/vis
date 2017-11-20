@@ -1,12 +1,21 @@
 public class Data{
 
   private int size;
+  private float error;
   private DataPoint[] dataPoints;
 
   public Data(DataPoint[] points){
     this.size       = points.length;
     this.dataPoints = points;
 
+  }
+  
+  public void setError(float _err) {
+    this.error = _err;
+  }
+  
+  public float getError() {
+    return this.error;
   }
 
   public int size(){

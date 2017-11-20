@@ -11,7 +11,7 @@ class Parser {
   }
   
   HashMap<String, Data> mapFromPath(String filePath) {
-    String[] lines = loadStrings(filePath);
+    String[] lines = loadStrings(filePath + "all.csv");
     ArrayList<DataPoint> piePoints  = new ArrayList<DataPoint>();
     ArrayList<DataPoint> areaPoints = new ArrayList<DataPoint>();
     HashMap<String, Data> map = new HashMap();
@@ -33,8 +33,15 @@ class Parser {
                                      Float.parseFloat(values[5])));
       }
     }
-    map.put("pie", new Data(piePoints.toArray(new DataPoint[piePoints.size()])));
-    map.put("area", new Data(areaPoints.toArray(new DataPoint[areaPoints.size()])));
+    String[] errors = loadStrings(filePath + "error.csv");
+    float pieError = Float.parseFloat(errors[1].split(",")[0]);
+    float areaError = Float.parseFloat(errors[1].split(",")[1]);
+    Data pieData  = new Data(piePoints.toArray(new DataPoint[piePoints.size()]));
+    Data areaData = new Data(areaPoints.toArray(new DataPoint[areaPoints.size()]));
+    pieData.setError(pieError);
+    areaData.setError(areaError);
+    map.put("pie", pieData);
+    map.put("area", areaData);
     return map;
   }
   

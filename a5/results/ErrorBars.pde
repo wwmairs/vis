@@ -23,21 +23,21 @@ class ErrorBars{
     this.fill   = _f;
     this.minError   = getMinError();
     this.maxError   = getMaxError();
-    this.rangeStart = floor(minError);
-    this.rangeEnd   = ceil(maxError);
+    this.rangeStart = floor(minError) - 1;
+    this.rangeEnd   = ceil(maxError) + 1;
     this.rangeSize  = rangeEnd - rangeStart;
     this.errorUnit  = w / rangeSize;
   }
   
   float getMinError() {
-    float normalMin = min(normal.get("pie").minError(), normal.get("area").minError());
-    float fillMin = min(normal.get("pie").minError(), normal.get("area").minError());
+    float normalMin = min(normal.get("pie").meanError(), normal.get("area").meanError());
+    float fillMin = min(fill.get("pie").meanError(), fill.get("area").meanError());
     return min(normalMin, fillMin);
   }
   
   float getMaxError() {
-    float normalMax = max(normal.get("pie").maxError(), normal.get("area").maxError());
-    float fillMax = max(normal.get("pie").maxError(), normal.get("area").maxError());
+    float normalMax = max(normal.get("pie").meanError(), normal.get("area").meanError());
+    float fillMax = max(fill.get("pie").meanError(), fill.get("area").meanError());
     return max(normalMax, fillMax);
   }
   
@@ -48,12 +48,30 @@ class ErrorBars{
     fill(0);
     //println(minError, maxError);
     for ( int i = 0; i < rangeSize; i++) {
-      ellipse((errorUnit * i) + (errorUnit / 2), h, 10, 10);
-      text(rangeStart + i, (errorUnit * i) + (errorUnit / 2), h - 15);
+      rectMode(CENTER);
+      rect((errorUnit * i) + (errorUnit / 2), h, 0, 10);
+      textAlign(CENTER);
+      text(rangeStart + i, (errorUnit * i) + (errorUnit / 2), h + 20);
     }
-    println("pie error", normal.get("pie").meanError());
-    println("area error", normal.get("area").meanError());
-    ellipse((errorUnit * normal.get("pie").meanError()) + (errorUnit / 2), h / 3, 20, 20);
-    ellipse((errorUnit * normal.get("area").meanError()) + (errorUnit / 2), (2 * h) / 3, 20, 20);
+    line((errorUnit / 2), h, (errorUnit * (rangeSize - 1)) + (errorUnit / 2), h);
+    //println("pie error", normal.get("pie").getError());
+    //println("area error", normal.get("area").getError());
+    errorBar(normal.get("pie").meanError(), normal.get("pie").getError(), 1, "Monochromatic Pie");
+    errorBar(normal.get("area").meanError(), normal.get("area").getError(), 2, "Monochromatic Area");
+    errorBar(fill.get("pie").meanError(), fill.get("pie").getError(), 3, "Highlighted Pie");
+    errorBar(fill.get("area").meanError(), fill.get("area").getError(), 4, "Highlighted Area");
+  }
+  
+  
+  void errorBar(float mean, float error, int c, String label) {
+    float meanX = (errorUnit * mean) + (errorUnit / 2);
+    ellipse(meanX, (h * c) / 5, 10, 10);
+    stroke(0);
+    strokeWeight(2);
+    line(meanX, (h * c) / 5, meanX - (errorUnit * error), (h * c) / 5);
+    line(meanX, (h * c) / 5, meanX + (errorUnit * error), (h * c) / 5);
+    fill(0);
+    textAlign(LEFT);
+    text(label, this.x, (h * c) / 5);
   }
 }
