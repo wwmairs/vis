@@ -20,10 +20,10 @@ public class AreaChart extends Chart {
       if (i > 0) {
         beginShape();
         // uncomment this to make the marked segment a different color
-        //fill(this.data.get(i).isMarked() ? 100 : 150);
+        fill(this.data.get(i).isMarked() ? 100 : 150);
         
         // shade in the area beneath
-        fill(150);
+        //fill(150);
         noStroke();
         vertex(this.getX() + (xStep * i), this.getY() + yPos);
         vertex(this.getX() + (xStep * i), this.getY() + this.getHeight());
