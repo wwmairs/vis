@@ -86,16 +86,12 @@ for (var i = 0; i < statistics.values.length; i++) {
   path.setAttribute("fill", c);
 
   path.addEventListener("mouseover", function(event){
-    // path.setAttribute("fill", "white");
-    path.setAttribute("stroke-width", 3);
     path.setAttribute("d", highlightDescription);
     text.setAttribute("fill", c);
     text.innerHTML = value.number + " are from " + value.program + ".";
   });
 
   path.addEventListener("mouseleave", function(event){
-    path.setAttribute("fill", c);
-    path.setAttribute("stroke-width", 1);
     path.setAttribute("d", description);
     text.setAttribute("fill", "black");
     text.innerHTML = defaultMessage;
