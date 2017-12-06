@@ -82,6 +82,7 @@ for (var i = 0; i < statistics.values.length; i++) {
   let highlightDescription = "M" + cx + "," + cy + " L" + highlightStartX + "," + highlightStartY + " A" + hr + "," + hr + " 0 " + largestFlag + ",0 " + highlightEndX + "," + highlightEndY + " z";
   let c = colors[i];
   path.setAttribute("d", description);
+  path.setAttribute("stroke-width", 0);
   path.setAttribute("stroke", c);
   path.setAttribute("fill", c);
 
